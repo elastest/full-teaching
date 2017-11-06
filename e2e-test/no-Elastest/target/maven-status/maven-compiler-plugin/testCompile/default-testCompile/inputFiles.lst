@@ -1,0 +1,11 @@
+/home/gtunon/FullTeachingWorkspace/e2e-tests/src/test/java/com/fullteaching/e2e_tests/webDriverFactory/FirefoxFactory.java
+/home/gtunon/FullTeachingWorkspace/e2e-tests/src/test/java/com/fullteaching/e2e_tests/common/exception/NotLoggedException.java
+/home/gtunon/FullTeachingWorkspace/e2e-tests/src/test/java/com/fullteaching/e2e_tests/test/UserTests.java
+/home/gtunon/FullTeachingWorkspace/e2e-tests/src/test/java/com/fullteaching/e2e_tests/utils/User.java
+/home/gtunon/FullTeachingWorkspace/e2e-tests/src/test/java/com/fullteaching/e2e_tests/webDriverFactory/ChromeFactory.java
+/home/gtunon/FullTeachingWorkspace/e2e-tests/src/test/java/com/fullteaching/e2e_tests/chrome/ChromeUserTests.java
+/home/gtunon/FullTeachingWorkspace/e2e-tests/src/test/java/com/fullteaching/e2e_tests/common/UserUtilities.java
+/home/gtunon/FullTeachingWorkspace/e2e-tests/src/test/java/com/fullteaching/e2e_tests/utils/UserLoader.java
+/home/gtunon/FullTeachingWorkspace/e2e-tests/src/test/java/com/fullteaching/e2e_tests/utils/Wait.java
+/home/gtunon/FullTeachingWorkspace/e2e-tests/src/test/java/com/fullteaching/e2e_tests/common/exception/BadUserException.java
+/home/gtunon/FullTeachingWorkspace/e2e-tests/src/test/java/com/fullteaching/e2e_tests/utils/ParameterLoader.java

@@ -1,0 +1,11 @@
+com/fullteaching/e2e_tests/utils/User.class
+com/fullteaching/e2e_tests/utils/ParameterLoader.class
+com/fullteaching/e2e_tests/common/UserUtilities.class
+com/fullteaching/e2e_tests/utils/Wait.class
+com/fullteaching/e2e_tests/utils/UserLoader.class
+com/fullteaching/e2e_tests/webDriverFactory/ChromeFactory.class
+com/fullteaching/e2e_tests/test/UserTests.class
+com/fullteaching/e2e_tests/webDriverFactory/FirefoxFactory.class
+com/fullteaching/e2e_tests/chrome/ChromeUserTests.class
+com/fullteaching/e2e_tests/common/exception/NotLoggedException.class
+com/fullteaching/e2e_tests/common/exception/BadUserException.class
