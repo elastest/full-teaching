@@ -17,7 +17,7 @@ import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
 import com.fullteaching.e2e.no_elastest.utils.ParameterLoader;
 
 
-public class UserTests {
+public class UserTest {
 
 	
 	protected static WebDriver driver;
