@@ -8,14 +8,19 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
+import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
 
 public class UserUtilities {
-
-	public static WebDriver login(WebDriver wd, String user, String password) {
+	
+	public static String login_url = "http://localhost:5000/";
+	
+	public static WebDriver login(WebDriver wd, String user, String password) throws ElementNotFoundException {
+		
 		//navigate to login page
-		wd.get("http://localhost:5000/");
+		if (!wd.getCurrentUrl().equals(login_url))
+			wd.get(login_url);
 		
 		try {
 			WebElement login_menu  = Wait.ten(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/app/div/header/navbar/div/nav/div/ul/li[2]/a")));
@@ -36,9 +41,11 @@ public class UserUtilities {
 		}
 		catch(TimeoutException tOe) {
 			System.err.println("[User.login] Time Out");
+			throw new ElementNotFoundException("[User.login] Time Out");
 		}
 		catch(NoSuchElementException nEe) {
 			System.err.println("[User.login] Element not found");
+			throw new ElementNotFoundException("[User.login] Time Out");
 		}
 				
 		return wd;
@@ -84,5 +91,17 @@ public class UserUtilities {
 		
 	}
 	
+	public static WebDriver checkLogOut(WebDriver wd) throws ElementNotFoundException {
+		
+		try {
+			Wait.ten(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/app/div/header/navbar/div/nav/div/ul/li[2]/a")));
+		}
+		catch (TimeoutException toe) {
+			throw new ElementNotFoundException("Not Logged Out. Not in the home");	
+		}
+		
+		return wd;
+		
+	}
 	
 }

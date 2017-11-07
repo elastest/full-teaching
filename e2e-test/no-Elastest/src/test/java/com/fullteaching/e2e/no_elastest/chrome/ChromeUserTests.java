@@ -1,5 +1,6 @@
 package com.fullteaching.e2e.no_elastest.chrome;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -19,4 +20,8 @@ public class ChromeUserTests extends UserTests {
 		driver = ChromeFactory.getWebDriver();
 	}
 	
+	@AfterClass
+	public static void tearOff() {
+		ChromeFactory.disposeWebDriver();
+	}
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
@@ -11,6 +12,7 @@ import org.openqa.selenium.WebDriver;
 
 import com.fullteaching.e2e.no_elastest.common.UserUtilities;
 import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
+import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
 import com.fullteaching.e2e.no_elastest.utils.ParameterLoader;
 
@@ -35,38 +37,55 @@ public class UserTests {
         return ParameterLoader.getTestUsers();
     }
 	
+    @Before 
+    public void setUp() throws NotLoggedException, BadUserException {
+		
+    	try {	
+    		if (!driver.getCurrentUrl().equals(UserUtilities.login_url))
+    			driver.get(UserUtilities.login_url);
+    		
+			driver = UserUtilities.checkLogOut(driver);
+			
+		} catch (ElementNotFoundException enfe) {
+			driver = UserUtilities.logOut(driver);
+		}
+    }
+    
+    
 	@Test
 	public void loginTest() {
-		boolean isLogged = false;
 		try {
 			driver = UserUtilities.login(driver, user, password);
 		
 			driver = UserUtilities.checkLogin(driver, user);
-			isLogged = true;
+
+			Assert.assertTrue(true);
 			
 		} catch (NotLoggedException | BadUserException e) {
-				// TODO Auto-generated catch block
+				
 			e.printStackTrace();
 			Assert.fail("Not logged");
+			
+		} catch (ElementNotFoundException e) {
+			
+			e.printStackTrace();
+			Assert.fail(e.getLocalizedMessage());
 		}
 		
 		try {
 			driver = UserUtilities.logOut(driver);
 			
-			driver = UserUtilities.checkLogin(driver, ""); //if BadUserException there is still a user logged
+			driver = UserUtilities.checkLogOut(driver);
 			
-		} catch (NotLoggedException nle) {
-			// TODO Auto-generated catch block
-			isLogged = false;
-		} 
-		catch (BadUserException e) {
+		} catch (ElementNotFoundException enfe) {
 			Assert.fail("Still logged");
-		}
-		
-		Assert.assertFalse(isLogged);
-
+			
+		} catch (NotLoggedException e) {
+			Assert.assertTrue(true);
+		} 
+			
+		Assert.assertTrue(true);
 	}
-	
 	
 	
 }
