@@ -15,7 +15,10 @@ public class FirefoxFactory {
 	}
 	
 	public static void disposeWebDriver() {
-		if (driver !=null)
+		if (driver !=null) {
 			driver.close();
+			driver = null;
+		}
+		
 	}
 }

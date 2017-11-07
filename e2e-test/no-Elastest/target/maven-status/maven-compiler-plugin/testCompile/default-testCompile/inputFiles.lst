@@ -1,11 +1,12 @@
-/home/gtunon/FullTeachingWorkspace/full-teaching/e2e-test/no-Elastest/src/test/java/com/fullteaching/e2e/no_elastest/common/UserUtilities.java
-/home/gtunon/FullTeachingWorkspace/full-teaching/e2e-test/no-Elastest/src/test/java/com/fullteaching/e2e/no_elastest/webDriverFactory/ChromeFactory.java
 /home/gtunon/FullTeachingWorkspace/full-teaching/e2e-test/no-Elastest/src/test/java/com/fullteaching/e2e/no_elastest/chrome/ChromeUserTest.java
 /home/gtunon/FullTeachingWorkspace/full-teaching/e2e-test/no-Elastest/src/test/java/com/fullteaching/e2e/no_elastest/test/UserTest.java
 /home/gtunon/FullTeachingWorkspace/full-teaching/e2e-test/no-Elastest/src/test/java/com/fullteaching/e2e/no_elastest/utils/UserLoader.java
+/home/gtunon/FullTeachingWorkspace/full-teaching/e2e-test/no-Elastest/src/test/java/com/fullteaching/e2e/no_elastest/firefox/FirefoxUserTest.java
 /home/gtunon/FullTeachingWorkspace/full-teaching/e2e-test/no-Elastest/src/test/java/com/fullteaching/e2e/no_elastest/utils/Wait.java
-/home/gtunon/FullTeachingWorkspace/full-teaching/e2e-test/no-Elastest/src/test/java/com/fullteaching/e2e/no_elastest/utils/User.java
 /home/gtunon/FullTeachingWorkspace/full-teaching/e2e-test/no-Elastest/src/test/java/com/fullteaching/e2e/no_elastest/utils/ParameterLoader.java
+/home/gtunon/FullTeachingWorkspace/full-teaching/e2e-test/no-Elastest/src/test/java/com/fullteaching/e2e/no_elastest/common/UserUtilities.java
+/home/gtunon/FullTeachingWorkspace/full-teaching/e2e-test/no-Elastest/src/test/java/com/fullteaching/e2e/no_elastest/webDriverFactory/ChromeFactory.java
+/home/gtunon/FullTeachingWorkspace/full-teaching/e2e-test/no-Elastest/src/test/java/com/fullteaching/e2e/no_elastest/utils/User.java
 /home/gtunon/FullTeachingWorkspace/full-teaching/e2e-test/no-Elastest/src/test/java/com/fullteaching/e2e/no_elastest/common/exception/BadUserException.java
 /home/gtunon/FullTeachingWorkspace/full-teaching/e2e-test/no-Elastest/src/test/java/com/fullteaching/e2e/no_elastest/webDriverFactory/FirefoxFactory.java
 /home/gtunon/FullTeachingWorkspace/full-teaching/e2e-test/no-Elastest/src/test/java/com/fullteaching/e2e/no_elastest/common/exception/ElementNotFoundException.java
