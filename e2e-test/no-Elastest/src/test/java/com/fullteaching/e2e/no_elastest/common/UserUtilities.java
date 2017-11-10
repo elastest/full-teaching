@@ -19,8 +19,7 @@ public class UserUtilities {
 	public static WebDriver login(WebDriver wd, String user, String password) throws ElementNotFoundException {
 		
 		//navigate to login page
-		if (!wd.getCurrentUrl().equals(login_url))
-			wd.get(login_url);
+		NavigationUtilities.getUrlAndWaitFooter(wd, login_url);
 		
 		try {
 			WebElement login_menu  = Wait.ten(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/app/div/header/navbar/div/nav/div/ul/li[2]/a")));
@@ -101,6 +100,29 @@ public class UserUtilities {
 		}
 		
 		return wd;
+		
+	}
+	
+	public static String getLoggedUser(WebDriver wd) throws NotLoggedException {
+		String current_url = wd.getCurrentUrl();
+		String current_user = null;
+		
+		try {
+			//go to settings
+			WebElement settings_button  = Wait.ten(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("settings-button")));
+			
+			settings_button.click();
+			
+			WebElement settings_page  = Wait.ten(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("stng-user-mail")));
+			current_user = settings_page.getText().trim();
+			wd.get(current_url);
+			
+		}catch(TimeoutException toe) {
+			wd.get(current_url);
+			throw new NotLoggedException(toe.getMessage());
+		}
+		
+		return current_user;
 		
 	}
 	

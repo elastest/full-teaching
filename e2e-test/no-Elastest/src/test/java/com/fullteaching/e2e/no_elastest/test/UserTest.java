@@ -10,6 +10,7 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 import org.openqa.selenium.WebDriver;
 
+import com.fullteaching.e2e.no_elastest.common.NavigationUtilities;
 import com.fullteaching.e2e.no_elastest.common.UserUtilities;
 import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
@@ -41,8 +42,7 @@ public class UserTest {
     public void setUp() throws NotLoggedException, BadUserException {
 		
     	try {	
-    		if (!driver.getCurrentUrl().equals(UserUtilities.login_url))
-    			driver.get(UserUtilities.login_url);
+    		NavigationUtilities.getUrlAndWaitFooter(driver, UserUtilities.login_url);
     		
 			driver = UserUtilities.checkLogOut(driver);
 			

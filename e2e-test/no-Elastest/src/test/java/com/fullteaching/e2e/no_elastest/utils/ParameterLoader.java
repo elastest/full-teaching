@@ -19,4 +19,52 @@ public class ParameterLoader {
 		
 		return records;
 		}
+	
+	public static Collection<String[]> getTestStudents() throws IOException {
+		
+		List<String[]> records = new ArrayList<String[]>();
+		
+		Collection<User> users = UserLoader.getAllUsers();
+		
+		for(User user : users) {
+			if (isStudent(user) && !isTeacher(user))
+				records.add(user.getUserCsv().split(","));
+		}
+		
+		return records;
+	}
+	
+	public static Collection<String[]> getTestTeachers() throws IOException {
+		List<String[]> records = new ArrayList<String[]>();
+		
+		Collection<User> users = UserLoader.getAllUsers();
+		
+		for(User user : users) {
+			if (!isStudent(user) && isTeacher(user))
+				records.add(user.getUserCsv().split(","));
+		}
+		
+		return records;
+	}
+
+	private static boolean isStudent(User user) {
+		String[] roles = user.getRoles();
+		
+		for(String role : roles) {
+			if (role.trim().equals("STUDENT")) 
+				return true;
+		}
+		return false;
+	}
+	
+	private static boolean isTeacher(User user) {
+		String[] roles = user.getRoles();
+		
+		for(String role : roles) {
+			if (role.trim().equals("TEACHER")) 
+				return true;
+		}
+		return false;
+	}
+
 }
