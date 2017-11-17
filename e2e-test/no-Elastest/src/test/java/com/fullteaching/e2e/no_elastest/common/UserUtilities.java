@@ -14,7 +14,7 @@ import com.fullteaching.e2e.no_elastest.utils.Wait;
 
 public class UserUtilities {
 	
-	public static String login_url = "http://localhost:5000/";
+	public static String login_url = "http://localhost:5000";
 	
 	public static WebDriver login(WebDriver wd, String user, String password) throws ElementNotFoundException {
 		
@@ -24,7 +24,7 @@ public class UserUtilities {
 		try {
 			WebElement login_menu  = Wait.ten(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/app/div/header/navbar/div/nav/div/ul/li[2]/a")));
 						
-			login_menu.click();
+			wd = NavigationUtilities.clickWithNRetries(wd, login_menu, 3, By.id("login-modal") );
 			
 			WebElement login_modal = Wait.one(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("login-modal")));
 			
@@ -81,6 +81,8 @@ public class UserUtilities {
 			
 			logout_button.click();
 			
+			//go to home as the log out has been done
+			NavigationUtilities.getUrlAndWaitFooter(wd, login_url);
 			
 		}catch(TimeoutException toe) {
 			throw new NotLoggedException("Already logged Out");

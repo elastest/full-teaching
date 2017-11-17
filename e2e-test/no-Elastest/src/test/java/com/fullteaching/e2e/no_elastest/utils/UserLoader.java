@@ -16,7 +16,7 @@ public class UserLoader {
 	public static int ROLES = 2; 
 	
 	private static String cvsMainFieldsSplitBy = ",";
-	private static String cvsRolesSplitBy = "|";
+	private static String cvsRolesSplitBy = "\\|";
 	
 	private static Map<String,User> users;
 	
