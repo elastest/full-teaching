@@ -11,8 +11,7 @@ import com.fullteaching.e2e.no_elastest.utils.Wait;
 
 public class NavigationUtilities {
 
-	public static WebDriver getUrl(WebDriver wd, String url) {
-		
+	public static boolean amIHere(WebDriver wd, String url) {
 		String currentUrl = wd.getCurrentUrl().trim();
 		String compareUrl = url;
 		
@@ -23,45 +22,33 @@ public class NavigationUtilities {
 			compareUrl=compareUrl.substring(0, compareUrl.length()-2);
 		}
 		
-		if (!currentUrl.equals(compareUrl))
+		return (currentUrl.equals(compareUrl));
+	}
+	
+	public static WebDriver getUrl(WebDriver wd, String url) {
+		
+		if (!amIHere(wd, url))
 			wd.get(url);
 	
 		return wd; 
 	}
 	
 	public static WebDriver getUrlAndWaitFooter(WebDriver wd, String url) {
+		
 		wd = getUrl( wd,  url);
 		
-		Wait.ten(wd).until(ExpectedConditions.visibilityOfElementLocated(By.className("page-footer")));
+		Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.className("page-footer")));
 		
 		return wd;
 	}
 	
 	public static WebDriver toCoursesHome(WebDriver wd) {
 		
-		Wait.one(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id(coursesButtonId))).click();
+		Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id(coursesButtonId))).click();
 		
-		Wait.one(wd).until(ExpectedConditions.visibilityOfElementLocated(By.className("dashboard-title")));
+		Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.className("dashboard-title")));
 		
 		return wd; 
-	}
-	
-	
-	public static WebDriver clickWithNRetries(WebDriver wd, WebElement ele, int n, By waitFor) throws ElementNotFoundException {
-		int i = 0;
-		do {
-			try {
-				ele.click();
-				Wait.one(wd).until(ExpectedConditions.visibilityOfElementLocated(waitFor));
-				return wd;
-			}
-			catch(TimeoutException toe) {
-				i ++;
-			}
-			
-		}while(i<n);
-		
-		throw new ElementNotFoundException("Click doesn't work properly");
 	}
 	
 	

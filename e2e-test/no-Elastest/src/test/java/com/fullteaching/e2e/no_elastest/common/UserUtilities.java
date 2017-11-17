@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
+import com.fullteaching.e2e.no_elastest.utils.Click;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
 
 public class UserUtilities {
@@ -22,11 +23,11 @@ public class UserUtilities {
 		NavigationUtilities.getUrlAndWaitFooter(wd, login_url);
 		
 		try {
-			WebElement login_menu  = Wait.ten(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/app/div/header/navbar/div/nav/div/ul/li[2]/a")));
+			WebElement login_menu  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/app/div/header/navbar/div/nav/div/ul/li[2]/a")));
 						
-			wd = NavigationUtilities.clickWithNRetries(wd, login_menu, 3, By.id("login-modal") );
+			wd = Click.withNRetries(wd, login_menu, 3, By.id("login-modal") );
 			
-			WebElement login_modal = Wait.one(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("login-modal")));
+			WebElement login_modal = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("login-modal")));
 			
 			WebElement user_field = login_modal.findElement(By.id("email"));
 			WebElement pass_field = login_modal.findElement(By.id("password"));
@@ -55,14 +56,14 @@ public class UserUtilities {
 		
 		//Wait to settings button to be present
 		try {
-			WebElement settings_button  = Wait.ten(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("settings-button")));
+			WebElement settings_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("settings-button")));
 		
 			settings_button.click();
 		}catch(TimeoutException toe) {
 			throw new NotLoggedException(toe.getMessage());
 		}
 		
-		WebElement settings_page  = Wait.ten(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("stng-user-mail")));
+		WebElement settings_page  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("stng-user-mail")));
 		
 		//Check if the user name is the expected
 		if (!settings_page.getText().trim().equals(user.trim())) throw new BadUserException();
@@ -73,11 +74,11 @@ public class UserUtilities {
 	public static WebDriver logOut(WebDriver wd) throws NotLoggedException {
 		//press logout link
 		try {
-			WebElement arrow_button  = Wait.ten(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("arrow-drop-down")));
+			WebElement arrow_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("arrow-drop-down")));
 		
 			arrow_button.click();
 			
-			WebElement logout_button  = Wait.one(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("logout-button")));
+			WebElement logout_button  = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("logout-button")));
 			
 			logout_button.click();
 			
@@ -95,7 +96,7 @@ public class UserUtilities {
 	public static WebDriver checkLogOut(WebDriver wd) throws ElementNotFoundException {
 		
 		try {
-			Wait.ten(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/app/div/header/navbar/div/nav/div/ul/li[2]/a")));
+			Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/app/div/header/navbar/div/nav/div/ul/li[2]/a")));
 		}
 		catch (TimeoutException toe) {
 			throw new ElementNotFoundException("Not Logged Out. Not in the home");	
@@ -111,11 +112,11 @@ public class UserUtilities {
 		
 		try {
 			//go to settings
-			WebElement settings_button  = Wait.ten(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("settings-button")));
+			WebElement settings_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("settings-button")));
 			
 			settings_button.click();
 			
-			WebElement settings_page  = Wait.ten(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("stng-user-mail")));
+			WebElement settings_page  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("stng-user-mail")));
 			current_user = settings_page.getText().trim();
 			wd.get(current_url);
 			
