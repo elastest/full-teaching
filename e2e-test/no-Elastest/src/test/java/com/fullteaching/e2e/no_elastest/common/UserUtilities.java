@@ -16,6 +16,7 @@ import com.fullteaching.e2e.no_elastest.utils.Wait;
 public class UserUtilities {
 	
 	public static String login_url = "http://localhost:5000";
+	public static String settings_url = login_url+"/settings";
 	
 	public static WebDriver login(WebDriver wd, String user, String password) throws ElementNotFoundException {
 		
@@ -69,6 +70,36 @@ public class UserUtilities {
 		if (!settings_page.getText().trim().equals(user.trim())) throw new BadUserException();
 		
 		return wd;
+	}
+	
+	public static String getUserName(WebDriver wd, boolean goBack) throws NotLoggedException, BadUserException{
+		
+		//Wait to settings button to be present
+		try {
+			
+			WebElement settings_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("settings-button")));
+			
+			if(!NavigationUtilities.amIHere(wd, login_url)) {
+				settings_button.click();
+			}
+			else {
+				goBack = false;
+			}
+			
+		}catch(TimeoutException toe) {
+			throw new NotLoggedException(toe.getMessage());
+		}
+		
+		WebElement name_placeholder  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(USERNAME_XPATH)));
+		
+		String userName = name_placeholder.getText().trim();
+		
+		if (goBack) {
+			wd.navigate().back();
+		}
+		//Check if the user name is the expected
+		return userName;
+		
 	}
 	
 	public static WebDriver logOut(WebDriver wd) throws NotLoggedException {
@@ -129,4 +160,5 @@ public class UserUtilities {
 		
 	}
 	
+	private static String USERNAME_XPATH ="/html/body/app/div/main/app-settings/div/div[3]/div[2]/ul/li[2]/div[2]";
 }

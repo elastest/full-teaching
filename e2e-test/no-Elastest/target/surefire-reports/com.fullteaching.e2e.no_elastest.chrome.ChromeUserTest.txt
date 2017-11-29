@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.fullteaching.e2e.no_elastest.chrome.ChromeUserTest
--------------------------------------------------------------------------------
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 30.495 sec - in com.fullteaching.e2e.no_elastest.chrome.ChromeUserTest

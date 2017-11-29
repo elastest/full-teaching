@@ -22,6 +22,7 @@ public class LoggedTest {
 	@Parameter(2)
 	public String roles;
 	
+	protected String userName;
 	
 	 @Before 
 	 public void setUp() throws BadUserException, ElementNotFoundException, NotLoggedException {
@@ -47,6 +48,7 @@ public class LoggedTest {
 	    		driver = UserUtilities.login(driver, user, password);
 	    	}
 	    	driver = UserUtilities.checkLogin(driver, user);
-	 
+	    	
+	    	userName = UserUtilities.getUserName(driver, true);
 	    }
 }

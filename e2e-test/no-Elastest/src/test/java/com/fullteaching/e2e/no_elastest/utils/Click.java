@@ -31,6 +31,9 @@ public class Click {
 			catch(TimeoutException toe) {
 				i ++;
 			}
+			catch(Exception e) {
+				i ++;
+			}
 			
 		}while(i<n);
 		

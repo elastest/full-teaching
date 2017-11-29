@@ -1,6 +1,9 @@
 package com.fullteaching.e2e.no_elastest.common;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -51,6 +54,43 @@ public class NavigationUtilities {
 		return wd; 
 	}
 	
+	public static WebElement getOption(List<WebElement> options, String find, FindOption type, String attribute) {
+		
+
+		
+		for (WebElement option: options) {
+			switch(type) {
+				case CLASS: 
+						if (find.equals(option.getAttribute("class")))
+							return option;		
+						break;
+				case TEXT:
+						if (find.equals(option.getText()))
+							return option;
+						break;
+				case VALUE:
+						if (find.equals(option.getAttribute("value")))
+							return option;
+						break;
+				default:
+						if (find.equals(option.getAttribute(attribute)))
+							return option;
+						break;	
+			}
+		}
+		
+		return null;
+		
+	}
 	
 	private static String coursesButtonId= "courses-button";
+	
+	public static String SELECTALL = Keys.chord(Keys.CONTROL, "a");
+	public static String NEWLINE= Keys.chord(Keys.ENTER);
+	public static String DELETE= Keys.chord(Keys.BACK_SPACE);
+
+	public enum FindOption {
+	    CLASS, TEXT, VALUE, ATTRIBUTE
+	}
+
 }
