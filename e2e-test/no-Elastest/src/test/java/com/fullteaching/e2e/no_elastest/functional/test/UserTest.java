@@ -15,10 +15,11 @@ import com.fullteaching.e2e.no_elastest.common.UserUtilities;
 import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
+import com.fullteaching.e2e.no_elastest.common.exception.TimeOutExeception;
 import com.fullteaching.e2e.no_elastest.utils.ParameterLoader;
 
 
-public class UserTest {
+abstract public class UserTest {
 
 	
 	protected static WebDriver driver;
@@ -70,7 +71,10 @@ public class UserTest {
 			
 			e.printStackTrace();
 			Assert.fail(e.getLocalizedMessage());
-		}
+			
+		}  catch (TimeOutExeception e) {
+			Assert.fail(e.getLocalizedMessage());
+		} 
 		
 		try {
 			driver = UserUtilities.logOut(driver);
@@ -81,8 +85,8 @@ public class UserTest {
 			Assert.fail("Still logged");
 			
 		} catch (NotLoggedException e) {
-			Assert.assertTrue(true);
-		} 
+			Assert.assertTrue(true);	
+		}
 			
 		Assert.assertTrue(true);
 	}

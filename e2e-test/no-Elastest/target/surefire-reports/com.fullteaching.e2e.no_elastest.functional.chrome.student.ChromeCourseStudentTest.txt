@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.fullteaching.e2e.no_elastest.functional.chrome.student.ChromeCourseStudentTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 79.115 sec - in com.fullteaching.e2e.no_elastest.functional.chrome.student.ChromeCourseStudentTest

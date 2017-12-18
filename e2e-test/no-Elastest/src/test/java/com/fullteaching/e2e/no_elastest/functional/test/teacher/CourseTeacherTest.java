@@ -24,7 +24,7 @@ import com.fullteaching.e2e.no_elastest.utils.Click;
 import com.fullteaching.e2e.no_elastest.utils.ParameterLoader;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
 
-public class CourseTeacherTest extends LoggedTest{
+abstract public class CourseTeacherTest extends LoggedTest{
 
 	
 	/* In super class Logged Test:
@@ -185,7 +185,7 @@ public class CourseTeacherTest extends LoggedTest{
     	
     		
     		//change name
-    		WebElement name_field = edit_modal.findElement(By.id(EDITCOURSE_MODAL_NAMEFIELD_ID));
+    		WebElement name_field = driver.findElement(By.id(EDITCOURSE_MODAL_NAMEFIELD_ID));
 
     		String old_name = name_field.getAttribute("value");
     		String edition_name = "EDITION TEST_"+System.currentTimeMillis();
@@ -193,7 +193,7 @@ public class CourseTeacherTest extends LoggedTest{
     		name_field.sendKeys(edition_name);
     		
     		//save
-    		WebElement save_button = edit_modal.findElement(By.id(EDITCOURSE_MODAL_SAVE_ID));
+    		WebElement save_button = driver.findElement(By.id(EDITCOURSE_MODAL_SAVE_ID));
     		save_button.click();
     		
     		//check if course exists
@@ -424,21 +424,54 @@ public class CourseTeacherTest extends LoggedTest{
     	//Well done!
     }
     
-    @Ignore
     @Test 
     public void teacherDeleteCourseTest() {
+    	String courseName="";
     	// navigate to courses if not there
+    	if (!NavigationUtilities.amIHere(driver, COURSES_URL))
+    		driver = NavigationUtilities.toCoursesHome(driver);
     	
     	// create a course 
-    	
+    	try {
+    		courseName= CourseNavigationUtilities.newCourse(driver);
+		
+    	} catch (ElementNotFoundException e) {
+    		Assert.fail("Failed to create course:: "+ e.getClass()+ ": "+e.getLocalizedMessage());
+		}
     	// populate course
 	    	// in sessions program 
-				// new session
+				// TODO: new session
     		// in attenders
-				// add attenders
+				// TODO: add attenders
     	
     	// delete course  	
+    	try {
+    		WebElement course = CourseNavigationUtilities.getCourseElement(driver, courseName);
+    		
+    		
+    		WebElement edit_name_button = course.findElement(By.xpath("./"+EDITCOURSE_BUTTON_XPATH));
+    		//    		WebElement edit_name_button = course.findElements(By.tagName("div")).get(3).findElement(By.tagName("a"));
+
+    		edit_name_button.click();//if "normal" click doesn't work => Click.byJS(driver,edit_name_button);
+    		
+    		//wait for edit modal
+    		WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(EDITDELETE_MODAL_ID)));
     	
+    		//allow deletion
+    		WebElement allow_deletion_button = edit_modal.findElement(By.xpath(ENABLEDELETION_BUTTON_XPATH));
+    		allow_deletion_button.click();
+    		
+    		//delete
+    		WebElement delete_button = edit_modal.findElement(By.xpath(DELETE_BUTTON_XPATH));
+			
+    		Click.withNRetries(driver, delete_button, 3, By.xpath(COURSES_LIST_XPATH));
+    		
+    		Assert.assertFalse("The course have not been deleted", CourseNavigationUtilities.checkIfCourseExists(driver, courseName));
+    		
+    	} catch(Exception e) {
+    		Assert.fail("Failed to deletecourse:: (File: "+e.getStackTrace()[15].getFileName() +" -line: "+e.getStackTrace()[15].getLineNumber()+") "
+						+ e.getClass()+ ": "+e.getLocalizedMessage());
+    	}
     	//Well done!
     }
     
@@ -473,6 +506,9 @@ public class CourseTeacherTest extends LoggedTest{
     
     private static String DISABLEFORUM_BUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[2]/div/div/form/div[1]/label";
     private static String ENABLEFORUM_BUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[2]/div/div/form/div[1]/label";
+    
+    private static String ENABLEDELETION_BUTTON_XPATH = "/html/body/app/div/main/app-dashboard/div/div[2]/div/div/form/div[2]/div/div/label";
+    private static String DELETE_BUTTON_XPATH = "/html/body/app/div/main/app-dashboard/div/div[2]/div/div/form/div[2]/div/a";
     
     private static String COURSES_LIST_XPATH = "/html/body/app/div/main/app-dashboard/div/div[3]/div/div[1]/ul";
     

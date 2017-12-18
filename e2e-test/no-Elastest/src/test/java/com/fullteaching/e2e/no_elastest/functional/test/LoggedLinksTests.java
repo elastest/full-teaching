@@ -16,7 +16,7 @@ import com.fullteaching.e2e.no_elastest.common.NavigationUtilities;
 import com.fullteaching.e2e.no_elastest.common.SpiderNavigation;
 import com.fullteaching.e2e.no_elastest.utils.ParameterLoader;
 
-public class LoggedLinksTests extends LoggedTest {
+abstract public class LoggedLinksTests extends LoggedTest {
 	
 	/* In super class Logged Test:
 	

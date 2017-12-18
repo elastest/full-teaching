@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
+import com.fullteaching.e2e.no_elastest.common.exception.TimeOutExeception;
 import com.fullteaching.e2e.no_elastest.utils.Click;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
 
@@ -18,7 +19,7 @@ public class UserUtilities {
 	public static String login_url = "http://localhost:5000";
 	public static String settings_url = login_url+"/settings";
 	
-	public static WebDriver login(WebDriver wd, String user, String password) throws ElementNotFoundException {
+	public static WebDriver login(WebDriver wd, String user, String password) throws ElementNotFoundException, TimeOutExeception {
 		
 		//navigate to login page
 		NavigationUtilities.getUrlAndWaitFooter(wd, login_url);
@@ -42,7 +43,7 @@ public class UserUtilities {
 		}
 		catch(TimeoutException tOe) {
 			System.err.println("[User.login] Time Out");
-			throw new ElementNotFoundException("[User.login] Time Out");
+			throw new TimeOutExeception("[User.login] Time Out");
 		}
 		catch(NoSuchElementException nEe) {
 			System.err.println("[User.login] Element not found");
@@ -137,15 +138,15 @@ public class UserUtilities {
 		
 	}
 	
-	public static String getLoggedUser(WebDriver wd) throws NotLoggedException {
-		String current_url = wd.getCurrentUrl();
+	public static String getLoggedUser(WebDriver wd) throws NotLoggedException, ElementNotFoundException {
 		String current_user = null;
-		
+		String current_url = wd.getCurrentUrl();
+
 		try {
 			//go to settings
 			WebElement settings_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("settings-button")));
 			
-			settings_button.click();
+			Click.withNRetries(wd, settings_button, 3, By.id("stng-user-mail"));
 			
 			WebElement settings_page  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("stng-user-mail")));
 			current_user = settings_page.getText().trim();

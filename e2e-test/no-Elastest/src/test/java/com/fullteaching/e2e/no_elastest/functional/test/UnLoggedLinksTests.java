@@ -13,7 +13,7 @@ import org.openqa.selenium.WebElement;
 import com.fullteaching.e2e.no_elastest.common.NavigationUtilities;
 import com.fullteaching.e2e.no_elastest.common.SpiderNavigation;
 
-public class UnLoggedLinksTests {
+abstract public class UnLoggedLinksTests {
 
 	protected static WebDriver driver; 
 	protected static int DEPTH = 3;

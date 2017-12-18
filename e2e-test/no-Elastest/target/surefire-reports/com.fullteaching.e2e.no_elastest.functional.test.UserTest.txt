@@ -1,0 +1,14 @@
+-------------------------------------------------------------------------------
+Test set: com.fullteaching.e2e.no_elastest.functional.test.UserTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.048 sec <<< FAILURE! - in com.fullteaching.e2e.no_elastest.functional.test.UserTest
+loginTest(com.fullteaching.e2e.no_elastest.functional.test.UserTest)  Time elapsed: 0.048 sec  <<< ERROR!
+org.openqa.selenium.SessionNotCreatedException: 
+Tried to run command without establishing a connection
+Build info: version: '3.6.0', revision: '6fbf3ec767', time: '2017-09-27T15:28:36.4Z'
+System info: host: 'ubuntu', ip: '127.0.1.1', os.name: 'Linux', os.arch: 'amd64', os.version: '4.4.0-101-generic', java.version: '1.8.0_131'
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Capabilities [{moz:profile=/tmp/rust_mozprofile.QVJkLdIu5rCH, rotatable=false, timeouts={implicit=0, pageLoad=300000, script=30000}, pageLoadStrategy=normal, moz:headless=false, platform=LINUX, moz:accessibilityChecks=false, acceptInsecureCerts=true, browserVersion=57.0, platformVersion=4.4.0-101-generic, moz:processID=31349, browserName=firefox, javascriptEnabled=true, platformName=LINUX, moz:webdriverClick=false}]
+Session ID: f8c8080f-1ee3-428e-8734-bc4fcf784035
+	at com.fullteaching.e2e.no_elastest.functional.test.UserTest.setUp(UserTest.java:46)
+

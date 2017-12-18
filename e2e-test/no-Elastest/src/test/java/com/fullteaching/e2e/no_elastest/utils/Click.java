@@ -25,7 +25,7 @@ public class Click {
 		do {
 			try {
 				ele.click();
-				Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(waitFor));
+				Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(waitFor));
 				return wd;
 			}
 			catch(TimeoutException toe) {

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.fullteaching.e2e.no_elastest.functional.chrome.ChromeLoggedLinkTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 245.886 sec - in com.fullteaching.e2e.no_elastest.functional.chrome.ChromeLoggedLinkTest

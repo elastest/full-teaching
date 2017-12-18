@@ -8,8 +8,9 @@ import com.fullteaching.e2e.no_elastest.common.UserUtilities;
 import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
+import com.fullteaching.e2e.no_elastest.common.exception.TimeOutExeception;
 
-public class LoggedTest {
+abstract public class LoggedTest {
 
 	protected static WebDriver driver;
 	
@@ -25,7 +26,7 @@ public class LoggedTest {
 	protected String userName;
 	
 	 @Before 
-	 public void setUp() throws BadUserException, ElementNotFoundException, NotLoggedException {
+	 public void setUp() throws BadUserException, ElementNotFoundException, NotLoggedException, TimeOutExeception {
 			
 	    	String logged_user = null; 
 	    	boolean is_logged = true;

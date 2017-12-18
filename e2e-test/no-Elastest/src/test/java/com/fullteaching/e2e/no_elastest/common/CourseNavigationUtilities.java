@@ -16,7 +16,7 @@ import com.fullteaching.e2e.no_elastest.utils.Wait;
 
 public class CourseNavigationUtilities {
 
-	public static WebDriver newCourse(WebDriver wd) throws ElementNotFoundException {
+	public static String newCourse(WebDriver wd) throws ElementNotFoundException {
 		boolean found = false;
     	
 		
@@ -63,7 +63,7 @@ public class CourseNavigationUtilities {
 	    if (! found) {
 	    	throw new ElementNotFoundException("Course hasn't been created");
 	    }
-		return wd;
+		return course_title;
 	}
 	
 	public static boolean checkIfCourseExists(WebDriver wd, String course_title) {
@@ -128,6 +128,29 @@ public class CourseNavigationUtilities {
     	
     	return wd;
 		
+	}
+	
+	public static WebElement getCourseElement(WebDriver wd, String name) throws ElementNotFoundException {
+		WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(COURSES_LIST_XPATH)));
+    	
+    	//find the newly create course
+    	List<WebElement> courses = courses_list.findElements(By.tagName("li"));
+    	
+    	for (WebElement c : courses) {
+    		try {
+    			WebElement title = c.findElement(By.className("title"));
+    			String title_text = title.getText();
+    			if(name.equals(title_text)) {
+    				
+    				return c;
+    			}
+    		}
+    		catch(NoSuchElementException csee) {
+    			//do nothing and look for the next item
+    		}
+    	}
+    	
+    	throw new ElementNotFoundException("the course doesn't exist");
 	}
 	
 	private static String COURSES_URL = "http://localhost:5000/courses";
