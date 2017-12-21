@@ -1,5 +1,7 @@
 package com.fullteaching.e2e.no_elastest.functional.test;
 
+import static java.lang.System.getProperty;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runners.Parameterized.Parameters;
 import org.openqa.selenium.WebElement;
@@ -29,6 +32,7 @@ abstract public class LoggedLinksTests extends LoggedTest {
 		@Parameter(2)
 		public String roles;	
 	*/	
+	protected static String host ="localhost";
 	
 	protected static int DEPTH = 3;
 	
@@ -37,11 +41,19 @@ abstract public class LoggedLinksTests extends LoggedTest {
         return ParameterLoader.getTestUsers();
     }
 	    
+    @Before
+    public void setUp() {
+    	String appHost = getProperty("fullTeachingUrl");
+        if (appHost != null) {
+            host = appHost;
+        }
+    }
+    
 	@Test
 	public void spiderLoggedTest() {
 		
 		/*navigate from home*/
-		NavigationUtilities.getUrlAndWaitFooter(driver, "http://localhost:5000/");
+		NavigationUtilities.getUrlAndWaitFooter(driver, "http://"+host+":5000/");
 				
 		List <WebElement> pageLinks = SpiderNavigation.getPageLinks(driver);
 		

@@ -1,5 +1,6 @@
 package com.fullteaching.e2e.no_elastest.functional.test;
 
+import static java.lang.System.getProperty;
 import java.io.IOException;
 import java.util.Collection;
 
@@ -32,6 +33,9 @@ abstract public class UserTest {
 	
 	@ Parameter(2)
 	public String roles;
+
+	
+	private String host="localhost";
 	
 	
 	@Parameters
@@ -42,13 +46,18 @@ abstract public class UserTest {
     @Before 
     public void setUp() throws NotLoggedException, BadUserException {
 		
+    	String appHost = getProperty("fullTeachingUrl");
+        if (appHost != null) {
+            host = appHost;
+        }
+        
     	try {	
-    		NavigationUtilities.getUrlAndWaitFooter(driver, UserUtilities.login_url);
+    		NavigationUtilities.getUrlAndWaitFooter(driver, UserUtilities.login_url.replace("__HOST__", host));
     		
 			driver = UserUtilities.checkLogOut(driver);
 			
 		} catch (ElementNotFoundException enfe) {
-			driver = UserUtilities.logOut(driver);
+			driver = UserUtilities.logOut(driver,host);
 		}
     }
     
@@ -56,7 +65,7 @@ abstract public class UserTest {
 	@Test
 	public void loginTest() {
 		try {
-			driver = UserUtilities.login(driver, user, password);
+			driver = UserUtilities.login(driver, user, password, host);
 		
 			driver = UserUtilities.checkLogin(driver, user);
 
@@ -77,7 +86,7 @@ abstract public class UserTest {
 		} 
 		
 		try {
-			driver = UserUtilities.logOut(driver);
+			driver = UserUtilities.logOut(driver,host);
 			
 			driver = UserUtilities.checkLogOut(driver);
 			

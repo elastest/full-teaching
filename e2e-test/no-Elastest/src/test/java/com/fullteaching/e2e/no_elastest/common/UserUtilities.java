@@ -16,13 +16,12 @@ import com.fullteaching.e2e.no_elastest.utils.Wait;
 
 public class UserUtilities {
 	
-	public static String login_url = "http://localhost:5000";
-	public static String settings_url = login_url+"/settings";
+	public static String login_url = "http://__HOST__:5000";
 	
-	public static WebDriver login(WebDriver wd, String user, String password) throws ElementNotFoundException, TimeOutExeception {
+	public static WebDriver login(WebDriver wd, String user, String password, String host) throws ElementNotFoundException, TimeOutExeception {
 		
 		//navigate to login page
-		NavigationUtilities.getUrlAndWaitFooter(wd, login_url);
+		NavigationUtilities.getUrlAndWaitFooter(wd, login_url.replace("__HOST__", host));
 		
 		try {
 			WebElement login_menu  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/app/div/header/navbar/div/nav/div/ul/li[2]/a")));
@@ -73,14 +72,14 @@ public class UserUtilities {
 		return wd;
 	}
 	
-	public static String getUserName(WebDriver wd, boolean goBack) throws NotLoggedException, BadUserException{
+	public static String getUserName(WebDriver wd, boolean goBack, String host) throws NotLoggedException, BadUserException{
 		
 		//Wait to settings button to be present
 		try {
 			
 			WebElement settings_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("settings-button")));
 			
-			if(!NavigationUtilities.amIHere(wd, login_url)) {
+			if(!NavigationUtilities.amIHere(wd, login_url.replace("__HOST__", host))) {
 				settings_button.click();
 			}
 			else {
@@ -103,7 +102,7 @@ public class UserUtilities {
 		
 	}
 	
-	public static WebDriver logOut(WebDriver wd) throws NotLoggedException {
+	public static WebDriver logOut(WebDriver wd, String host) throws NotLoggedException {
 		//press logout link
 		try {
 			WebElement arrow_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("arrow-drop-down")));
@@ -115,7 +114,7 @@ public class UserUtilities {
 			logout_button.click();
 			
 			//go to home as the log out has been done
-			NavigationUtilities.getUrlAndWaitFooter(wd, login_url);
+			NavigationUtilities.getUrlAndWaitFooter(wd, login_url.replace("__HOST__", host));
 			
 		}catch(TimeoutException toe) {
 			throw new NotLoggedException("Already logged Out");

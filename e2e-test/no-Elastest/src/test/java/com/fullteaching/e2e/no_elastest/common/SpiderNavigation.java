@@ -1,5 +1,7 @@
 package com.fullteaching.e2e.no_elastest.common;
 
+import static java.lang.System.getProperty;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +29,11 @@ public class SpiderNavigation {
 	 * @return List<WebElements> 
 	 */
 	public static List<WebElement> getPageLinks(WebDriver wd){
+		
+		String appHost = getProperty("fullTeachingUrl");
+        if (appHost != null) {
+            host = appHost;
+        }
 		
 		Set<String> links_href = new HashSet<String>();
 		List<WebElement> links = new ArrayList<WebElement>();

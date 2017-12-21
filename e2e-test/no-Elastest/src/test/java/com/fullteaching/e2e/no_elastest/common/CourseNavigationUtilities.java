@@ -16,12 +16,12 @@ import com.fullteaching.e2e.no_elastest.utils.Wait;
 
 public class CourseNavigationUtilities {
 
-	public static String newCourse(WebDriver wd) throws ElementNotFoundException {
+	public static String newCourse(WebDriver wd, String host) throws ElementNotFoundException {
 		boolean found = false;
     	
 		
     	// navigate to courses if not there
-		if (!NavigationUtilities.amIHere(wd, COURSES_URL)) {
+		if (!NavigationUtilities.amIHere(wd, COURSES_URL.replace("__HOST__", host))) {
 			
 			wd = NavigationUtilities.toCoursesHome(wd);
 		}
@@ -153,7 +153,7 @@ public class CourseNavigationUtilities {
     	throw new ElementNotFoundException("the course doesn't exist");
 	}
 	
-	private static String COURSES_URL = "http://localhost:5000/courses";
+	private static String COURSES_URL = "http://__HOST__:5000/courses";
 	   
     //Xpaths and ids
     private static String FIRSTCOURSE_XPATH = "/html/body/app/div/main/app-dashboard/div/div[3]/div/div[1]/ul/li[1]/div";

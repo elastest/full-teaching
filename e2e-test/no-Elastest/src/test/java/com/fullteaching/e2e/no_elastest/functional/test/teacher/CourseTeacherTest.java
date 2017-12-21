@@ -52,7 +52,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     public void teacherCourseMainTest() {
     	
     	try {
-    		if(!NavigationUtilities.amIHere(driver,COURSES_URL))
+    		if(!NavigationUtilities.amIHere(driver,COURSES_URL.replace("__HOST__", host)))
         		driver = NavigationUtilities.toCoursesHome(driver);
 	    	    	
 	    	WebElement course_button = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(FIRSTCOURSE_XPATH+GOTOCOURSE_XPATH)));
@@ -112,7 +112,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     	boolean found = false;
     	
     	// navigate to courses if not there
-    	if (!NavigationUtilities.amIHere(driver, COURSES_URL))
+    	if (!NavigationUtilities.amIHere(driver, COURSES_URL.replace("__HOST__", host)))
     		driver = NavigationUtilities.toCoursesHome(driver);
 
     	try {
@@ -167,7 +167,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     public void teacherEditCourseValues() {
     	
     	// navigate to courses if not there
-    	if (!NavigationUtilities.amIHere(driver, COURSES_URL))
+    	if (!NavigationUtilities.amIHere(driver, COURSES_URL.replace("__HOST__", host)))
     		driver = NavigationUtilities.toCoursesHome(driver);
     	
     	// select first course (never mind which course -while application is in a test environment-)
@@ -428,12 +428,12 @@ abstract public class CourseTeacherTest extends LoggedTest{
     public void teacherDeleteCourseTest() {
     	String courseName="";
     	// navigate to courses if not there
-    	if (!NavigationUtilities.amIHere(driver, COURSES_URL))
+    	if (!NavigationUtilities.amIHere(driver, COURSES_URL.replace("__HOST__", host)))
     		driver = NavigationUtilities.toCoursesHome(driver);
     	
     	// create a course 
     	try {
-    		courseName= CourseNavigationUtilities.newCourse(driver);
+    		courseName= CourseNavigationUtilities.newCourse(driver, host);
 		
     	} catch (ElementNotFoundException e) {
     		Assert.fail("Failed to create course:: "+ e.getClass()+ ": "+e.getLocalizedMessage());
@@ -475,7 +475,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     	//Well done!
     }
     
-    private static String COURSES_URL = "http://localhost:5000/courses";
+    private static String COURSES_URL = "http://__HOST__:5000/courses";
    
     //Xpaths and ids
     private static String FIRSTCOURSE_XPATH = "/html/body/app/div/main/app-dashboard/div/div[3]/div/div[1]/ul/li[1]/div";
