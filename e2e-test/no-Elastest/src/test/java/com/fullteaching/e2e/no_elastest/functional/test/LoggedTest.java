@@ -3,9 +3,12 @@ package com.fullteaching.e2e.no_elastest.functional.test;
 import static java.lang.System.getProperty;
 import static java.lang.invoke.MethodHandles.lookup;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.runners.Parameterized.Parameter;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogEntries;
 import org.slf4j.Logger;
 
 import com.fullteaching.e2e.no_elastest.common.UserUtilities;
@@ -14,7 +17,13 @@ import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundExceptio
 import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
 import com.fullteaching.e2e.no_elastest.common.exception.TimeOutExeception;
 
+import static org.openqa.selenium.OutputType.BASE64;
+import static org.openqa.selenium.logging.LogType.BROWSER;
+
 import static org.slf4j.LoggerFactory.getLogger;
+
+import java.io.IOException;
+import java.util.Date;
 
 
 abstract public class LoggedTest {
@@ -69,5 +78,24 @@ abstract public class LoggedTest {
 	    	driver = UserUtilities.checkLogin(driver, user);
 	    	
 	    	userName = UserUtilities.getUserName(driver, true, host);
+	    }
+	 
+	 @After
+	 public void teardown() throws IOException {
+        if (driver != null) {
+            log.info("Screenshot (in Base64) at the end of the test:\n{}",
+                    getBase64Screenshot(driver));
+
+            log.info("Browser console at the end of the test");
+            LogEntries logEntries = driver.manage().logs().get(BROWSER);
+            logEntries.forEach((entry) -> log.info("[{}] {} {}",
+                    new Date(entry.getTimestamp()), entry.getLevel(),
+                    entry.getMessage()));
+        }
+    }
+	 protected String getBase64Screenshot(WebDriver driver) throws IOException {
+	        String screenshotBase64 = ((TakesScreenshot) driver)
+	                .getScreenshotAs(BASE64);
+	        return "data:image/png;base64," + screenshotBase64;
 	    }
 }
