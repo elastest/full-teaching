@@ -15,7 +15,7 @@ import com.fullteaching.e2e.no_elastest.functional.test.LoggedTest;
 import com.fullteaching.e2e.no_elastest.utils.ParameterLoader;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
 
-public class CourseStudentTest extends LoggedTest {
+public abstract class CourseStudentTest extends LoggedTest {
 	
 	/* In super class Logged Test:
 	
