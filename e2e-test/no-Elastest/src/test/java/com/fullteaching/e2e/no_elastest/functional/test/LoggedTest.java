@@ -1,16 +1,21 @@
 package com.fullteaching.e2e.no_elastest.functional.test;
 
 import static java.lang.System.getProperty;
+import static java.lang.invoke.MethodHandles.lookup;
 
 import org.junit.Before;
 import org.junit.runners.Parameterized.Parameter;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
 
 import com.fullteaching.e2e.no_elastest.common.UserUtilities;
 import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
 import com.fullteaching.e2e.no_elastest.common.exception.TimeOutExeception;
+
+import static org.slf4j.LoggerFactory.getLogger;
+
 
 abstract public class LoggedTest {
 
@@ -29,6 +34,8 @@ abstract public class LoggedTest {
 
 	protected String host="localhost";
 	
+	final Logger log = getLogger(lookup().lookupClass());
+	
 	 @Before 
 	 public void setUp() throws BadUserException, ElementNotFoundException, NotLoggedException, TimeOutExeception {
 			
@@ -39,6 +46,8 @@ abstract public class LoggedTest {
 	        if (appHost != null) {
 	            host = appHost;
 	        }
+	        
+	        log.info("Test over url: http://"+host+":5000/");
 	        
 	    	//check if logged with correct user
 	    	try {
