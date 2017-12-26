@@ -40,16 +40,18 @@ public class NavigationUtilities {
 		
 		wd = getUrl( wd,  url);
 		
-		Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.className("page-footer")));
+		Wait.notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(By.className("page-footer")));
 		
 		return wd;
 	}
 	
 	public static WebDriver toCoursesHome(WebDriver wd) {
 		
-		Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id(coursesButtonId))).click();
+		WebElement button = Wait.aLittle(wd).until(ExpectedConditions.presenceOfElementLocated(By.id(coursesButtonId)));
 		
-		Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.className("dashboard-title")));
+		button.click();
+		
+		Wait.notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(By.className("dashboard-title")));
 		
 		return wd; 
 	}

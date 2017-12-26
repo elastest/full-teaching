@@ -56,7 +56,7 @@ abstract public class LoggedTest {
 	            host = appHost;
 	        }
 	        
-	        log.info("Test over url: http://"+host+":5000/");
+	        log.info("Test over url: "+host);
 	        
 	    	//check if logged with correct user
 	    	try {
@@ -96,6 +96,6 @@ abstract public class LoggedTest {
 	 protected String getBase64Screenshot(WebDriver driver) throws IOException {
 	        String screenshotBase64 = ((TakesScreenshot) driver)
 	                .getScreenshotAs(BASE64);
-	        return "data:image/png;base64," + screenshotBase64;
+	        return host+"\ndata:image/png;base64," + screenshotBase64;
 	    }
 }

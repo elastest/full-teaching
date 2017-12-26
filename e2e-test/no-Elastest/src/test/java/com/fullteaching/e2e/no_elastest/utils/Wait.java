@@ -16,6 +16,6 @@ public class Wait {
 	}
 
 	public static void footer(WebDriver wd) {
-		notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.className("page-footer")));	
+		notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(By.className("page-footer")));	
 	}
 }
