@@ -16,7 +16,7 @@ import com.fullteaching.e2e.no_elastest.utils.Wait;
 
 public class UserUtilities {
 	
-	public static String login_url = "http://__HOST__:5000";
+	public static String login_url = "__HOST__";
 	
 	public static WebDriver login(WebDriver wd, String user, String password, String host) throws ElementNotFoundException, TimeOutExeception {
 		

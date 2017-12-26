@@ -475,7 +475,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     	//Well done!
     }
     
-    private static String COURSES_URL = "http://__HOST__:5000/courses";
+    private static String COURSES_URL = "__HOST__/courses";
    
     //Xpaths and ids
     private static String FIRSTCOURSE_XPATH = "/html/body/app/div/main/app-dashboard/div/div[3]/div/div[1]/ul/li[1]/div";
