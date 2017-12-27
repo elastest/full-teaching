@@ -30,7 +30,7 @@ public class Click {
 		}
 		do {
 			try {
-				
+				Wait.notTooMuch(wd).until(ExpectedConditions.elementToBeClickable(ele));
 				ele.click();
 				Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(waitFor));
 				return wd;
@@ -65,6 +65,7 @@ public class Click {
 	public static WebDriver element(WebDriver wd, WebElement ele) throws ElementNotFoundException {
 		try {
 			wd = Scroll.toElement(wd, ele);
+			Wait.notTooMuch(wd).until(ExpectedConditions.elementToBeClickable(ele));
 		}
 		catch(Exception e) {
 			throw new ElementNotFoundException("Failed on scroll");
