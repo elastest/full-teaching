@@ -2,6 +2,12 @@ package com.fullteaching.e2e.no_elastest.functional.test;
 
 import static java.lang.System.getProperty;
 import static java.lang.invoke.MethodHandles.lookup;
+import static org.openqa.selenium.OutputType.BASE64;
+import static org.openqa.selenium.logging.LogType.BROWSER;
+import static org.slf4j.LoggerFactory.getLogger;
+
+import java.io.IOException;
+import java.util.Date;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,13 +23,7 @@ import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundExceptio
 import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
 import com.fullteaching.e2e.no_elastest.common.exception.TimeOutExeception;
 
-import static org.openqa.selenium.OutputType.BASE64;
-import static org.openqa.selenium.logging.LogType.BROWSER;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
-import java.io.IOException;
-import java.util.Date;
 
 
 abstract public class LoggedTest {
@@ -41,7 +41,7 @@ abstract public class LoggedTest {
 	
 	protected String userName;
 
-	protected String host="localhost";
+	protected String host="https://localhost:5000";
 	
 	final Logger log = getLogger(lookup().lookupClass());
 	
@@ -94,7 +94,8 @@ abstract public class LoggedTest {
         }
     }
 	 protected String getBase64Screenshot(WebDriver driver) throws IOException {
-	        String screenshotBase64 = ((TakesScreenshot) driver)
+		 
+		 	String screenshotBase64 = ((TakesScreenshot) driver)
 	                .getScreenshotAs(BASE64);
 	        return host+"\ndata:image/png;base64," + screenshotBase64;
 	    }

@@ -32,7 +32,7 @@ abstract public class LoggedLinksTests extends LoggedTest {
 		@Parameter(2)
 		public String roles;	
 	*/	
-	protected static String host ="localhost";
+	protected static String host ="https://localhost:5000";
 	
 	protected static int DEPTH = 3;
 	

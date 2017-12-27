@@ -22,7 +22,7 @@ abstract public class UnLoggedLinksTests {
 
 	protected static WebDriver driver; 
 	protected static int DEPTH = 3;
-	protected static String host = "localhost";
+	protected static String host = "https://localhost:5000";
 	
 	 @Before 
 	    public void setUp() throws NotLoggedException, BadUserException {

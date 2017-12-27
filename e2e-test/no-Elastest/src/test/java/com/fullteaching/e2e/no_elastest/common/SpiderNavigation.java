@@ -21,7 +21,7 @@ public class SpiderNavigation {
 	 * This is a Specialized Spider navigation for FullTeaching.*/
 	
 	
-	private static String host = "localhost";
+	private static String host = "https://localhost:5000";
 	
 	/**
 	 * Retrieve all the links in a webpage

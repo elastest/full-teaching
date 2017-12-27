@@ -35,7 +35,7 @@ abstract public class UserTest {
 	public String roles;
 
 	
-	private String host="localhost";
+	private String host="https://localhost:5000";
 	
 	
 	@Parameters

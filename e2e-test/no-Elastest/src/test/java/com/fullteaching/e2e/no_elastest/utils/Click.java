@@ -22,8 +22,15 @@ public class Click {
 	
 	public static WebDriver withNRetries(WebDriver wd, WebElement ele, int n, By waitFor) throws ElementNotFoundException {
 		int i = 0;
+		try {
+			wd = Scroll.toElement(wd, ele);
+		}
+		catch(Exception e) {
+			throw new ElementNotFoundException("Failed on scroll");
+		}
 		do {
 			try {
+				
 				ele.click();
 				Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(waitFor));
 				return wd;
@@ -45,6 +52,26 @@ public class Click {
 		js.executeScript("var evt = document.createEvent('MouseEvents');" 
 							+ "evt.initMouseEvent('click',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null);" 
 							+ "arguments[0].dispatchEvent(evt);", we);
+		return wd;
+	}
+	
+	/**
+	 * Scrolls and click
+	 * @param wd
+	 * @param ele
+	 * @return
+	 * @throws ElementNotFoundException 
+	 */
+	public static WebDriver element(WebDriver wd, WebElement ele) throws ElementNotFoundException {
+		try {
+			wd = Scroll.toElement(wd, ele);
+		}
+		catch(Exception e) {
+			throw new ElementNotFoundException("Failed on scroll");
+		}
+		
+		ele.click();
+		
 		return wd;
 	}
 }
