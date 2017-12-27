@@ -55,7 +55,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     		if(!NavigationUtilities.amIHere(driver,COURSES_URL.replace("__HOST__", host)))
         		driver = NavigationUtilities.toCoursesHome(driver);
 	    	    	
-	    	WebElement course_button = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(FIRSTCOURSE_XPATH+GOTOCOURSE_XPATH)));
+	    	WebElement course_button = Wait.notTooMuch(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath(FIRSTCOURSE_XPATH+GOTOCOURSE_XPATH)));
 	    	course_button.click();
 	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(TABS_DIV_ID)));
     	}catch(Exception e) {
@@ -64,41 +64,46 @@ abstract public class CourseTeacherTest extends LoggedTest{
     	//Check tabs
     	//Home tab 
     	try {
-    		WebElement home_tab = driver.findElement(By.id(HOMETAB_ID));
-    		home_tab.click();
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-0")));	
+    		WebElement home_tab = driver.findElement(By.xpath(HOMETAB_XPATH));
+    		String id = home_tab.getAttribute("id");
+    		driver = Click.element(driver, home_tab);
+    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     	} catch(Exception e) {
     		Assert.fail("Failed to load home tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
     	try {
-    		WebElement session_tab = driver.findElement(By.id(SESSIONSTAB_ID));
-    		session_tab.click();
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-1")));	
+    		WebElement session_tab = driver.findElement(By.xpath(SESSIONSTAB_XPATH));
+    		String id = session_tab.getAttribute("id");
+    		driver = Click.element(driver, session_tab);
+    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     	} catch(Exception e) {
     		Assert.fail("Failed to load session tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
     	try {
-    		WebElement forum_tab = driver.findElement(By.id(FORUMTAB_ID));
-    		forum_tab.click();
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-2")));	
+    		WebElement forum_tab = driver.findElement(By.xpath(FORUMTAB_XPATH));
+    		String id = forum_tab.getAttribute("id");
+    		driver = Click.element(driver, forum_tab);
+    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     	} catch(Exception e) {
     		Assert.fail("Failed to load forum tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
     	try {
-    		WebElement files_tab = driver.findElement(By.id(FILESTAB_ID));
-    		files_tab.click();
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-3")));	
+    		WebElement files_tab = driver.findElement(By.xpath(FILESTAB_XPATH));
+    		String id = files_tab.getAttribute("id");
+    		driver = Click.element(driver, files_tab);
+    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     	} catch(Exception e) {
     		Assert.fail("Failed to load files tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
     	try {
-    		WebElement attenders_tab = driver.findElement(By.id(ATTEDENDERSTAB_ID));
-    		attenders_tab.click();
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-4")));	
+    		WebElement attenders_tab = driver.findElement(By.xpath(ATTENDERSTAB_XPATH));
+    		String id = attenders_tab.getAttribute("id");
+    		driver = Click.element(driver, attenders_tab);
+    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     	} catch(Exception e) {
     		Assert.fail("Failed to load attenders tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
@@ -110,14 +115,17 @@ abstract public class CourseTeacherTest extends LoggedTest{
     public void teacherNewCourseTest() {
     	
     	boolean found = false;
+    	try {
+	    	// navigate to courses if not there
+	    	if (!NavigationUtilities.amIHere(driver, COURSES_URL.replace("__HOST__", host)))
+	    		driver = NavigationUtilities.toCoursesHome(driver);
+    	}catch (Exception e) {
+    		Assert.fail("Failed to go to Courses "+ e.getClass()+ ": "+e.getLocalizedMessage());
+    	}
     	
-    	// navigate to courses if not there
-    	if (!NavigationUtilities.amIHere(driver, COURSES_URL.replace("__HOST__", host)))
-    		driver = NavigationUtilities.toCoursesHome(driver);
-
     	try {
 	    	// press new course button and wait for modal course-modal 
-	    	WebElement new_course_button = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(NEWCOURSE_BUTTON_XPATH)));
+	    	WebElement new_course_button = Wait.notTooMuch(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath(NEWCOURSE_BUTTON_XPATH)));
 	    	
 	    	Click.byJS(driver,new_course_button);
     	
@@ -135,7 +143,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     	
     	//fill information
     	try {
-	    	WebElement name_field = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(NEWCOURSE_MODAL_NAMEFIELD_ID)));
+	    	WebElement name_field = Wait.aLittle(driver).until(ExpectedConditions.presenceOfElementLocated(By.id(NEWCOURSE_MODAL_NAMEFIELD_ID)));
 	    	course_title = "Test Course_"+System.currentTimeMillis();
 	    	name_field.sendKeys(course_title); //no duplicated courses
     	}catch (TimeoutException toe) {
@@ -144,11 +152,13 @@ abstract public class CourseTeacherTest extends LoggedTest{
     	
     	//Save
     	try {
-	    	WebElement save_button = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(NEW_COURSE_MODAL_SAVE_ID)));
-	    	save_button.click();
+	    	WebElement save_button = Wait.aLittle(driver).until(ExpectedConditions.presenceOfElementLocated(By.id(NEW_COURSE_MODAL_SAVE_ID)));
+	    	driver = Click.element(driver, save_button);
     	}catch (TimeoutException toe) {
     		Assert.fail("New course modal doesn't appear");
-    	}
+    	} catch (ElementNotFoundException e) {
+    		Assert.fail("Button failed");
+		}
     	
     	//check if the course appears now in the list
     	try {
@@ -166,22 +176,26 @@ abstract public class CourseTeacherTest extends LoggedTest{
     @Test
     public void teacherEditCourseValues() {
     	
-    	// navigate to courses if not there
-    	if (!NavigationUtilities.amIHere(driver, COURSES_URL.replace("__HOST__", host)))
-    		driver = NavigationUtilities.toCoursesHome(driver);
-    	
+    	try {
+	    	// navigate to courses if not there
+	    	if (!NavigationUtilities.amIHere(driver, COURSES_URL.replace("__HOST__", host)))
+	    		driver = NavigationUtilities.toCoursesHome(driver);
+    	}catch(Exception e) {
+    		Assert.fail("Failed to go to Courses "+ e.getClass()+ ": "+e.getLocalizedMessage());
+    	}
     	// select first course (never mind which course -while application is in a test environment-)
     	// for more general testing use NavigationUtilities.newCourse but it will need some code rewriting.
     	
     	
     	//Modify name
     	try {
+    		
     		WebElement edit_name_button = driver.findElement(By.xpath(FIRSTCOURSE_XPATH+EDITCOURSE_BUTTON_XPATH));
     		
-    		edit_name_button.click();//if "normal" click doesn't work => Click.byJS(driver,edit_name_button);
+    		Click.element(driver, edit_name_button);//if "normal" click doesn't work => Click.byJS(driver,edit_name_button);
     		
     		//wait for edit modal
-    		WebElement edit_modal = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(EDITDELETE_MODAL_ID)));
+    		WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(EDITDELETE_MODAL_ID)));
     	
     		
     		//change name
@@ -209,20 +223,21 @@ abstract public class CourseTeacherTest extends LoggedTest{
     	//Go to details and edit them
     	try {//*[@id="sticky-footer-div"]/main/app-dashboard/div/div[3]/div/div[1]/ul/li[1]/div/div[2]
     		    	    	
-	    	WebElement course_button = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(FIRSTCOURSE_XPATH)));
-	    	course_button.click();
+	    	WebElement course_button = Wait.notTooMuch(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath(FIRSTCOURSE_XPATH+GOTOCOURSE_XPATH)));
+	    	driver = Click.element(driver, course_button);
 	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(TABS_DIV_ID)));
 	    	
     	}catch(Exception e) {
-    		Assert.fail("Failed to load Courses Tabs"+ e.getClass()+ ": "+e.getLocalizedMessage());
+    		Assert.fail("Failed to load Courses Tabs "+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
     	
     	// Modify description TAB HOME
     	try {
-    		WebElement home_tab = driver.findElement(By.id(HOMETAB_ID));
-    		home_tab.click();
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-0")));	
+    		WebElement home_tab = driver.findElement(By.xpath(HOMETAB_XPATH));
+    		String id = home_tab.getAttribute("id");
+    		driver = Click.element(driver, home_tab);
+    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     		
     		
     		//Modify the description
@@ -242,7 +257,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     		
     		//New Title
     		WebElement headerSelector = driver.findElement(By.className("ql-header"));
-    		headerSelector.click();
+    		Click.element(driver, headerSelector);
     		WebElement picker_options = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.className("ql-picker-options")));
     		WebElement option = NavigationUtilities.getOption(picker_options.findElements(By.className("ql-picker-item")), "Heading", NavigationUtilities.FindOption.ATTRIBUTE, "data-label");
     		
@@ -257,7 +272,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     		
     		//New SubTitle
     		headerSelector = driver.findElement(By.className("ql-header"));
-    		headerSelector.click();
+    		Click.element(driver, headerSelector);
     		picker_options = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.className("ql-picker-options")));
     		option = NavigationUtilities.getOption(picker_options.findElements(By.className("ql-picker-item")), "Subheading", NavigationUtilities.FindOption.ATTRIBUTE, "data-label");
 
@@ -272,7 +287,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     		
     		//Content
     		headerSelector = driver.findElement(By.className("ql-header"));
-    		headerSelector.click();
+    		Click.element(driver, headerSelector);
     		picker_options = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.className("ql-picker-options")));
     		option = NavigationUtilities.getOption(picker_options.findElements(By.className("ql-picker-item")), "Normal", NavigationUtilities.FindOption.ATTRIBUTE, "data-label");
 
@@ -315,9 +330,10 @@ abstract public class CourseTeacherTest extends LoggedTest{
     	
     	// in sessions program 
     	try {
-    		WebElement session_tab = driver.findElement(By.id(SESSIONSTAB_ID));
-    		session_tab.click();
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-1")));	
+    		WebElement sessions_tab = driver.findElement(By.xpath(SESSIONSTAB_XPATH));
+    		String id = sessions_tab.getAttribute("id");
+    		driver = Click.element(driver, sessions_tab);
+    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     		// new session ¡in session Tests!
     		// delete session ¡in session Tests!
     	} catch(Exception e) {	
@@ -327,9 +343,10 @@ abstract public class CourseTeacherTest extends LoggedTest{
     	
     	// in forum enable/disable
     	try {
-    		WebElement forum_tab = driver.findElement(By.id(FORUMTAB_ID));
-    		forum_tab.click();
-    		WebElement forum_tab_content = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-2")));	
+    		WebElement forum_tab = driver.findElement(By.xpath(FORUMTAB_XPATH));
+    		String id = forum_tab.getAttribute("id");
+    		driver = Click.element(driver, forum_tab);
+    		WebElement forum_tab_content = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));		
     		
     		//check if Forum is enabled 
     		if(ForumNavigationUtilities.isForumEnabled(forum_tab_content)) {
@@ -404,9 +421,10 @@ abstract public class CourseTeacherTest extends LoggedTest{
     	}
     	// in attenders
     	try {
-    		WebElement attenders_tab = driver.findElement(By.id(ATTEDENDERSTAB_ID));
-    		attenders_tab.click();
-    		WebElement attenders_tab_content = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-4")));
+    		WebElement attenders_tab = driver.findElement(By.xpath(ATTENDERSTAB_XPATH));
+    		String id = attenders_tab.getAttribute("id");
+    		driver = Click.element(driver, attenders_tab);
+    		WebElement attenders_tab_content = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));		
     		
     		// check logged user 
     		//get attenders list
@@ -428,9 +446,12 @@ abstract public class CourseTeacherTest extends LoggedTest{
     public void teacherDeleteCourseTest() {
     	String courseName="";
     	// navigate to courses if not there
-    	if (!NavigationUtilities.amIHere(driver, COURSES_URL.replace("__HOST__", host)))
-    		driver = NavigationUtilities.toCoursesHome(driver);
-    	
+    	try {
+	    	if (!NavigationUtilities.amIHere(driver, COURSES_URL.replace("__HOST__", host)))
+	    		driver = NavigationUtilities.toCoursesHome(driver);
+    	}catch (Exception e) {
+    		Assert.fail("Failed to go to Courses "+ e.getClass()+ ": "+e.getLocalizedMessage());
+    	}
     	// create a course 
     	try {
     		courseName= CourseNavigationUtilities.newCourse(driver, host);
@@ -452,14 +473,14 @@ abstract public class CourseTeacherTest extends LoggedTest{
     		WebElement edit_name_button = course.findElement(By.xpath("./"+EDITCOURSE_BUTTON_XPATH));
     		//    		WebElement edit_name_button = course.findElements(By.tagName("div")).get(3).findElement(By.tagName("a"));
 
-    		edit_name_button.click();//if "normal" click doesn't work => Click.byJS(driver,edit_name_button);
+    		Click.element(driver,edit_name_button);//if "normal" click doesn't work => Click.byJS(driver,edit_name_button);
     		
     		//wait for edit modal
     		WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(EDITDELETE_MODAL_ID)));
     	
     		//allow deletion
     		WebElement allow_deletion_button = edit_modal.findElement(By.xpath(ENABLEDELETION_BUTTON_XPATH));
-    		allow_deletion_button.click();
+    		Click.element(driver, allow_deletion_button);
     		
     		//delete
     		WebElement delete_button = edit_modal.findElement(By.xpath(DELETE_BUTTON_XPATH));
@@ -483,11 +504,11 @@ abstract public class CourseTeacherTest extends LoggedTest{
     private static String GOTOCOURSE_XPATH = "/div[2]"; /*use with XCOURSE_XPATH+GOTOCOURSE_XPATH*/
  
     private static String TABS_DIV_ID ="tabs-course-details";
-    private static String HOMETAB_ID ="md-tab-label-0-0";
-    private static String SESSIONSTAB_ID ="md-tab-label-0-1";
-    private static String FORUMTAB_ID ="md-tab-label-0-2";
-    private static String FILESTAB_ID ="md-tab-label-0-3";
-    private static String ATTEDENDERSTAB_ID ="md-tab-label-0-4";
+    private static String HOMETAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[1]";
+    private static String SESSIONSTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[2]";
+    private static String FORUMTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[3]";
+    private static String FILESTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[4]";
+    private static String ATTENDERSTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[5]";
 
     private static String NEWCOURSE_BUTTON_XPATH = "/html/body/app/div/main/app-dashboard/div/div[3]/div/div[1]/div/a";
     private static String NEWCOURSE_MODAL_ID = "course-modal";

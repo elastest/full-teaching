@@ -12,6 +12,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import com.fullteaching.e2e.no_elastest.utils.Click;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
 
 public class SpiderNavigation {
@@ -85,7 +86,7 @@ public class SpiderNavigation {
 			try {
 				//explore page...
 				//navigate to new page: 
-				link.click();
+				Click.element(wd, link);
 				Wait.footer(wd);
 				explored.put(href, "OK");
 				

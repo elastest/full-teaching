@@ -53,7 +53,7 @@ abstract public class LoggedLinksTests extends LoggedTest {
 	public void spiderLoggedTest() {
 		
 		/*navigate from home*/
-		NavigationUtilities.getUrlAndWaitFooter(driver, "http://"+host+":5000/");
+		NavigationUtilities.getUrlAndWaitFooter(driver, host);
 				
 		List <WebElement> pageLinks = SpiderNavigation.getPageLinks(driver);
 		

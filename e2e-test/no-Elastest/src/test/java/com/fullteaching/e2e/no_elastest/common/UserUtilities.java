@@ -37,7 +37,7 @@ public class UserUtilities {
 			user_field.sendKeys(user);
 			pass_field.sendKeys(password);
 			
-			submit_field.click();
+			wd = Click.element(wd, submit_field);
 			
 		}
 		catch(TimeoutException tOe) {
@@ -79,7 +79,7 @@ public class UserUtilities {
 			
 			WebElement settings_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("settings-button")));
 			
-			if(!NavigationUtilities.amIHere(wd, login_url.replace("__HOST__", host))) {
+			if(!NavigationUtilities.amIHere(wd, host+"/settings")) {
 				settings_button.click();
 			}
 			else {
@@ -149,10 +149,15 @@ public class UserUtilities {
 			
 			WebElement settings_page  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("stng-user-mail")));
 			current_user = settings_page.getText().trim();
-			wd.get(current_url);
+			while (!wd.getCurrentUrl().equals(current_url)) {
+				wd.navigate().back();
+			}
+			
 			
 		}catch(TimeoutException toe) {
-			wd.get(current_url);
+			while (!wd.getCurrentUrl().equals(current_url)) {
+				wd.navigate().back();
+			}
 			throw new NotLoggedException(toe.getMessage());
 		}
 		

@@ -83,8 +83,8 @@ abstract public class LoggedTest {
 	 @After
 	 public void teardown() throws IOException {
         if (driver != null) {
-            log.info("Screenshot (in Base64) at the end of the test:\n{}",
-                    getBase64Screenshot(driver));
+            log.info("url:"+driver.getCurrentUrl()+"\nScreenshot (in Base64) at the end of the test:\n{}",
+                    getBase64Screenshot());
 
             log.info("Browser console at the end of the test");
             LogEntries logEntries = driver.manage().logs().get(BROWSER);
@@ -93,10 +93,10 @@ abstract public class LoggedTest {
                     entry.getMessage()));
         }
     }
-	 protected String getBase64Screenshot(WebDriver driver) throws IOException {
+	 protected String getBase64Screenshot() throws IOException {
 		 
 		 	String screenshotBase64 = ((TakesScreenshot) driver)
 	                .getScreenshotAs(BASE64);
-	        return host+"\ndata:image/png;base64," + screenshotBase64;
+	        return "data:image/png;base64," + screenshotBase64;
 	    }
 }

@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.fullteaching.e2e.no_elastest.common.NavigationUtilities;
 import com.fullteaching.e2e.no_elastest.functional.test.LoggedTest;
+import com.fullteaching.e2e.no_elastest.utils.Click;
 import com.fullteaching.e2e.no_elastest.utils.ParameterLoader;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
 
@@ -39,66 +40,75 @@ public abstract class CourseStudentTest extends LoggedTest {
     public void studentCourseMainTest() {
     	
     	try {
-	    	driver = NavigationUtilities.toCoursesHome(driver);
+    		if(!NavigationUtilities.amIHere(driver,COURSES_URL.replace("__HOST__", host)))
+        		driver = NavigationUtilities.toCoursesHome(driver);
 	    	    	
-	    	WebElement course_button = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(FIRSTCOURSE_XPATH)));
-	    	course_button.click();
+	    	WebElement course_button = Wait.notTooMuch(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath(FIRSTCOURSE_XPATH)));
+	    	Click.element(driver, course_button);
 	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(TABS_DIV_ID)));
     	}catch(Exception e) {
-    		Assert.fail("Failed to load Courses Tabs");
+    		Assert.fail("Failed to load Courses Tabs"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	//Check tabs
     	//Home tab 
     	try {
-    		WebElement home_tab = driver.findElement(By.id(HOMETAB_ID));
-    		home_tab.click();
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-0")));	
+    		WebElement home_tab = driver.findElement(By.xpath(HOMETAB_XPATH));
+    		String id = home_tab.getAttribute("id");
+    		driver = Click.element(driver, home_tab);
+    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     	} catch(Exception e) {
-    		Assert.fail("Failed to load home tab");
+    		Assert.fail("Failed to load home tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
     	try {
-    		WebElement session_tab = driver.findElement(By.id(SESSIONSTAB_ID));
-    		session_tab.click();
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-1")));	
+    		WebElement session_tab = driver.findElement(By.xpath(SESSIONSTAB_XPATH));
+    		String id = session_tab.getAttribute("id");
+    		driver = Click.element(driver, session_tab);
+    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     	} catch(Exception e) {
-    		Assert.fail("Failed to load session tab");
+    		Assert.fail("Failed to load session tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
     	try {
-    		WebElement forum_tab = driver.findElement(By.id(FORUMTAB_ID));
-    		forum_tab.click();
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-2")));	
+    		WebElement forum_tab = driver.findElement(By.xpath(FORUMTAB_XPATH));
+    		String id = forum_tab.getAttribute("id");
+    		driver = Click.element(driver, forum_tab);
+    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     	} catch(Exception e) {
-    		Assert.fail("Failed to load forum tab");
+    		Assert.fail("Failed to load forum tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
     	try {
-    		WebElement files_tab = driver.findElement(By.id(FILESTAB_ID));
-    		files_tab.click();
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-3")));	
+    		WebElement files_tab = driver.findElement(By.xpath(FILESTAB_XPATH));
+    		String id = files_tab.getAttribute("id");
+    		driver = Click.element(driver, files_tab);
+    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     	} catch(Exception e) {
-    		Assert.fail("Failed to load files tab");
+    		Assert.fail("Failed to load files tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
     	try {
-    		WebElement attenders_tab = driver.findElement(By.id(ATTEDENDERSTAB_ID));
-    		attenders_tab.click();
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-4")));	
+    		WebElement attenders_tab = driver.findElement(By.xpath(ATTEDENDERSTAB_XPATH));
+    		String id = attenders_tab.getAttribute("id");
+    		driver = Click.element(driver, attenders_tab);
+    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     	} catch(Exception e) {
-    		Assert.fail("Failed to load attenders tab");
+    		Assert.fail("Failed to load attenders tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
     }
     
     //Xpaths and ids
-    private static String FIRSTCOURSE_XPATH = "/html/body/app/div/main/app-dashboard/div/div[2]/div/div[1]/ul/li[1]/div/div[2]";
-    private static String TABS_DIV_ID ="tabs-course-details";
-    private static String HOMETAB_ID ="md-tab-label-0-0";
-    private static String SESSIONSTAB_ID ="md-tab-label-0-1";
-    private static String FORUMTAB_ID ="md-tab-label-0-2";
-    private static String FILESTAB_ID ="md-tab-label-0-3";
-    private static String ATTEDENDERSTAB_ID ="md-tab-label-0-4";
-
+    private static String COURSES_URL = "__HOST__/courses";
     
+    //Xpaths and ids
+    private static String FIRSTCOURSE_XPATH = "/html/body/app/div/main/app-dashboard/div/div[2]/div/div[1]/ul/li[1]/div/div[2]";
+     
+    private static String TABS_DIV_ID ="tabs-course-details";
+    private static String HOMETAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[3]/md-tab-group/div[1]/div[1]";
+    private static String SESSIONSTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[3]/md-tab-group/div[1]/div[2]";
+    private static String FORUMTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[3]/md-tab-group/div[1]/div[3]";
+    private static String FILESTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[3]/md-tab-group/div[1]/div[4]";
+    private static String ATTEDENDERSTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[3]/md-tab-group/div[1]/div[5]";
+
 }

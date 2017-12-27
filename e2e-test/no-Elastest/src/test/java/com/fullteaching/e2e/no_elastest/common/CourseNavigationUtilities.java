@@ -27,7 +27,7 @@ public class CourseNavigationUtilities {
 		}
 
     	// press new course button and wait for modal course-modal 
-	    WebElement new_course_button = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(NEWCOURSE_BUTTON_XPATH)));
+	    WebElement new_course_button = Wait.notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(By.xpath(NEWCOURSE_BUTTON_XPATH)));
 	    Click.byJS(wd,new_course_button);
    	
 	    Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id(NEWCOURSE_MODAL_ID)));
@@ -131,7 +131,7 @@ public class CourseNavigationUtilities {
 	}
 	
 	public static WebElement getCourseElement(WebDriver wd, String name) throws ElementNotFoundException {
-		WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(COURSES_LIST_XPATH)));
+		WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(By.xpath(COURSES_LIST_XPATH)));
     	
     	//find the newly create course
     	List<WebElement> courses = courses_list.findElements(By.tagName("li"));

@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
+import com.fullteaching.e2e.no_elastest.utils.Click;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
 
 public class NavigationUtilities {
@@ -45,11 +46,11 @@ public class NavigationUtilities {
 		return wd;
 	}
 	
-	public static WebDriver toCoursesHome(WebDriver wd) {
+	public static WebDriver toCoursesHome(WebDriver wd) throws ElementNotFoundException {
 		
 		WebElement button = Wait.aLittle(wd).until(ExpectedConditions.presenceOfElementLocated(By.id(coursesButtonId)));
 		
-		button.click();
+		wd = Click.element(wd, button);
 		
 		Wait.notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(By.className("dashboard-title")));
 		
