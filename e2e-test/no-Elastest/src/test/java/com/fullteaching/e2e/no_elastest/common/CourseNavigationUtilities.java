@@ -102,7 +102,7 @@ public class CourseNavigationUtilities {
     	int i = 1;
     	for (WebElement c : courses) {
     		try {
-    			log.info("Course ["+i+"]");
+    			log.debug("Course ["+i+"] "+c.getText());
     			WebElement title = c.findElement(By.className("title"));
     			String title_text = title.getText();
     			if(oldName.equals(title_text)) {
