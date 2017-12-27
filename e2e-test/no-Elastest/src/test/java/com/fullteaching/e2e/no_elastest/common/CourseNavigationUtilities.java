@@ -1,5 +1,8 @@
 package com.fullteaching.e2e.no_elastest.common;
 
+import static java.lang.invoke.MethodHandles.lookup;
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.List;
 
 import org.junit.Assert;
@@ -9,12 +12,15 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.slf4j.Logger;
 
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 import com.fullteaching.e2e.no_elastest.utils.Click;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
 
 public class CourseNavigationUtilities {
+
+	public static final  Logger log = getLogger(lookup().lookupClass());
 
 	public static String newCourse(WebDriver wd, String host) throws ElementNotFoundException {
 		boolean found = false;
@@ -93,9 +99,10 @@ public class CourseNavigationUtilities {
     	
     	//find the newly create course
     	List<WebElement> courses = courses_list.findElements(By.tagName("li"));
-    	
+    	int i = 1;
     	for (WebElement c : courses) {
     		try {
+    			log.info("Course ["+i+"]");
     			WebElement title = c.findElement(By.className("title"));
     			String title_text = title.getText();
     			if(oldName.equals(title_text)) {
@@ -122,6 +129,7 @@ public class CourseNavigationUtilities {
     		catch(NoSuchElementException csee) {
     			//do nothing and look for the next item
     		}
+    		i++;
     	}
     	
     	if (!found) throw new ElementNotFoundException("Course "+oldName +"doesn't exists");

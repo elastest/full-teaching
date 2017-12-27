@@ -43,7 +43,7 @@ abstract public class LoggedTest {
 
 	protected String host="https://localhost:5000";
 	
-	final Logger log = getLogger(lookup().lookupClass());
+	final  Logger log = getLogger(lookup().lookupClass());
 	
 	 @Before 
 	 public void setUp() throws BadUserException, ElementNotFoundException, NotLoggedException, TimeOutExeception {
