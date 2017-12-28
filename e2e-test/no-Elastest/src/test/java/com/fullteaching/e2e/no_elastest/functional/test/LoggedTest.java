@@ -47,7 +47,8 @@ abstract public class LoggedTest {
 	
 	 @Before 
 	 public void setUp() throws BadUserException, ElementNotFoundException, NotLoggedException, TimeOutExeception {
-			
+		 	
+		 	log.info("[INI setUP]");
 	    	String logged_user = null; 
 	    	boolean is_logged = true;
 	    	
@@ -78,6 +79,8 @@ abstract public class LoggedTest {
 	    	driver = UserUtilities.checkLogin(driver, user);
 	    	
 	    	userName = UserUtilities.getUserName(driver, true, host);
+	    	
+	    	log.info("[End setUP]");
 	    }
 	 
 	 @After

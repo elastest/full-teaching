@@ -1,11 +1,15 @@
 package com.fullteaching.e2e.no_elastest.common;
 
+import static java.lang.invoke.MethodHandles.lookup;
+import static org.slf4j.LoggerFactory.getLogger;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.slf4j.Logger;
 
 import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
@@ -18,8 +22,10 @@ public class UserUtilities {
 	
 	public static String login_url = "__HOST__";
 	
+	final static Logger log = getLogger(lookup().lookupClass());
+	
 	public static WebDriver login(WebDriver wd, String user, String password, String host) throws ElementNotFoundException, TimeOutExeception {
-		
+		log.info("[INI]login");
 		//navigate to login page
 		NavigationUtilities.getUrlAndWaitFooter(wd, login_url.replace("__HOST__", host));
 		
@@ -48,13 +54,13 @@ public class UserUtilities {
 			System.err.println("[User.login] Element not found");
 			throw new ElementNotFoundException("[User.login] Time Out");
 		}
-				
+		log.info("[END]login");		
 		return wd;
 		
 	}
 	
 	public static WebDriver checkLogin(WebDriver wd, String user) throws NotLoggedException, BadUserException{
-		
+		log.info("[INI]checkLogin");
 		//Wait to settings button to be present
 		try {
 			WebElement settings_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("settings-button")));
@@ -68,12 +74,12 @@ public class UserUtilities {
 		
 		//Check if the user name is the expected
 		if (!settings_page.getText().trim().equals(user.trim())) throw new BadUserException();
-		
+		log.info("[END]checkLogin");
 		return wd;
 	}
 	
 	public static String getUserName(WebDriver wd, boolean goBack, String host) throws NotLoggedException, BadUserException{
-		
+		log.info("[INI]getUserName");
 		//Wait to settings button to be present
 		try {
 			
@@ -98,11 +104,13 @@ public class UserUtilities {
 			wd.navigate().back();
 		}
 		//Check if the user name is the expected
+		log.info("[END]getUserName");
 		return userName;
 		
 	}
 	
 	public static WebDriver logOut(WebDriver wd, String host) throws NotLoggedException {
+		log.info("[INI]logOut");
 		//press logout link
 		try {
 			WebElement arrow_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("arrow-drop-down")));
@@ -119,25 +127,26 @@ public class UserUtilities {
 		}catch(TimeoutException toe) {
 			throw new NotLoggedException("Already logged Out");
 		}
-		
+		log.info("[END]logOut");
 		return wd;
 		
 	}
 	
 	public static WebDriver checkLogOut(WebDriver wd) throws ElementNotFoundException {
-		
+		log.info("[INI]checkLogOut");
 		try {
 			Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/app/div/header/navbar/div/nav/div/ul/li[2]/a")));
 		}
 		catch (TimeoutException toe) {
 			throw new ElementNotFoundException("Not Logged Out. Not in the home");	
 		}
-		
+		log.info("[END]checkLogOut");
 		return wd;
 		
 	}
 	
 	public static String getLoggedUser(WebDriver wd) throws NotLoggedException, ElementNotFoundException {
+		log.info("[INI]getLoggedUser");
 		String current_user = null;
 		String current_url = wd.getCurrentUrl();
 
@@ -160,7 +169,7 @@ public class UserUtilities {
 			}
 			throw new NotLoggedException(toe.getMessage());
 		}
-		
+		log.info("[END]getLoggedUser");
 		return current_user;
 		
 	}
