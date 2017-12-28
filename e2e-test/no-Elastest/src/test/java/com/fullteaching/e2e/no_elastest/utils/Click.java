@@ -44,17 +44,24 @@ public class Click {
 				Wait.notTooMuch(wd).until(ExpectedConditions.elementToBeClickable(wd.findElement(eleBy)));
 				wd.findElement(eleBy).click();
 				Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(waitFor));
-				log.info("Click.withNRetries: ele:"+tagName+":"+text+"+>OK");
+				log.info("Click.withNRetries (click): ele:"+tagName+":"+text+" ==>OK");
 				return wd;
 			}
 			catch(Exception e) {
-				log.error("Click.withNRetries n:"+i+" "+e.getClass().getName()+":"+e.getLocalizedMessage());
-				i ++;
+				try {
+					log.error("Click.withNRetries n (click):"+i+" "+e.getClass().getName()+":"+e.getLocalizedMessage());
+					wd = byJS(wd,wd.findElement(eleBy));
+					log.info("Click.element (ByJs): ele:"+tagName+":"+text+" ==>OK");
+					return wd;
+				}catch(Exception ex) {
+					log.error("Click.withNRetries n (ByJS):"+i+" "+ex.getClass().getName()+":"+ex.getLocalizedMessage());
+					i ++;
+				}		
 			}
 			
 		}while(i<n);
 		
-		log.error("Click.withNRetries: ele:"+tagName+":"+text+"+>KO");
+		log.error("Click.withNRetries: ele:"+tagName+":"+text+" ==>KO");
 		throw new ElementNotFoundException("Click doesn't work properly");
 	}
 	
@@ -79,23 +86,33 @@ public class Click {
 		String tagName = wd.findElement(eleBy).getTagName();
 		String text= wd.findElement(eleBy).getText();
 		
-		WebElement ele =  wd.findElement(eleBy);
 		try {
 			wd = Scroll.toElement(wd, wd.findElement(eleBy));
 		}catch(Exception e) {
 			log.error("Click.element: Scroll failed continuing...");
 		}
-		
+		//try by click
 		try {			
 			Wait.notTooMuch(wd).until(ExpectedConditions.elementToBeClickable(wd.findElement(eleBy)));
 			wd.findElement(eleBy).click();
-			log.info("Click.element: ele:"+tagName+":"+text+"+>OK");
+			log.info("Click.element (click): ele:"+tagName+":"+text+" ==>OK");
+			return wd;
 		}
 		catch(Exception e) {
-			log.error("Click.element: ele:"+tagName+":"+text+"+>KO");
-			throw new ElementNotFoundException("Click.element ERROR::"+e.getClass().getName()+":"+e.getLocalizedMessage());
+			log.error("Click.element (click): ele:"+tagName+":"+text+" ==>KO "+e.getClass().getName()+":"+e.getLocalizedMessage());
+		}
+		//Try by Js
+		try {			
+			wd = byJS(wd,wd.findElement(eleBy));
+			log.info("Click.element (ByJs): ele:"+tagName+":"+text+" ==>OK");
+			return wd;
+		}
+		catch(Exception e) {
+			log.error("Click.element (ByJs): ele:"+tagName+":"+text+" ==>KO "+e.getClass().getName()+":"+e.getLocalizedMessage());
 		}
 		
-		return wd;
+		throw new ElementNotFoundException("Click.element ERROR");
+
+		
 	}
 }
