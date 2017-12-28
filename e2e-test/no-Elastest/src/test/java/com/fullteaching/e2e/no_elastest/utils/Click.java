@@ -1,5 +1,8 @@
 package com.fullteaching.e2e.no_elastest.utils;
 
+import static java.lang.invoke.MethodHandles.lookup;
+import static org.slf4j.LoggerFactory.getLogger;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
@@ -7,10 +10,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.slf4j.Logger;
 
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 
 public class Click {
+
+	public static final  Logger log = getLogger(lookup().lookupClass());
 
 	public static WebDriver here(WebDriver wd, int x, int y) {
 		Actions builder = new Actions(wd);  
@@ -20,19 +26,25 @@ public class Click {
 		return wd;
 	}
 	
-	public static WebDriver withNRetries(WebDriver wd, WebElement ele, int n, By waitFor) throws ElementNotFoundException {
+	public static WebDriver withNRetries(WebDriver wd, By eleBy, int n, By waitFor) throws ElementNotFoundException {
+		/*properties for log*/
+		String tagName = wd.findElement(eleBy).getTagName();
+		String text= wd.findElement(eleBy).getText();
+		
 		int i = 0;
+		
 		try {
-			wd = Scroll.toElement(wd, ele);
+			wd = Scroll.toElement(wd, wd.findElement(eleBy));
 		}
 		catch(Exception e) {
-			throw new ElementNotFoundException("Failed on scroll");
+			log.error("Click.withNRetries: Failed on scroll");
 		}
 		do {
 			try {
-				Wait.notTooMuch(wd).until(ExpectedConditions.elementToBeClickable(ele));
-				ele.click();
+				Wait.notTooMuch(wd).until(ExpectedConditions.elementToBeClickable(wd.findElement(eleBy)));
+				wd.findElement(eleBy).click();
 				Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(waitFor));
+				log.info("Click.withNRetries: ele:"+tagName+":"+text+"+>OK");
 				return wd;
 			}
 			catch(TimeoutException toe) {
@@ -44,6 +56,7 @@ public class Click {
 			
 		}while(i<n);
 		
+		log.error("Click.withNRetries: ele:"+tagName+":"+text+"+>KO");
 		throw new ElementNotFoundException("Click doesn't work properly");
 	}
 	
@@ -62,16 +75,23 @@ public class Click {
 	 * @return
 	 * @throws ElementNotFoundException 
 	 */
-	public static WebDriver element(WebDriver wd, WebElement ele) throws ElementNotFoundException {
+	public static WebDriver element(WebDriver wd, By eleBy) throws ElementNotFoundException {
+		
+		/*properties for log*/
+		String tagName = wd.findElement(eleBy).getTagName();
+		String text= wd.findElement(eleBy).getText();
+		
+		WebElement ele =  wd.findElement(eleBy);
 		try {
-			wd = Scroll.toElement(wd, ele);
-			Wait.notTooMuch(wd).until(ExpectedConditions.elementToBeClickable(ele));
+			wd = Scroll.toElement(wd, wd.findElement(eleBy));
+			Wait.notTooMuch(wd).until(ExpectedConditions.elementToBeClickable(wd.findElement(eleBy)));
+			wd.findElement(eleBy).click();
+			log.info("Click.element: ele:"+tagName+":"+text+"+>OK");
 		}
 		catch(Exception e) {
-			throw new ElementNotFoundException("Failed on scroll");
+			log.error("Click.element: ele:"+tagName+":"+text+"+>KO");
+			throw new ElementNotFoundException("Click.element:Failed on scroll::"+e.getClass().getName()+":"+e.getLocalizedMessage());
 		}
-		
-		ele.click();
 		
 		return wd;
 	}

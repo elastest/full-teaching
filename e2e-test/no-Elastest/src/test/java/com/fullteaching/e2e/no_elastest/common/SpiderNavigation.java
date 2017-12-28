@@ -86,7 +86,7 @@ public class SpiderNavigation {
 			try {
 				//explore page...
 				//navigate to new page: 
-				Click.element(wd, link);
+				link.click();
 				Wait.footer(wd);
 				explored.put(href, "OK");
 				

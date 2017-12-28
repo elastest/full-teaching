@@ -24,9 +24,9 @@ public class UserUtilities {
 		NavigationUtilities.getUrlAndWaitFooter(wd, login_url.replace("__HOST__", host));
 		
 		try {
-			WebElement login_menu  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/app/div/header/navbar/div/nav/div/ul/li[2]/a")));
+			WebElement login_menu  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(LOGINMENU_XPATH)));
 						
-			wd = Click.withNRetries(wd, login_menu, 3, By.id("login-modal") );
+			wd = Click.withNRetries(wd, By.xpath(LOGINMENU_XPATH), 3, By.id("login-modal") );
 			
 			WebElement login_modal = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("login-modal")));
 			
@@ -37,7 +37,7 @@ public class UserUtilities {
 			user_field.sendKeys(user);
 			pass_field.sendKeys(password);
 			
-			wd = Click.element(wd, submit_field);
+			submit_field.click();
 			
 		}
 		catch(TimeoutException tOe) {
@@ -145,7 +145,7 @@ public class UserUtilities {
 			//go to settings
 			WebElement settings_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("settings-button")));
 			
-			Click.withNRetries(wd, settings_button, 3, By.id("stng-user-mail"));
+			Click.withNRetries(wd, By.id("settings-button"), 3, By.id("stng-user-mail"));
 			
 			WebElement settings_page  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("stng-user-mail")));
 			current_user = settings_page.getText().trim();
@@ -166,4 +166,5 @@ public class UserUtilities {
 	}
 	
 	private static String USERNAME_XPATH ="/html/body/app/div/main/app-settings/div/div[3]/div[2]/ul/li[2]/div[2]";
+	private static String LOGINMENU_XPATH ="/html/body/app/div/header/navbar/div/nav/div/ul/li[2]/a";
 }

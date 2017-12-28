@@ -44,7 +44,7 @@ public abstract class CourseStudentTest extends LoggedTest {
         		driver = NavigationUtilities.toCoursesHome(driver);
 	    	    	
 	    	WebElement course_button = Wait.notTooMuch(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath(FIRSTCOURSE_XPATH)));
-	    	Click.element(driver, course_button);
+	    	driver = Click.element(driver, By.xpath(FIRSTCOURSE_XPATH));
 	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(TABS_DIV_ID)));
     	}catch(Exception e) {
     		Assert.fail("Failed to load Courses Tabs"+ e.getClass()+ ": "+e.getLocalizedMessage());
@@ -54,7 +54,7 @@ public abstract class CourseStudentTest extends LoggedTest {
     	try {
     		WebElement home_tab = driver.findElement(By.xpath(HOMETAB_XPATH));
     		String id = home_tab.getAttribute("id");
-    		driver = Click.element(driver, home_tab);
+    		driver = Click.element(driver, By.xpath(HOMETAB_XPATH));
     		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     	} catch(Exception e) {
     		Assert.fail("Failed to load home tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
@@ -63,7 +63,7 @@ public abstract class CourseStudentTest extends LoggedTest {
     	try {
     		WebElement session_tab = driver.findElement(By.xpath(SESSIONSTAB_XPATH));
     		String id = session_tab.getAttribute("id");
-    		driver = Click.element(driver, session_tab);
+    		driver = Click.element(driver, By.xpath(SESSIONSTAB_XPATH));
     		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     	} catch(Exception e) {
     		Assert.fail("Failed to load session tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
@@ -72,7 +72,7 @@ public abstract class CourseStudentTest extends LoggedTest {
     	try {
     		WebElement forum_tab = driver.findElement(By.xpath(FORUMTAB_XPATH));
     		String id = forum_tab.getAttribute("id");
-    		driver = Click.element(driver, forum_tab);
+    		driver = Click.element(driver, By.xpath(FORUMTAB_XPATH));
     		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     	} catch(Exception e) {
     		Assert.fail("Failed to load forum tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
@@ -81,16 +81,16 @@ public abstract class CourseStudentTest extends LoggedTest {
     	try {
     		WebElement files_tab = driver.findElement(By.xpath(FILESTAB_XPATH));
     		String id = files_tab.getAttribute("id");
-    		driver = Click.element(driver, files_tab);
+    		driver = Click.element(driver, By.xpath(FILESTAB_XPATH));
     		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     	} catch(Exception e) {
     		Assert.fail("Failed to load files tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
     	try {
-    		WebElement attenders_tab = driver.findElement(By.xpath(ATTEDENDERSTAB_XPATH));
+    		WebElement attenders_tab = driver.findElement(By.xpath(ATTENDERSTAB_XPATH));
     		String id = attenders_tab.getAttribute("id");
-    		driver = Click.element(driver, attenders_tab);
+    		driver = Click.element(driver, By.xpath(ATTENDERSTAB_XPATH));
     		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
     	} catch(Exception e) {
     		Assert.fail("Failed to load attenders tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
@@ -109,6 +109,6 @@ public abstract class CourseStudentTest extends LoggedTest {
     private static String SESSIONSTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[3]/md-tab-group/div[1]/div[2]";
     private static String FORUMTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[3]/md-tab-group/div[1]/div[3]";
     private static String FILESTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[3]/md-tab-group/div[1]/div[4]";
-    private static String ATTEDENDERSTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[3]/md-tab-group/div[1]/div[5]";
+    private static String ATTENDERSTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[3]/md-tab-group/div[1]/div[5]";
 
 }

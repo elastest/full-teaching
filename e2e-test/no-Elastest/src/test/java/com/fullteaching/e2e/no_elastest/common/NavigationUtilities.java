@@ -50,7 +50,7 @@ public class NavigationUtilities {
 		
 		WebElement button = Wait.aLittle(wd).until(ExpectedConditions.presenceOfElementLocated(By.id(coursesButtonId)));
 		
-		wd = Click.element(wd, button);
+		wd = Click.element(wd, By.id(coursesButtonId));
 		
 		Wait.notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(By.className("dashboard-title")));
 		

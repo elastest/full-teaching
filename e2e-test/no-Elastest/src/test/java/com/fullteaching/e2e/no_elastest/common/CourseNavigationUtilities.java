@@ -45,7 +45,7 @@ public class CourseNavigationUtilities {
 	    name_field.sendKeys(course_title); //no duplicated courses
     	
     	WebElement save_button = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id(NEW_COURSE_MODAL_SAVE_ID)));
-	    save_button.click();
+	    Click.element(wd, By.id(NEW_COURSE_MODAL_SAVE_ID));
     	    	
     	//check if the course appears now in the list
     	WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(COURSES_LIST_XPATH)));
@@ -67,7 +67,8 @@ public class CourseNavigationUtilities {
 	    		}
 	    }
 	    if (! found) {
-	    	throw new ElementNotFoundException("Course hasn't been created");
+	    	log.error("newCourse - Course hasn't been created");
+	    	throw new ElementNotFoundException("newCourse - Course hasn't been created");
 	    }
 		return course_title;
 	}
@@ -109,7 +110,7 @@ public class CourseNavigationUtilities {
     				
     				WebElement edit_name_button = wd.findElement(By.xpath(FIRSTCOURSE_XPATH+EDITCOURSE_BUTTON_XPATH));
     	    		
-    	    		edit_name_button.click();//if "normal" click doesn't work => Click.byJS(driver,edit_name_button);
+    	    		Click.element(wd,By.xpath(FIRSTCOURSE_XPATH+EDITCOURSE_BUTTON_XPATH));//if "normal" click doesn't work => Click.byJS(driver,edit_name_button);
     	    		
     	    		//wait for edit modal
     	    		WebElement edit_modal = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id(EDITDELETE_MODAL_ID)));
@@ -121,7 +122,7 @@ public class CourseNavigationUtilities {
     				
     				//save
     				WebElement save_button = edit_modal.findElement(By.id(EDITCOURSE_MODAL_SAVE_ID));
-    				save_button.click();
+    				Click.element(wd, By.id(EDITCOURSE_MODAL_SAVE_ID));
     				found=true;
     				break;
     			}
@@ -132,7 +133,7 @@ public class CourseNavigationUtilities {
     		i++;
     	}
     	
-    	if (!found) throw new ElementNotFoundException("Course "+oldName +"doesn't exists");
+    	if (!found) throw new ElementNotFoundException("changeCourseName - Course "+oldName +"doesn't exists");
     	
     	return wd;
 		
@@ -158,7 +159,7 @@ public class CourseNavigationUtilities {
     		}
     	}
     	
-    	throw new ElementNotFoundException("the course doesn't exist");
+    	throw new ElementNotFoundException("getCourseElement-the course doesn't exist");
 	}
 	
 	private static String COURSES_URL = "__HOST__/courses";
