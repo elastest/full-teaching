@@ -216,7 +216,8 @@ abstract public class CourseTeacherTest extends LoggedTest{
 
 	    	//return to old name
 	    	driver = CourseNavigationUtilities.changeCourseName(driver, edition_name, old_name);
-	    	
+	    	Assert.assertTrue("The course title hasn't been reset",CourseNavigationUtilities.checkIfCourseExists(driver, old_name));
+
     	}catch (Exception e) {
     		Assert.fail("Failed to edit course name "+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
@@ -224,7 +225,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     	//Go to details and edit them
     	try {//*[@id="sticky-footer-div"]/main/app-dashboard/div/div[3]/div/div[1]/ul/li[1]/div/div[2]
     		    	    	
-	    	WebElement course_button = Wait.notTooMuch(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath(FIRSTCOURSE_XPATH+GOTOCOURSE_XPATH)));
+	    	Wait.notTooMuch(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath(FIRSTCOURSE_XPATH+GOTOCOURSE_XPATH)));
 	    	driver = Click.element(driver, By.xpath(FIRSTCOURSE_XPATH+GOTOCOURSE_XPATH));
 	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(TABS_DIV_ID)));
 	    	
