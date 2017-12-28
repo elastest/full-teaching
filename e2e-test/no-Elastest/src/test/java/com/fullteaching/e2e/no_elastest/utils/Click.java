@@ -47,10 +47,8 @@ public class Click {
 				log.info("Click.withNRetries: ele:"+tagName+":"+text+"+>OK");
 				return wd;
 			}
-			catch(TimeoutException toe) {
-				i ++;
-			}
 			catch(Exception e) {
+				log.error("Click.withNRetries n:"+i+" "+e.getClass().getName()+":"+e.getLocalizedMessage());
 				i ++;
 			}
 			
@@ -84,13 +82,18 @@ public class Click {
 		WebElement ele =  wd.findElement(eleBy);
 		try {
 			wd = Scroll.toElement(wd, wd.findElement(eleBy));
+		}catch(Exception e) {
+			log.error("Click.element: Scroll failed continuing...");
+		}
+		
+		try {			
 			Wait.notTooMuch(wd).until(ExpectedConditions.elementToBeClickable(wd.findElement(eleBy)));
 			wd.findElement(eleBy).click();
 			log.info("Click.element: ele:"+tagName+":"+text+"+>OK");
 		}
 		catch(Exception e) {
 			log.error("Click.element: ele:"+tagName+":"+text+"+>KO");
-			throw new ElementNotFoundException("Click.element:Failed on scroll::"+e.getClass().getName()+":"+e.getLocalizedMessage());
+			throw new ElementNotFoundException("Click.element ERROR::"+e.getClass().getName()+":"+e.getLocalizedMessage());
 		}
 		
 		return wd;
