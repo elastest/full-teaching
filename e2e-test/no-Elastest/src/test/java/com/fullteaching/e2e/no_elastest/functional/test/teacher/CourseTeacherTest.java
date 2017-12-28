@@ -19,6 +19,7 @@ import com.fullteaching.e2e.no_elastest.common.CourseNavigationUtilities;
 import com.fullteaching.e2e.no_elastest.common.ForumNavigationUtilities;
 import com.fullteaching.e2e.no_elastest.common.NavigationUtilities;
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
+import com.fullteaching.e2e.no_elastest.common.exception.ExceptionsHelper;
 import com.fullteaching.e2e.no_elastest.functional.test.LoggedTest;
 import com.fullteaching.e2e.no_elastest.utils.Click;
 import com.fullteaching.e2e.no_elastest.utils.ParameterLoader;
@@ -324,7 +325,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     		
     		    		
     	} catch(Exception e) {	
-    		Assert.fail("Failed to modify description:: (File: "+e.getStackTrace()[15].getFileName() +" -line: "+e.getStackTrace()[15].getLineNumber()+") "
+    		Assert.fail("Failed to modify description:: (File:CourseTeacherTest.java - line:"+ExceptionsHelper.getFileLineInfo(e.getStackTrace(), "CourseTeacherTest.java")+") "
     						+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
@@ -337,7 +338,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     		// new session ¡in session Tests!
     		// delete session ¡in session Tests!
     	} catch(Exception e) {	
-    		Assert.fail("Failed to test session:: (File: "+e.getStackTrace()[15].getFileName() +" -line: "+e.getStackTrace()[15].getLineNumber()+") "
+    		Assert.fail("Failed to test session:: (File:CourseTeacherTest.java - line:"+ExceptionsHelper.getFileLineInfo(e.getStackTrace(), "CourseTeacherTest.java")+") "
     						+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
@@ -416,7 +417,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     		}
     		
     	} catch(Exception e) {	
-    		Assert.fail("Failed to tests forum:: (File: "+e.getStackTrace()[15].getFileName() +" -line: "+e.getStackTrace()[15].getLineNumber()+") "
+    		Assert.fail("Failed to tests forum:: (File:CourseTeacherTest.java - line:"+ExceptionsHelper.getFileLineInfo(e.getStackTrace(), "CourseTeacherTest.java")+") "
     						+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	// in attenders
@@ -434,7 +435,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     		// delete attenders -in test attenders
     	}
     	 catch(Exception e) {	
-     		Assert.fail("Failed to tests attenders:: (File: "+e.getStackTrace()[15].getFileName() +" -line: "+e.getStackTrace()[15].getLineNumber()+") "
+     		Assert.fail("Failed to tests attenders:: (File: CourseTeacherTest.java -line: "+ExceptionsHelper.getFileLineInfo(e.getStackTrace(), "CourseTeacherTest.java")+") "
      						+ e.getClass()+ ": "+e.getLocalizedMessage());
      	}
     		
@@ -490,7 +491,7 @@ abstract public class CourseTeacherTest extends LoggedTest{
     		Assert.assertFalse("The course have not been deleted", CourseNavigationUtilities.checkIfCourseExists(driver, courseName));
     		
     	} catch(Exception e) {
-    		Assert.fail("Failed to deletecourse:: (File: "+e.getStackTrace()[15].getFileName() +" -line: "+e.getStackTrace()[15].getLineNumber()+") "
+    		Assert.fail("Failed to deletecourse:: (File:CourseTeacherTest.java - line:"+ExceptionsHelper.getFileLineInfo(e.getStackTrace(), "CourseTeacherTest.java")+") "
 						+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	//Well done!
