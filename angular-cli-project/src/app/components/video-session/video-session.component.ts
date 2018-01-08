@@ -95,7 +95,8 @@ export class VideoSessionComponent implements OnInit {
     this.getParamsAndJoin();
 
     let wsUri = environment.CHAT_URL;
-    this.websocket = new WebSocket(wsUri);
+    //this.websocket = new WebSocket(wsUri);
+    this.websocket = new WebSocket("wss://" + window.location.hostname + ":" + window.location.port + "/chat")
 
     this.websocket.onopen = (event: Event) => { // Connection is open
       // New welcome chat line
@@ -447,7 +448,7 @@ export class VideoSessionComponent implements OnInit {
   }
 
   joinSession() {
-    this.OV = new OpenVidu(environment.OPENVIDU_URL);
+    this.OV = new OpenVidu();
     this.OVSession = this.OV.initSession(this.OVSessionId);
 
     this.OVSession.on('streamCreated', (event) => {
@@ -480,7 +481,7 @@ export class VideoSessionComponent implements OnInit {
           if (this.authenticationService.isTeacher()) {
             this.OVPublisher = this.OV.initPublisher('nothing');
           } else {
-            this.OVPublisher = this.OV.initPublisher('nothing', {audio:false, video:false});
+            this.OVPublisher = this.OV.initPublisher('nothing', {audioActive:false, videoActive:false});
           }
           this.OVPublisher.on('accessAllowed', (event) => {
             console.warn("ACCESS ALLOWED");
