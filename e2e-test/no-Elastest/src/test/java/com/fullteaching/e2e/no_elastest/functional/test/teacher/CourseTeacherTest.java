@@ -1,44 +1,106 @@
 package com.fullteaching.e2e.no_elastest.functional.test.teacher;
 
+import static java.lang.invoke.MethodHandles.lookup;
+import static org.openqa.selenium.OutputType.BASE64;
+import static org.openqa.selenium.logging.LogType.BROWSER;
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
+import java.util.Date;
 
+import org.junit.After;
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.Point;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.slf4j.Logger;
 
 import com.fullteaching.e2e.no_elastest.common.CourseNavigationUtilities;
 import com.fullteaching.e2e.no_elastest.common.ForumNavigationUtilities;
 import com.fullteaching.e2e.no_elastest.common.NavigationUtilities;
+import com.fullteaching.e2e.no_elastest.common.UserUtilities;
+import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 import com.fullteaching.e2e.no_elastest.common.exception.ExceptionsHelper;
-import com.fullteaching.e2e.no_elastest.functional.test.LoggedTest;
+import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
+import com.fullteaching.e2e.no_elastest.common.exception.TimeOutExeception;
 import com.fullteaching.e2e.no_elastest.utils.Click;
 import com.fullteaching.e2e.no_elastest.utils.ParameterLoader;
+import com.fullteaching.e2e.no_elastest.utils.SetUp;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
 
-abstract public class CourseTeacherTest extends LoggedTest{
+abstract public class CourseTeacherTest {
 
 	
-	/* In super class Logged Test:
-		
-		@Parameter(0)
-		public String user; 
-		
-		@Parameter(1)
-		public String password;
-		
-		@Parameter(2)
-		public String roles;	
-	*/	
+	protected static WebDriver driver;
+	
+	@Parameter(0)
+	public String user; 
+	
+	@Parameter(1)
+	public String password;
+	
+	@Parameter(2)
+	public String roles;
+	
+	protected String userName;
+
+	protected String host="https://localhost:5000";
+	
+	final  Logger log = getLogger(lookup().lookupClass());
+	
+	 @Before 
+	 public void setUp() throws BadUserException, ElementNotFoundException, NotLoggedException, TimeOutExeception {
+		 	
+		 	log.info("[INI setUP]");    	
+	    	
+	    	host = SetUp.getHost();
+	     
+	        log.info("Test over url: "+host);
+	        
+	    	//check if logged with correct user
+	    	driver = SetUp.loginUser(driver, host, user, password);
+	    	
+	    	driver = UserUtilities.checkLogin(driver, user);
+	    	
+	    	userName = UserUtilities.getUserName(driver, true, host);
+	    	
+	    	log.info("[End setUP]");
+	    }
+	 
+	 @After
+	 public void teardown() throws IOException {
+        SetUp.tearDown(driver);
+    }
+	/* @After
+	 public void tearDown()throws IOException {
+		 if (driver != null) {
+	            log.info("url:"+driver.getCurrentUrl()+"\nScreenshot (in Base64) at the end of the test:\n{}",
+	                    getBase64Screenshot(driver));
+
+	            log.info("Browser console at the end of the test");
+	            LogEntries logEntries = driver.manage().logs().get(BROWSER);
+	            logEntries.forEach((entry) -> log.info("[{}] {} {}",
+	                    new Date(entry.getTimestamp()), entry.getLevel(),
+	                    entry.getMessage()));
+	        }
+	    }
+	 
+	 private String getBase64Screenshot(WebDriver driver) throws IOException {
+		 
+	 	String screenshotBase64 = ((TakesScreenshot) driver)
+                .getScreenshotAs(BASE64);
+        return "data:image/png;base64," + screenshotBase64;
+    }*/
 		
 	private static String course_title; 
 	
@@ -514,12 +576,12 @@ abstract public class CourseTeacherTest extends LoggedTest{
 
     private static String NEWCOURSE_BUTTON_XPATH = "/html/body/app/div/main/app-dashboard/div/div[3]/div/div[1]/div/a";
     private static String NEWCOURSE_MODAL_ID = "course-modal";
-    private static String NEWCOURSE_MODAL_NAMEFIELD_ID = "inputPostCourseName";
+    private static String NEWCOURSE_MODAL_NAMEFIELD_ID = "input-post-course-name";
     private static String NEW_COURSE_MODAL_SAVE_ID="submit-post-course-btn";
 
     private static String EDITCOURSE_BUTTON_XPATH = "/div[3]/a";/*use with XCOURSE_XPATH+EDITCOURSE_BUTTON_XPATH*/
     private static String EDITDELETE_MODAL_ID = "put-delete-course-modal";
-    private static String EDITCOURSE_MODAL_NAMEFIELD_ID = "inputPutCourseName";
+    private static String EDITCOURSE_MODAL_NAMEFIELD_ID = "input-put-course-name";
     private static String EDITCOURSE_MODAL_SAVE_ID="submit-put-course-btn";
     
     private static String EDITDESCRIPTION_BUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[2]/div[1]/div/div[1]/a";

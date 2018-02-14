@@ -95,6 +95,9 @@ public class CourseNavigationUtilities {
 	}
 	
 	public static WebDriver changeCourseName(WebDriver wd, String oldName, String newName) throws ElementNotFoundException {
+		
+		log.info("[INI] changeCourseName({}=>{})",oldName,  newName);
+		
 		boolean found = false;
 		WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(COURSES_LIST_XPATH)));
     	
@@ -133,8 +136,11 @@ public class CourseNavigationUtilities {
     		i++;
     	}
     	
-    	if (!found) throw new ElementNotFoundException("changeCourseName - Course "+oldName +"doesn't exists");
-    	
+    	if (!found) {
+    		log.info("[END] changeCourseName KO: changeCourseName - Course \"{}\"doesn't exists",oldName);
+    		throw new ElementNotFoundException("changeCourseName - Course "+oldName +"doesn't exists");
+    	}
+    	log.info("[END] changeCourseName OK");
     	return wd;
 		
 	}
@@ -178,12 +184,12 @@ public class CourseNavigationUtilities {
 
     private static String NEWCOURSE_BUTTON_XPATH = "/html/body/app/div/main/app-dashboard/div/div[3]/div/div[1]/div/a";
     private static String NEWCOURSE_MODAL_ID = "course-modal";
-    private static String NEWCOURSE_MODAL_NAMEFIELD_ID = "inputPostCourseName";
+    private static String NEWCOURSE_MODAL_NAMEFIELD_ID = "input-post-course-name";
     private static String NEW_COURSE_MODAL_SAVE_ID="submit-post-course-btn";
 
     private static String EDITCOURSE_BUTTON_XPATH = "/div[3]/a";/*use with XCOURSE_XPATH+EDITCOURSE_BUTTON_XPATH*/
     private static String EDITDELETE_MODAL_ID = "put-delete-course-modal";
-    private static String EDITCOURSE_MODAL_NAMEFIELD_ID = "inputPutCourseName";
+    private static String EDITCOURSE_MODAL_NAMEFIELD_ID = "input-put-course-name";
     private static String EDITCOURSE_MODAL_SAVE_ID="submit-put-course-btn";
     
     private static String COURSES_LIST_XPATH = "/html/body/app/div/main/app-dashboard/div/div[3]/div/div[1]/ul";
