@@ -3,8 +3,6 @@ package com.fullteaching.e2e.no_elastest.common;
 import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,6 +10,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 import com.fullteaching.e2e.no_elastest.utils.Click;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
+import static com.fullteaching.e2e.no_elastest.common.Constants.*;
+
 
 public class NavigationUtilities {
 
@@ -41,18 +41,18 @@ public class NavigationUtilities {
 		
 		wd = getUrl( wd,  url);
 		
-		Wait.notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(By.className("page-footer")));
+		Wait.notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(FOOTER));
 		
 		return wd;
 	}
 	
 	public static WebDriver toCoursesHome(WebDriver wd) throws ElementNotFoundException {
 		
-		WebElement button = Wait.aLittle(wd).until(ExpectedConditions.presenceOfElementLocated(By.id(coursesButtonId)));
+		WebElement button = Wait.aLittle(wd).until(ExpectedConditions.presenceOfElementLocated(COURSES_BUTTON));
 		
-		wd = Click.element(wd, By.id(coursesButtonId));
+		wd = Click.element(wd, COURSES_BUTTON);
 		
-		Wait.notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(By.className("dashboard-title")));
+		Wait.notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(COURSESDASHBOARD_TITLE));
 		
 		return wd; 
 	}
@@ -86,11 +86,7 @@ public class NavigationUtilities {
 		
 	}
 	
-	private static String coursesButtonId= "courses-button";
 	
-	public static String SELECTALL = Keys.chord(Keys.CONTROL, "a");
-	public static String NEWLINE= Keys.chord(Keys.ENTER);
-	public static String DELETE= Keys.chord(Keys.BACK_SPACE);
 
 	public enum FindOption {
 	    CLASS, TEXT, VALUE, ATTRIBUTE

@@ -17,6 +17,8 @@ import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
 import com.fullteaching.e2e.no_elastest.common.exception.TimeOutExeception;
 import com.fullteaching.e2e.no_elastest.utils.Click;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
+import static com.fullteaching.e2e.no_elastest.common.Constants.*;
+
 
 public class UserUtilities {
 	
@@ -30,15 +32,15 @@ public class UserUtilities {
 		NavigationUtilities.getUrlAndWaitFooter(wd, login_url.replace("__HOST__", host));
 		
 		try {
-			WebElement login_menu  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(LOGINMENU_XPATH)));
+			Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(LOGINMENU_XPATH)));
 						
-			wd = Click.withNRetries(wd, By.xpath(LOGINMENU_XPATH), 3, By.id("login-modal") );
+			wd = Click.withNRetries(wd, By.xpath(LOGINMENU_XPATH), 3, LOGIN_MODAL );
 			
-			WebElement login_modal = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("login-modal")));
+			WebElement login_modal = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(LOGIN_MODAL));
 			
-			WebElement user_field = login_modal.findElement(By.id("email"));
-			WebElement pass_field = login_modal.findElement(By.id("password"));
-			WebElement submit_field = login_modal.findElement(By.id("log-in-btn"));
+			WebElement user_field = login_modal.findElement(LOGIN_USER_FIELD);
+			WebElement pass_field = login_modal.findElement(LOGIN_PASSWORD_FIELD);
+			WebElement submit_field = login_modal.findElement(LOGIN_BUTTON);
 			
 			user_field.sendKeys(user);
 			pass_field.sendKeys(password);
@@ -63,14 +65,14 @@ public class UserUtilities {
 		log.info("[INI]checkLogin");
 		//Wait to settings button to be present
 		try {
-			WebElement settings_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("settings-button")));
+			WebElement settings_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(SETTINGS_BUTTON));
 		
 			settings_button.click();
 		}catch(TimeoutException toe) {
 			throw new NotLoggedException(toe.getMessage());
 		}
 		
-		WebElement settings_page  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("stng-user-mail")));
+		WebElement settings_page  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(SETTINGS_USEREMAIL));
 		
 		//Check if the user name is the expected
 		if (!settings_page.getText().trim().equals(user.trim())) throw new BadUserException();
@@ -83,7 +85,7 @@ public class UserUtilities {
 		//Wait to settings button to be present
 		try {
 			
-			WebElement settings_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("settings-button")));
+			WebElement settings_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(SETTINGS_BUTTON));
 			
 			if(!NavigationUtilities.amIHere(wd, host+"/settings")) {
 				settings_button.click();
@@ -113,11 +115,11 @@ public class UserUtilities {
 		log.info("[INI]logOut");
 		//press logout link
 		try {
-			WebElement arrow_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("arrow-drop-down")));
+			WebElement arrow_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(MAINMENU_ARROW));
 		
 			arrow_button.click();
 			
-			WebElement logout_button  = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("logout-button")));
+			WebElement logout_button  = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(LOGOUT_BUTTON));
 			
 			logout_button.click();
 			
@@ -135,7 +137,7 @@ public class UserUtilities {
 	public static WebDriver checkLogOut(WebDriver wd) throws ElementNotFoundException {
 		log.info("[INI]checkLogOut");
 		try {
-			Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/app/div/header/navbar/div/nav/div/ul/li[2]/a")));
+			Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(LOGINMENU_XPATH)));
 		}
 		catch (TimeoutException toe) {
 			throw new ElementNotFoundException("Not Logged Out. Not in the home");	
@@ -152,11 +154,11 @@ public class UserUtilities {
 
 		try {
 			//go to settings
-			WebElement settings_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("settings-button")));
+			Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(SETTINGS_BUTTON));
 			
-			Click.withNRetries(wd, By.id("settings-button"), 3, By.id("stng-user-mail"));
+			Click.withNRetries(wd, SETTINGS_BUTTON, 3, SETTINGS_USEREMAIL);
 			
-			WebElement settings_page  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id("stng-user-mail")));
+			WebElement settings_page  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(SETTINGS_USEREMAIL));
 			current_user = settings_page.getText().trim();
 			while (!wd.getCurrentUrl().equals(current_url)) {
 				wd.navigate().back();
@@ -174,6 +176,5 @@ public class UserUtilities {
 		
 	}
 	
-	private static String USERNAME_XPATH ="/html/body/app/div/main/app-settings/div/div[3]/div[2]/ul/li[2]/div[2]";
-	private static String LOGINMENU_XPATH ="/html/body/app/div/header/navbar/div/nav/div/ul/li[2]/a";
+	
 }

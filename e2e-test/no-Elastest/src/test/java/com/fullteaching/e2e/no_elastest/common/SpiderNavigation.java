@@ -12,8 +12,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import com.fullteaching.e2e.no_elastest.utils.Click;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
+import static com.fullteaching.e2e.no_elastest.common.Constants.LOCALHOST;
 
 public class SpiderNavigation {
 	
@@ -22,7 +22,7 @@ public class SpiderNavigation {
 	 * This is a Specialized Spider navigation for FullTeaching.*/
 	
 	
-	private static String host = "https://localhost:5000";
+	private static String host = LOCALHOST;
 	
 	/**
 	 * Retrieve all the links in a webpage

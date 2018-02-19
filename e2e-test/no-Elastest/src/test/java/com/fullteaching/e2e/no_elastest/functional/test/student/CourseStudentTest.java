@@ -28,6 +28,8 @@ import com.fullteaching.e2e.no_elastest.utils.Click;
 import com.fullteaching.e2e.no_elastest.utils.ParameterLoader;
 import com.fullteaching.e2e.no_elastest.utils.SetUp;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
+import static com.fullteaching.e2e.no_elastest.common.Constants.*;
+
 
 public abstract class CourseStudentTest {
 	
@@ -44,7 +46,7 @@ public abstract class CourseStudentTest {
 	
 	protected String userName;
 
-	protected String host="https://localhost:5000";
+	protected String host=LOCALHOST;
 	
 	final  Logger log = getLogger(lookup().lookupClass());
 	
@@ -140,17 +142,6 @@ public abstract class CourseStudentTest {
     	
     }
     
-    //Xpaths and ids
-    private static String COURSES_URL = "__HOST__/courses";
-    
-    //Xpaths and ids
-    private static String FIRSTCOURSE_XPATH = "/html/body/app/div/main/app-dashboard/div/div[2]/div/div[1]/ul/li[1]/div/div[2]";
-     
-    private static String TABS_DIV_ID ="tabs-course-details";
-    private static String HOMETAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[3]/md-tab-group/div[1]/div[1]";
-    private static String SESSIONSTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[3]/md-tab-group/div[1]/div[2]";
-    private static String FORUMTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[3]/md-tab-group/div[1]/div[3]";
-    private static String FILESTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[3]/md-tab-group/div[1]/div[4]";
-    private static String ATTENDERSTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[3]/md-tab-group/div[1]/div[5]";
+
 
 }

@@ -29,6 +29,7 @@ import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
 import com.fullteaching.e2e.no_elastest.common.exception.TimeOutExeception;
 import com.fullteaching.e2e.no_elastest.utils.ParameterLoader;
 import com.fullteaching.e2e.no_elastest.utils.SetUp;
+import static com.fullteaching.e2e.no_elastest.common.Constants.*;
 
 abstract public class LoggedLinksTests{
 	
@@ -45,7 +46,7 @@ abstract public class LoggedLinksTests{
 	
 	protected String userName;
 
-	protected String host="https://localhost:5000";
+	protected String host=LOCALHOST;
 	
 	final  Logger log = getLogger(lookup().lookupClass());
 	

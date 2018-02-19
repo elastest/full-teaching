@@ -18,6 +18,7 @@ import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundExceptio
 import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
 import com.fullteaching.e2e.no_elastest.common.exception.TimeOutExeception;
 import com.fullteaching.e2e.no_elastest.utils.ParameterLoader;
+import static com.fullteaching.e2e.no_elastest.common.Constants.*;
 
 
 abstract public class UserTest {
@@ -35,7 +36,7 @@ abstract public class UserTest {
 	public String roles;
 
 	
-	private String host="https://localhost:5000";
+	private String host=LOCALHOST;
 	
 	
 	@Parameters

@@ -37,6 +37,8 @@ import com.fullteaching.e2e.no_elastest.utils.Click;
 import com.fullteaching.e2e.no_elastest.utils.ParameterLoader;
 import com.fullteaching.e2e.no_elastest.utils.SetUp;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
+import static com.fullteaching.e2e.no_elastest.common.Constants.*;
+
 
 abstract public class CourseTeacherTest {
 
@@ -54,7 +56,7 @@ abstract public class CourseTeacherTest {
 	
 	protected String userName;
 
-	protected String host="https://localhost:5000";
+	protected String host=LOCALHOST;
 	
 	final  Logger log = getLogger(lookup().lookupClass());
 	
@@ -197,7 +199,7 @@ abstract public class CourseTeacherTest {
     	}
     	
     	try {
-    		Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(NEWCOURSE_MODAL_ID)));
+    		Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(NEWCOURSE_MODAL));
     	}
     	catch (TimeoutException toe) {
     		Assert.fail("New course modal doesn't appear");
@@ -215,8 +217,8 @@ abstract public class CourseTeacherTest {
     	
     	//Save
     	try {
-	    	WebElement save_button = Wait.aLittle(driver).until(ExpectedConditions.presenceOfElementLocated(By.id(NEW_COURSE_MODAL_SAVE_ID)));
-	    	driver = Click.element(driver, By.id(NEW_COURSE_MODAL_SAVE_ID));
+	    	WebElement save_button = Wait.aLittle(driver).until(ExpectedConditions.presenceOfElementLocated(By.id(NEWCOURSE_MODAL_SAVE_ID)));
+	    	driver = Click.element(driver, By.id(NEWCOURSE_MODAL_SAVE_ID));
     	}catch (TimeoutException toe) {
     		Assert.fail("New course modal doesn't appear");
     	} catch (ElementNotFoundException e) {
@@ -258,7 +260,7 @@ abstract public class CourseTeacherTest {
     		Click.element(driver, By.xpath(FIRSTCOURSE_XPATH+EDITCOURSE_BUTTON_XPATH));//if "normal" click doesn't work => Click.byJS(driver,edit_name_button);
     		
     		//wait for edit modal
-    		WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(EDITDELETE_MODAL_ID)));
+    		WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(EDITDELETE_MODAL));
     	
     		
     		//change name
@@ -305,7 +307,7 @@ abstract public class CourseTeacherTest {
     		
     		
     		//Modify the description
-    		WebElement editdescription_button = driver.findElement(By.xpath(EDITDESCRIPTION_BUTTON_XPATH));
+    		WebElement editdescription_button = driver.findElement(EDITDESCRIPTION_BUTTON);
     		editdescription_button.click();
     		
     		//wait for editor md editor???'
@@ -316,8 +318,8 @@ abstract public class CourseTeacherTest {
     		
     		//deletee old_desc
     		WebElement editor = driver.findElement(By.className("ql-editor"));
-    		editor.sendKeys(NavigationUtilities.SELECTALL);
-    		editor.sendKeys(NavigationUtilities.DELETE);
+    		editor.sendKeys(SELECTALL);
+    		editor.sendKeys(DELETE);
     		
     		//New Title
     		WebElement headerSelector = driver.findElement(By.className("ql-header"));
@@ -332,7 +334,7 @@ abstract public class CourseTeacherTest {
     		//Write the new Title.
     		editor = driver.findElement(By.className("ql-editor"));
     		editor.sendKeys("New Title");
-    		editor.sendKeys(NavigationUtilities.NEWLINE);
+    		editor.sendKeys(NEWLINE);
     		
     		//New SubTitle
     		headerSelector = driver.findElement(By.className("ql-header"));
@@ -347,7 +349,7 @@ abstract public class CourseTeacherTest {
     		//Write the new SubTitle.
     		editor = driver.findElement(By.className("ql-editor"));
     		editor.sendKeys("New SubHeading");
-    		editor.sendKeys(NavigationUtilities.NEWLINE);
+    		editor.sendKeys(NEWLINE);
     		
     		//Content
     		headerSelector = driver.findElement(By.className("ql-header"));
@@ -362,7 +364,7 @@ abstract public class CourseTeacherTest {
     		//Write the new Content.
     		editor = driver.findElement(By.className("ql-editor"));
     		editor.sendKeys("This is the normal content");
-    		editor.sendKeys(NavigationUtilities.NEWLINE);
+    		editor.sendKeys(NEWLINE);
     		
     		//preview? /html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[2]/div[1]/div/div[2]/div/a[2]
     		driver.findElement(By.xpath(EDITDESCRIPTION_PREVIEWBUTTON_XPATH)).click();
@@ -376,7 +378,7 @@ abstract public class CourseTeacherTest {
     		Assert.assertEquals("Normal content not properly rendered", "This is the normal content", preview.findElement(By.tagName("p")).getText());
     		
     		//save send-info-btn
-    		driver.findElement(By.id(EDITDESCRIPTION_SAVEBUTTON_ID)).click();
+    		driver.findElement(EDITDESCRIPTION_SAVEBUTTON).click();
     		
     		WebElement saved = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.className("ql-editor-custom")));
     		//chech heading
@@ -416,17 +418,17 @@ abstract public class CourseTeacherTest {
     		if(ForumNavigationUtilities.isForumEnabled(forum_tab_content)) {
     			//if (enabled)
     			//check entries ¡Only check if there is entries and all the buttons are present!
-    			Assert.assertNotNull("Add Entry not found", forum_tab_content.findElement(By.id("add-entry-icon")));
-    			Assert.assertNotNull("Add Entry not found", forum_tab_content.findElement(By.id("edit-forum-icon")));
+    			Assert.assertNotNull("Add Entry not found", forum_tab_content.findElement(FORUM_NEWENTRY_ICON));
+    			Assert.assertNotNull("Add Entry not found", forum_tab_content.findElement(FORUM_EDITENTRY_ICON));
     			
     			//disable 
     			//clic edit
-    			WebElement edit_button =  Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("edit-forum-icon")));
-    			driver = Click.element(driver,By.id("edit-forum-icon"));
+    			WebElement edit_button =  Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_EDITENTRY_ICON));
+    			driver = Click.element(driver,FORUM_EDITENTRY_ICON);
     			WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("put-delete-modal")));
     			//press disable
-    			WebElement disable_button = edit_modal.findElement(By.xpath(DISABLEFORUM_BUTTON_XPATH));
-    			driver = Click.withNRetries(driver, By.xpath(DISABLEFORUM_BUTTON_XPATH), 3, By.id("put-modal-btn"));
+    			WebElement disable_button = edit_modal.findElement(DISABLEFORUM_BUTTON);
+    			driver = Click.withNRetries(driver, DISABLEFORUM_BUTTON, 3, By.id("put-modal-btn"));
     			//disable_button.click();
     			WebElement save_button = edit_modal.findElement(By.id("put-modal-btn"));
     			driver = Click.element(driver,By.id("put-modal-btn"));
@@ -434,12 +436,12 @@ abstract public class CourseTeacherTest {
     			
     			//enable
     			//clic edit
-    			edit_button =  Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("edit-forum-icon")));
-    			driver = Click.element(driver,By.id("edit-forum-icon"));
+    			edit_button =  Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_EDITENTRY_ICON));
+    			driver = Click.element(driver,FORUM_EDITENTRY_ICON);
     			edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("put-delete-modal")));
     			//press disable
-    			WebElement enable_button = edit_modal.findElement(By.xpath(ENABLEFORUM_BUTTON_XPATH));
-    			driver = Click.withNRetries(driver, By.xpath(ENABLEFORUM_BUTTON_XPATH), 3, By.id("put-modal-btn"));
+    			WebElement enable_button = edit_modal.findElement(ENABLEFORUM_BUTTON);
+    			driver = Click.withNRetries(driver, ENABLEFORUM_BUTTON, 3, By.id("put-modal-btn"));
     			//enable_button.click();
     			save_button = edit_modal.findElement(By.id("put-modal-btn"));
     			driver = Click.element(driver, By.id("put-modal-btn"));
@@ -450,29 +452,29 @@ abstract public class CourseTeacherTest {
     		//else
     			//enable 
     			//clic edit
-    			WebElement edit_button =  Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("edit-forum-icon")));
-    			driver = Click.element(driver,By.id("edit-forum-icon"));
+    			WebElement edit_button =  Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_EDITENTRY_ICON));
+    			driver = Click.element(driver,FORUM_EDITENTRY_ICON);
     			WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("put-delete-modal")));
     			//press disable
-    			WebElement enable_button = edit_modal.findElement(By.xpath(ENABLEFORUM_BUTTON_XPATH));
-    			driver = Click.withNRetries(driver, By.xpath(ENABLEFORUM_BUTTON_XPATH), 3, By.id("put-modal-btn"));
+    			WebElement enable_button = edit_modal.findElement(ENABLEFORUM_BUTTON);
+    			driver = Click.withNRetries(driver, ENABLEFORUM_BUTTON, 3, By.id("put-modal-btn"));
     			//enable_button.click();
     			WebElement save_button = edit_modal.findElement(By.id("put-modal-btn"));
     			driver = Click.element(driver,By.id("put-modal-btn"));
     			Assert.assertTrue("The forum is not enabled", ForumNavigationUtilities.isForumEnabled(forum_tab_content));
     			
     			//check entries  ¡Only check if there is entries and all the buttons are present!
-    			Assert.assertNotNull("Add Entry not found", forum_tab_content.findElement(By.id("add-entry-icon")));
-    			Assert.assertNotNull("Add Entry not found", forum_tab_content.findElement(By.id("edit-forum-icon")));
+    			Assert.assertNotNull("Add Entry not found", forum_tab_content.findElement(FORUM_NEWENTRY_ICON));
+    			Assert.assertNotNull("Add Entry not found", forum_tab_content.findElement(FORUM_EDITENTRY_ICON));
     			
     			//disable 
     			//clic edit
-    			edit_button =  Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("edit-forum-icon")));
-    			driver = Click.element(driver,By.id("edit-forum-icon"));
+    			edit_button =  Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_EDITENTRY_ICON));
+    			driver = Click.element(driver,FORUM_EDITENTRY_ICON);
     			edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("put-delete-modal")));
     			//press disable
-    			WebElement disable_button = edit_modal.findElement(By.xpath(DISABLEFORUM_BUTTON_XPATH));
-    			driver = Click.withNRetries(driver, By.xpath(DISABLEFORUM_BUTTON_XPATH), 3, By.id("put-modal-btn"));
+    			WebElement disable_button = edit_modal.findElement(DISABLEFORUM_BUTTON);
+    			driver = Click.withNRetries(driver, DISABLEFORUM_BUTTON, 3, By.id("put-modal-btn"));
     			//disable_button.click();
     			save_button = edit_modal.findElement(By.id("put-modal-btn"));
     			driver = Click.element(driver,By.id("put-modal-btn"));
@@ -540,16 +542,16 @@ abstract public class CourseTeacherTest {
     		driver = Click.byJS(driver,edit_name_button);//if "normal" click doesn't work => Click.byJS(driver,edit_name_button);
     		
     		//wait for edit modal
-    		WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(EDITDELETE_MODAL_ID)));
+    		WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(EDITDELETE_MODAL));
     	
     		//allow deletion
-    		WebElement allow_deletion_button = edit_modal.findElement(By.xpath(ENABLEDELETION_BUTTON_XPATH));
-    		driver = Click.element(driver, By.xpath(ENABLEDELETION_BUTTON_XPATH));
+    		WebElement allow_deletion_button = edit_modal.findElement(ENABLECOURSE_DELETION_BUTTON);
+    		driver = Click.element(driver, ENABLECOURSE_DELETION_BUTTON);
     		
     		//delete
-    		WebElement delete_button = edit_modal.findElement(By.xpath(DELETE_BUTTON_XPATH));
+    		WebElement delete_button = edit_modal.findElement(DELETECOURSE_BUTTON);
 			
-    		driver = Click.withNRetries(driver, By.xpath(DELETE_BUTTON_XPATH), 3, By.xpath(COURSES_LIST_XPATH));
+    		driver = Click.withNRetries(driver, DELETECOURSE_BUTTON, 3, By.xpath(COURSES_LIST_XPATH));
     		
     		Assert.assertFalse("The course have not been deleted", CourseNavigationUtilities.checkIfCourseExists(driver, courseName));
     		
@@ -560,41 +562,6 @@ abstract public class CourseTeacherTest {
     	//Well done!
     }
     
-    private static String COURSES_URL = "__HOST__/courses";
-   
-    //Xpaths and ids
-    private static String FIRSTCOURSE_XPATH = "/html/body/app/div/main/app-dashboard/div/div[3]/div/div[1]/ul/li[1]/div";
-    
-    private static String GOTOCOURSE_XPATH = "/div[2]"; /*use with XCOURSE_XPATH+GOTOCOURSE_XPATH*/
- 
-    private static String TABS_DIV_ID ="tabs-course-details";
-    private static String HOMETAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[1]";
-    private static String SESSIONSTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[2]";
-    private static String FORUMTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[3]";
-    private static String FILESTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[4]";
-    private static String ATTENDERSTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[5]";
-
-    private static String NEWCOURSE_BUTTON_XPATH = "/html/body/app/div/main/app-dashboard/div/div[3]/div/div[1]/div/a";
-    private static String NEWCOURSE_MODAL_ID = "course-modal";
-    private static String NEWCOURSE_MODAL_NAMEFIELD_ID = "input-post-course-name";
-    private static String NEW_COURSE_MODAL_SAVE_ID="submit-post-course-btn";
-
-    private static String EDITCOURSE_BUTTON_XPATH = "/div[3]/a";/*use with XCOURSE_XPATH+EDITCOURSE_BUTTON_XPATH*/
-    private static String EDITDELETE_MODAL_ID = "put-delete-course-modal";
-    private static String EDITCOURSE_MODAL_NAMEFIELD_ID = "input-put-course-name";
-    private static String EDITCOURSE_MODAL_SAVE_ID="submit-put-course-btn";
-    
-    private static String EDITDESCRIPTION_BUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[2]/div[1]/div/div[1]/a";
-    private static String EDITDESCRIPTION_CONTENTBOX_CLASS = "ui-editor-content";
-    private static String EDITDESCRIPTION_PREVIEWBUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[2]/div[1]/div/div[2]/div/a[2]";
-    private static String EDITDESCRIPTION_SAVEBUTTON_ID = "send-info-btn";
-    
-    private static String DISABLEFORUM_BUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[2]/div/div/form/div[1]/label";
-    private static String ENABLEFORUM_BUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[2]/div/div/form/div[1]/label";
-    
-    private static String ENABLEDELETION_BUTTON_XPATH = "/html/body/app/div/main/app-dashboard/div/div[2]/div/div/form/div[2]/div/div/label";
-    private static String DELETE_BUTTON_XPATH = "/html/body/app/div/main/app-dashboard/div/div[2]/div/div/form/div[2]/div/a";
-    
-    private static String COURSES_LIST_XPATH = "/html/body/app/div/main/app-dashboard/div/div[3]/div/div[1]/ul";
+  
     
 }

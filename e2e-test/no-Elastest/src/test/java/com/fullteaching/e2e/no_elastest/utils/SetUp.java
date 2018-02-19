@@ -20,12 +20,14 @@ import com.fullteaching.e2e.no_elastest.common.UserUtilities;
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
 import com.fullteaching.e2e.no_elastest.common.exception.TimeOutExeception;
+import static com.fullteaching.e2e.no_elastest.common.Constants.*;
+
 
 public class SetUp {
 	
 	final static  Logger log = getLogger(lookup().lookupClass());
 
-	protected static String host="https://localhost:5000";
+	protected static String host=LOCALHOST;
 
 	public static String getHost() {
 		String appHost = getProperty("fullTeachingUrl");

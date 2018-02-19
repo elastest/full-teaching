@@ -17,12 +17,13 @@ import com.fullteaching.e2e.no_elastest.common.NavigationUtilities;
 import com.fullteaching.e2e.no_elastest.common.SpiderNavigation;
 import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
 import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
+import static com.fullteaching.e2e.no_elastest.common.Constants.*;
 
 abstract public class UnLoggedLinksTests {
 
 	protected static WebDriver driver; 
 	protected static int DEPTH = 3;
-	protected static String host = "https://localhost:5000";
+	protected static String host = LOCALHOST;
 	
 	 @Before 
 	    public void setUp() throws NotLoggedException, BadUserException {
