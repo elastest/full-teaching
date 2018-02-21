@@ -3,6 +3,7 @@ package com.fullteaching.e2e.no_elastest.common;
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.slf4j.LoggerFactory.getLogger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 import com.fullteaching.e2e.no_elastest.utils.Click;
+import com.fullteaching.e2e.no_elastest.utils.DOMMannager;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
 import static com.fullteaching.e2e.no_elastest.common.Constants.*;
 
@@ -47,7 +49,7 @@ public class CourseNavigationUtilities {
 	    Click.element(wd, By.id(NEWCOURSE_MODAL_SAVE_ID));
     	    	
     	//check if the course appears now in the list
-    	WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(COURSES_LIST_XPATH)));
+    	WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(COURSELIST));
 	    	
 	    //find the newly create course
 	    List<WebElement> courses = courses_list.findElements(By.tagName("li"));
@@ -73,7 +75,7 @@ public class CourseNavigationUtilities {
 	}
 	
 	public static boolean checkIfCourseExists(WebDriver wd, String course_title) {
-		WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(COURSES_LIST_XPATH)));
+		WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(COURSELIST));
     	
     	//find the newly create course
     	List<WebElement> courses = courses_list.findElements(By.tagName("li"));
@@ -98,7 +100,7 @@ public class CourseNavigationUtilities {
 		log.info("[INI] changeCourseName({}=>{})",oldName,  newName);
 		
 		boolean found = false;
-		WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(COURSES_LIST_XPATH)));
+		WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(COURSELIST));
     	
     	//find the newly create course
     	List<WebElement> courses = courses_list.findElements(By.tagName("li"));
@@ -144,8 +146,35 @@ public class CourseNavigationUtilities {
 		
 	}
 	
+	public static List<String> getCoursesList(WebDriver wd, String host) throws ElementNotFoundException{
+		
+		ArrayList <String> courses_names = new ArrayList<String>();
+		
+		if (!NavigationUtilities.amIHere(wd, COURSES_URL.replace("__HOST__", host))) {
+			
+			wd = NavigationUtilities.toCoursesHome(wd);
+		}
+		WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(COURSELIST));
+    	List<WebElement> courses = courses_list.findElements(By.tagName("li"));
+
+		for (WebElement c : courses) {
+    		try {
+    			WebElement title = c.findElement(By.className("title"));
+    			String title_text = title.getText();
+    			courses_names.add(title_text);   			
+    		}
+    		catch(NoSuchElementException csee) {
+    			//do nothing and look for the next item
+    		}
+    	}
+		
+		return courses_names;
+		
+	}
+	
+	
 	public static WebElement getCourseElement(WebDriver wd, String name) throws ElementNotFoundException {
-		WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(By.xpath(COURSES_LIST_XPATH)));
+		WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(COURSELIST));
     	
     	//find the newly create course
     	List<WebElement> courses = courses_list.findElements(By.tagName("li"));
@@ -165,6 +194,18 @@ public class CourseNavigationUtilities {
     	}
     	
     	throw new ElementNotFoundException("getCourseElement-the course doesn't exist");
+	}
+	
+	public static WebDriver go2Tab(WebDriver wd, By icon) throws ElementNotFoundException {
+		
+		WebElement icon_element = wd.findElement(icon);
+		WebElement tab =  DOMMannager.getParent(wd, DOMMannager.getParent(wd, icon_element));
+		String id = tab.getAttribute("id");
+		wd = Click.element(wd,tab);
+		Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
+		
+		return wd;
+	
 	}
 	
 	

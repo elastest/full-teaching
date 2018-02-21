@@ -5,6 +5,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -18,6 +19,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 
+import com.fullteaching.e2e.no_elastest.common.CourseNavigationUtilities;
 import com.fullteaching.e2e.no_elastest.common.NavigationUtilities;
 import com.fullteaching.e2e.no_elastest.common.UserUtilities;
 import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
@@ -86,56 +88,50 @@ public abstract class CourseStudentTest {
     	try {
     		if(!NavigationUtilities.amIHere(driver,COURSES_URL.replace("__HOST__", host)))
         		driver = NavigationUtilities.toCoursesHome(driver);
-	    	    	
-	    	WebElement course_button = Wait.notTooMuch(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath(FIRSTCOURSE_XPATH)));
-	    	driver = Click.element(driver, By.xpath(FIRSTCOURSE_XPATH));
+	    	
+    		//go to first course
+    		//get course list
+    		List<String>course_list = CourseNavigationUtilities.getCoursesList(driver, host);
+    		if (course_list.size()<0)  Assert.fail("No courses available for test user");
+    		
+    		WebElement course_button = CourseNavigationUtilities.getCourseElement(driver, course_list.get(0)).findElement(By.className("title"));
+    			    	
+	    	driver = Click.element(driver, course_button);
+	    	
 	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(TABS_DIV_ID)));
+	    	
     	}catch(Exception e) {
     		Assert.fail("Failed to load Courses Tabs"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	//Check tabs
     	//Home tab 
     	try {
-    		WebElement home_tab = driver.findElement(By.xpath(HOMETAB_XPATH));
-    		String id = home_tab.getAttribute("id");
-    		driver = Click.element(driver, By.xpath(HOMETAB_XPATH));
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
+    		driver = CourseNavigationUtilities.go2Tab(driver, HOME_ICON);
+    		
     	} catch(Exception e) {
     		Assert.fail("Failed to load home tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
     	try {
-    		WebElement session_tab = driver.findElement(By.xpath(SESSIONSTAB_XPATH));
-    		String id = session_tab.getAttribute("id");
-    		driver = Click.element(driver, By.xpath(SESSIONSTAB_XPATH));
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
+    		driver = CourseNavigationUtilities.go2Tab(driver, SESSION_ICON);
     	} catch(Exception e) {
     		Assert.fail("Failed to load session tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
     	try {
-    		WebElement forum_tab = driver.findElement(By.xpath(FORUMTAB_XPATH));
-    		String id = forum_tab.getAttribute("id");
-    		driver = Click.element(driver, By.xpath(FORUMTAB_XPATH));
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
+    		driver = CourseNavigationUtilities.go2Tab(driver, FORUM_ICON);
     	} catch(Exception e) {
     		Assert.fail("Failed to load forum tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
     	try {
-    		WebElement files_tab = driver.findElement(By.xpath(FILESTAB_XPATH));
-    		String id = files_tab.getAttribute("id");
-    		driver = Click.element(driver, By.xpath(FILESTAB_XPATH));
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
+    		driver = CourseNavigationUtilities.go2Tab(driver, FILES_ICON);
     	} catch(Exception e) {
     		Assert.fail("Failed to load files tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}
     	
     	try {
-    		WebElement attenders_tab = driver.findElement(By.xpath(ATTENDERSTAB_XPATH));
-    		String id = attenders_tab.getAttribute("id");
-    		driver = Click.element(driver, By.xpath(ATTENDERSTAB_XPATH));
-    		Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
+    		driver = CourseNavigationUtilities.go2Tab(driver, ATTENDERS_ICON);	
     	} catch(Exception e) {
     		Assert.fail("Failed to load attenders tab"+ e.getClass()+ ": "+e.getLocalizedMessage());
     	}

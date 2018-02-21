@@ -551,7 +551,7 @@ abstract public class CourseTeacherTest {
     		//delete
     		WebElement delete_button = edit_modal.findElement(DELETECOURSE_BUTTON);
 			
-    		driver = Click.withNRetries(driver, DELETECOURSE_BUTTON, 3, By.xpath(COURSES_LIST_XPATH));
+    		driver = Click.withNRetries(driver, DELETECOURSE_BUTTON, 3, COURSELIST);
     		
     		Assert.assertFalse("The course have not been deleted", CourseNavigationUtilities.checkIfCourseExists(driver, courseName));
     		

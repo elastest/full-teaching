@@ -72,6 +72,39 @@ public class Click {
 		return wd;
 	}
 	
+	
+	public static WebDriver element(WebDriver wd, WebElement ele) throws ElementNotFoundException {
+		
+		String tagName = ele.getTagName();
+		String text= ele.getText();
+		
+		try {
+			wd = Scroll.toElement(wd, ele);
+		}catch(Exception e) {
+			log.error("Click.element: Scroll failed continuing...");
+		}
+		//try by click
+		try {			
+			Wait.notTooMuch(wd).until(ExpectedConditions.elementToBeClickable(ele));
+			ele.click();
+			log.info("Click.element (click): ele:"+tagName+":"+text+" ==>OK");
+			return wd;
+		}
+		catch(Exception e) {
+			log.error("Click.element (click): ele:"+tagName+":"+text+" ==>KO "+e.getClass().getName()+":"+e.getLocalizedMessage());
+		}
+		//Try by Js
+		try {			
+			wd = byJS(wd,ele);
+			log.info("Click.element (ByJs): ele:"+tagName+":"+text+" ==>OK");
+			return wd;
+		}
+		catch(Exception e) {
+			log.error("Click.element (ByJs): ele:"+tagName+":"+text+" ==>KO "+e.getClass().getName()+":"+e.getLocalizedMessage());
+		}
+		
+		throw new ElementNotFoundException("Click.element ERROR");
+	}
 	/**
 	 * Scrolls and click
 	 * @param wd
@@ -81,37 +114,9 @@ public class Click {
 	 */
 	public static WebDriver element(WebDriver wd, By eleBy) throws ElementNotFoundException {
 		
-		/*properties for log*/
-		String tagName = wd.findElement(eleBy).getTagName();
-		String text= wd.findElement(eleBy).getText();
+		WebElement ele = wd.findElement(eleBy);		
 		
-		try {
-			wd = Scroll.toElement(wd, wd.findElement(eleBy));
-		}catch(Exception e) {
-			log.error("Click.element: Scroll failed continuing...");
-		}
-		//try by click
-		try {			
-			Wait.notTooMuch(wd).until(ExpectedConditions.elementToBeClickable(wd.findElement(eleBy)));
-			wd.findElement(eleBy).click();
-			log.info("Click.element (click): ele:"+tagName+":"+text+" ==>OK");
-			return wd;
-		}
-		catch(Exception e) {
-			log.error("Click.element (click): ele:"+tagName+":"+text+" ==>KO "+e.getClass().getName()+":"+e.getLocalizedMessage());
-		}
-		//Try by Js
-		try {			
-			wd = byJS(wd,wd.findElement(eleBy));
-			log.info("Click.element (ByJs): ele:"+tagName+":"+text+" ==>OK");
-			return wd;
-		}
-		catch(Exception e) {
-			log.error("Click.element (ByJs): ele:"+tagName+":"+text+" ==>KO "+e.getClass().getName()+":"+e.getLocalizedMessage());
-		}
-		
-		throw new ElementNotFoundException("Click.element ERROR");
-
+		return element(wd, ele);
 		
 	}
 }

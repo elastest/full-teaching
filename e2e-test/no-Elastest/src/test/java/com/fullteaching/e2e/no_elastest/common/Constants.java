@@ -1,5 +1,7 @@
 package com.fullteaching.e2e.no_elastest.common;
 
+import static com.fullteaching.e2e.no_elastest.common.Constants.FORUMTAB_XPATH;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 
@@ -22,7 +24,9 @@ public final class Constants {
     public static final String COURSESDASHBOARD_TITLE_CLASS = "dashboard-title";
 	public static final String FIRSTCOURSE_XPATH = "/html/body/app/div/main/app-dashboard/div/div[3]/div/div[1]/ul/li[1]/div";
     public static final String GOTOCOURSE_XPATH = "/div[2]"; /*use with XCOURSE_XPATH+GOTOCOURSE_XPATH*/
- 
+    public static final String COURSELIST_COURSETITLE_CLASS = "course-title"; 
+    public static final String COURSELIST_ID = "course-list";
+    
     public static final String TABS_DIV_ID ="tabs-course-details";
     public static final String HOMETAB_ID ="md-tab-label-0-0";
     public static final String SESSIONSTAB_ID ="md-tab-label-0-1";
@@ -40,14 +44,20 @@ public final class Constants {
     public static final String EDITCOURSE_MODAL_NAMEFIELD_ID = "input-put-course-name";
     public static final String EDITCOURSE_MODAL_SAVE_ID="submit-put-course-btn";
     
-    public static final String COURSES_LIST_XPATH = "/html/body/app/div/main/app-dashboard/div/div[3]/div/div[1]/ul";
-        
+    public static final String COURSE_BACK_TO_DASHBOARD_ID = "back-to-dashboard-btn";
+            
     public static final String HOMETAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[1]";
     public static final String SESSIONSTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[2]";
-    public static final String FORUMTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[3]";
+    public static final String FORUMTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[3]"; 
     public static final String FILESTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[4]";
     public static final String ATTENDERSTAB_XPATH ="/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[1]/div[5]";
-
+    
+    public static final String FORUM_ICON_ID = "forum-tab-icon";
+    public static final String HOME_ICON_ID = "info-tab-icon";
+    public static final String SESSION_ICON_ID = "sessions-tab-icon";
+    public static final String FILES_ICON_ID = "files-tab-icon";
+    public static final String ATTENDERS_ICON_ID = "attenders-tab-icon";
+    
     public static final String EDITDESCRIPTION_BUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[2]/div[1]/div/div[1]/a";
     public static final String EDITDESCRIPTION_CONTENTBOX_CLASS = "ui-editor-content";
     public static final String EDITDESCRIPTION_PREVIEWBUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[2]/div[1]/div/div[2]/div/a[2]";
@@ -66,7 +76,12 @@ public final class Constants {
     
     public static final String FORUM_NEWENTRY_ICON_ID ="add-entry-icon";
     public static final String FORUM_EDITENTRY_ICON_ID = "edit-forum-icon";
-    
+    public static final String FORUMENTRYLIST_ENTRYTITLE_CLASS = "forum-entry-title";
+    public static final String FORUMCOMMENTLIST_ID = "row-of-comments";
+    public static final String FORUMCOMMENTLIST_COMMENT_CLASS = "comment-block";
+    public static final String FORUMCOMMENTLIST_COMMENT_USER_CLASS = "user-name";
+    public static final String FORUMCOMMENTLIST_BACK_TO_ENTRIESLIST_ICON_ID = "entries-sml-btn";
+
     public static final String SETTINGS_USEREMAIL_ID = "stng-user-mail";
     
     //BUTTONS
@@ -85,6 +100,11 @@ public final class Constants {
     public static final By ENABLECOURSE_DELETION_BUTTON = By.xpath(ENABLECOURSE_DELETION_BUTTON_XPATH);
     public static final By DELETECOURSE_BUTTON = By.xpath(DELETECOURSE_BUTTON_XPATH);
     
+    public static final By BACK_TO_DASHBOARD = By.id(COURSE_BACK_TO_DASHBOARD_ID);
+    
+    //TABS
+    public static final By FORUMTAB = By.xpath(FORUMTAB_XPATH); //ALERT! not working for some tests
+    
     //MODALS
     public static final By NEWCOURSE_MODAL = By.id(NEWCOURSE_MODAL_ID);
     public static final By EDITDELETE_MODAL = By.id(EDITDELETE_MODAL_ID);
@@ -100,9 +120,25 @@ public final class Constants {
     public static final By SETTINGS_USEREMAIL = By.id(SETTINGS_USEREMAIL_ID);
     
     public static final By COURSESDASHBOARD_TITLE = By.className(COURSESDASHBOARD_TITLE_CLASS);
+    public static final By COURSELIST = By.id(COURSELIST_ID);
     
     public static final By FORUM_NEWENTRY_ICON = By.id(FORUM_NEWENTRY_ICON_ID);
     public static final By FORUM_EDITENTRY_ICON = By.id(FORUM_EDITENTRY_ICON_ID);
+    public static final By FORUMENTRYLIST_ENTRYTITLE = By.className(FORUMENTRYLIST_ENTRYTITLE_CLASS);
+    public static final By FORUMCOMMENTLIST = By.id(FORUMCOMMENTLIST_ID);
+    public static final By FORUMCOMMENTLIST_COMMENT = By.className(FORUMCOMMENTLIST_COMMENT_CLASS);
+    public static final By FORUMCOMMENTLIST_COMMENT_USER = By.className(FORUMCOMMENTLIST_COMMENT_USER_CLASS);
+    public static final By BACK_TO_ENTRIESLIST_ICON = By.id(FORUMCOMMENTLIST_BACK_TO_ENTRIESLIST_ICON_ID);
+
+    
+    public static final By COURSELIST_COURSETITLE = By.className(COURSELIST_COURSETITLE_CLASS);
+    
+    //ICONS
+    public static final By FORUM_ICON = By.id(FORUM_ICON_ID);
+    public static final By HOME_ICON = By.id(HOME_ICON_ID);
+    public static final By SESSION_ICON = By.id(SESSION_ICON_ID);
+    public static final By FILES_ICON = By.id(FILES_ICON_ID);
+    public static final By ATTENDERS_ICON = By.id(ATTENDERS_ICON_ID);
     
     //KEYS
 	public static final String SELECTALL = Keys.chord(Keys.CONTROL, "a");
