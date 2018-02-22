@@ -3,9 +3,14 @@ package com.fullteaching.e2e.no_elastest.functional.test;
 import static java.lang.invoke.MethodHandles.lookup;
 import static org.slf4j.LoggerFactory.getLogger;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.Properties;
+import java.text.DateFormatSymbols;
+
 
 import org.junit.After;
 import org.junit.Assert;
@@ -55,6 +60,8 @@ abstract public class LoggedForumTest {
 
 	protected String host=LOCALHOST;
 	
+	protected Properties properties; 
+	
 	final  Logger log = getLogger(lookup().lookupClass());
 	
 	 @Before 
@@ -76,12 +83,18 @@ abstract public class LoggedForumTest {
 	    	/* Dedicated set up to Forum tests*/
 	    	log.info("INI dedicated setUP");
 	    	
-	    	/*TODO: missing condition if user is no teacher? 
-	    	 * if( courseName == null ) {
-	    	 
-	    		courseName = SetUp.cleanEmptyCourse(driver);
-	    	}*/
-	    		    	
+	    	
+	    	//LOAD PROPERTIES:
+	    	properties = new Properties();
+			try {
+				// load a properties file for reading
+				properties.load(new FileInputStream("src/test/resources/inputs/test.properties"));
+				courseName = properties.getProperty("forum.test.course");
+				
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}  
+			
 	    	log.info("End dedicated setUP");
 	    	/*END dedicated*/
 	    	log.info("[End setUP]");
@@ -158,10 +171,77 @@ abstract public class LoggedForumTest {
     	
     	
     }
-    @Ignore
+
     @Test
     public void forumNewEntryTest() {
-    	//
+    	
+    	Calendar calendar = Calendar.getInstance();
+    	calendar.setTimeInMillis(System.currentTimeMillis());
+
+    	int mYear = calendar.get(Calendar.YEAR);
+    	int mMonth = calendar.get(Calendar.MONTH);
+    	int mDay = calendar.get(Calendar.DAY_OF_MONTH);
+    	int mHour = calendar.get(Calendar.HOUR_OF_DAY);
+    	int mMinute = calendar.get(Calendar.MINUTE);
+    	int mSecond = calendar.get(Calendar.SECOND);
+    	
+    	String newEntryTitle = "New Entry Test "+ mDay+mMonth+mYear+mHour+mMinute+mSecond;
+    	String newEntryContent = "This is the content written on the "+mDay+" of "+months[mMonth-1]+", " +mHour+":"+mMinute+","+mSecond ;
+    	
+    	try {
+    		//navigate to courses.
+    		if (!NavigationUtilities.amIHere(driver, COURSES_URL.replace("__HOST__", host))) {	
+    			driver = NavigationUtilities.toCoursesHome(driver);	
+    		}
+    		WebElement course = CourseNavigationUtilities.getCourseElement(driver, courseName);
+    		course.findElement(COURSELIST_COURSETITLE).click();
+	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(TABS_DIV_ID)));
+	    	driver = CourseNavigationUtilities.go2Tab(driver, FORUM_ICON);
+	    	Assert.assertEquals("Forum not activated",ForumNavigationUtilities.isForumEnabled(ForumNavigationUtilities.getForumTabContent(driver)),true);
+	    	
+	    	driver = Click.element(driver, FORUM_NEWENTRY_ICON);
+	    	
+	    	//wait for modal
+	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_NEWENTRY_MODAL));
+	    	
+	    	//fill new Entry
+	    	WebElement title = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_NEWENTRY_MODAL_TITLE));
+	    	title.sendKeys(newEntryTitle);
+	    	WebElement comment = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_NEWENTRY_MODAL_CONTENT));
+	    	comment.sendKeys(newEntryContent);
+	    	
+	    	//Publish
+	    	Click.element(driver,FORUM_NEWENTRY_MODAL_POSTBUTTON);
+
+	    	//Wait to publish
+	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUMENTRYLIST_ENTRIESUL));
+    		
+	    	//Check entry... 
+	    	WebElement newEntry = ForumNavigationUtilities.getEntry(driver, newEntryTitle);
+	    	Assert.assertEquals("Incorrect user",newEntry.findElement(FORUMENTRYLIST_ENTRY_USER).getText(),userName);
+	    	
+	    	driver = Click.element(driver, newEntry.findElement(FORUMENTRYLIST_ENTRYTITLE));
+	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUMCOMMENTLIST));
+	    	WebElement entryTitleRow = driver.findElement(FORUMCOMMENTLIST_ENTRY_TITLE);
+	    	Assert.assertEquals("Incorrect Entry Title", entryTitleRow.getText().split("\n")[0], newEntryTitle);
+	    	Assert.assertEquals("Incorrect User for Entry", entryTitleRow.findElement(FORUMCOMMENTLIST_ENTRY_USER).getText(), userName);
+	    	
+	    	//first comment should be the inserted while creating the entry
+	    	List<WebElement>comments = ForumNavigationUtilities.getComments(driver);
+	    	Assert.assertFalse("No comments on the entry", comments.size()< 1);
+	    	
+	    	WebElement newComment = comments.get(0);
+	    	Assert.assertEquals("Bad content of comment", newComment.findElement(FORUMCOMMENTLIST_COMMENT_CONTENT).getText(),newEntryContent);
+	    	Assert.assertEquals("Bad user in comment", newComment.findElement(FORUMCOMMENTLIST_COMMENT_USER).getText(),userName);
+	    	
+    	}catch(ElementNotFoundException enfe) {
+    		Assert.fail("Failed to navigate to course forum:: "+ enfe.getClass()+ ": "+enfe.getLocalizedMessage());
+    	}
+    	
     }
+    
+    protected  String months[] = {"January", "February", "March", "April",
+            "May", "June", "July", "August", "September",
+            "October", "November", "December"};
 
 }

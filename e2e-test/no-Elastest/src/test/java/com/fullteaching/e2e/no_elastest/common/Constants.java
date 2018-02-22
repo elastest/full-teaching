@@ -57,7 +57,7 @@ public final class Constants {
     public static final String SESSION_ICON_ID = "sessions-tab-icon";
     public static final String FILES_ICON_ID = "files-tab-icon";
     public static final String ATTENDERS_ICON_ID = "attenders-tab-icon";
-    
+        
     public static final String EDITDESCRIPTION_BUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[2]/div[1]/div/div[1]/a";
     public static final String EDITDESCRIPTION_CONTENTBOX_CLASS = "ui-editor-content";
     public static final String EDITDESCRIPTION_PREVIEWBUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[2]/div[1]/div/div[2]/div/a[2]";
@@ -77,10 +77,20 @@ public final class Constants {
     public static final String FORUM_NEWENTRY_ICON_ID ="add-entry-icon";
     public static final String FORUM_EDITENTRY_ICON_ID = "edit-forum-icon";
     public static final String FORUMENTRYLIST_ENTRYTITLE_CLASS = "forum-entry-title";
+    public static final String FORUMENTRYLIST_ENTRIESUL_CLASS = "entries-side-view";
+    public static final String FORUMENTRYLIST_ENTRY_USER_CLASS = "forum-entry-author";
+    public static final String FORUMCOMMENTLIST_ENTRY_TITLE_CLASS = "comment-section-title";
+    public static final String FORUMCOMMENTLIST_ENTRY_USER_CLASS = "user-name";
     public static final String FORUMCOMMENTLIST_ID = "row-of-comments";
     public static final String FORUMCOMMENTLIST_COMMENT_CLASS = "comment-block";
     public static final String FORUMCOMMENTLIST_COMMENT_USER_CLASS = "user-name";
+    public static final String FORUMCOMMENTLIST_COMMENT_CONTENT_CLASS = "forum-comment-msg";
     public static final String FORUMCOMMENTLIST_BACK_TO_ENTRIESLIST_ICON_ID = "entries-sml-btn";
+    public static final String FORUM_NEWENTRY_MODAL_ID = "course-details-modal";
+    public static final String FORUM_NEWENTRY_MODAL_TITLE_ID = "input-post-title";
+    public static final String FORUM_NEWENTRY_MODAL_CONTENT_ID = "input-post-comment";
+    public static final String FORUM_NEWENTRY_MODAL_POSTBUTTON_ID = "post-modal-btn";
+    
 
     public static final String SETTINGS_USEREMAIL_ID = "stng-user-mail";
     
@@ -102,6 +112,8 @@ public final class Constants {
     
     public static final By BACK_TO_DASHBOARD = By.id(COURSE_BACK_TO_DASHBOARD_ID);
     
+    public static final By FORUM_NEWENTRY_MODAL_POSTBUTTON = By.id(FORUM_NEWENTRY_MODAL_POSTBUTTON_ID);
+    
     //TABS
     public static final By FORUMTAB = By.xpath(FORUMTAB_XPATH); //ALERT! not working for some tests
     
@@ -109,7 +121,8 @@ public final class Constants {
     public static final By NEWCOURSE_MODAL = By.id(NEWCOURSE_MODAL_ID);
     public static final By EDITDELETE_MODAL = By.id(EDITDELETE_MODAL_ID);
     public static final By LOGIN_MODAL = By.id(LOGIN_MODAL_ID);
-    
+    public static final By FORUM_NEWENTRY_MODAL = By.id(FORUM_NEWENTRY_MODAL_ID);
+   
     //OTHER ELEMENTS
     public static final By FOOTER = By.className(FOOTER_CLASS);
     public static final By MAINMENU_ARROW = By.id(MAINMENU_ARROW_ID);
@@ -122,14 +135,19 @@ public final class Constants {
     public static final By COURSESDASHBOARD_TITLE = By.className(COURSESDASHBOARD_TITLE_CLASS);
     public static final By COURSELIST = By.id(COURSELIST_ID);
     
-    public static final By FORUM_NEWENTRY_ICON = By.id(FORUM_NEWENTRY_ICON_ID);
-    public static final By FORUM_EDITENTRY_ICON = By.id(FORUM_EDITENTRY_ICON_ID);
     public static final By FORUMENTRYLIST_ENTRYTITLE = By.className(FORUMENTRYLIST_ENTRYTITLE_CLASS);
+    public static final By FORUMENTRYLIST_ENTRIESUL = By.className(FORUMENTRYLIST_ENTRIESUL_CLASS);
+    public static final By FORUMENTRYLIST_ENTRY_USER = By.className(FORUMENTRYLIST_ENTRY_USER_CLASS);
     public static final By FORUMCOMMENTLIST = By.id(FORUMCOMMENTLIST_ID);
+    public static final By FORUMCOMMENTLIST_ENTRY_TITLE = By.className(FORUMCOMMENTLIST_ENTRY_TITLE_CLASS);
+    public static final By FORUMCOMMENTLIST_ENTRY_USER = By.className(FORUMCOMMENTLIST_ENTRY_USER_CLASS);
     public static final By FORUMCOMMENTLIST_COMMENT = By.className(FORUMCOMMENTLIST_COMMENT_CLASS);
     public static final By FORUMCOMMENTLIST_COMMENT_USER = By.className(FORUMCOMMENTLIST_COMMENT_USER_CLASS);
+    public static final By FORUMCOMMENTLIST_COMMENT_CONTENT = By.className(FORUMCOMMENTLIST_COMMENT_CONTENT_CLASS);
     public static final By BACK_TO_ENTRIESLIST_ICON = By.id(FORUMCOMMENTLIST_BACK_TO_ENTRIESLIST_ICON_ID);
-
+    
+    public static final By FORUM_NEWENTRY_MODAL_TITLE = By.id(FORUM_NEWENTRY_MODAL_TITLE_ID);
+    public static final By FORUM_NEWENTRY_MODAL_CONTENT = By.id(FORUM_NEWENTRY_MODAL_CONTENT_ID);
     
     public static final By COURSELIST_COURSETITLE = By.className(COURSELIST_COURSETITLE_CLASS);
     
@@ -140,6 +158,8 @@ public final class Constants {
     public static final By FILES_ICON = By.id(FILES_ICON_ID);
     public static final By ATTENDERS_ICON = By.id(ATTENDERS_ICON_ID);
     
+    public static final By FORUM_NEWENTRY_ICON = By.id(FORUM_NEWENTRY_ICON_ID);
+    public static final By FORUM_EDITENTRY_ICON = By.id(FORUM_EDITENTRY_ICON_ID);
     //KEYS
 	public static final String SELECTALL = Keys.chord(Keys.CONTROL, "a");
 	public static final String NEWLINE = Keys.chord(Keys.ENTER);
