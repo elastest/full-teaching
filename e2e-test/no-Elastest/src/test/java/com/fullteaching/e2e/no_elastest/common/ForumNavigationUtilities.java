@@ -28,26 +28,13 @@ public class ForumNavigationUtilities {
 		}catch(Exception e) {
 			return false;
 		}
-			
-	}
+				}
 	
-	public static String getForumTabId(WebDriver wd) {
-
-		WebElement forum_icon = wd.findElement(FORUM_ICON);
-		WebElement forum_tab =  DOMMannager.getParent(wd, DOMMannager.getParent(wd, forum_icon));
-		return forum_tab.getAttribute("id");
-	}
-	
-	public static WebElement getForumTabContent(WebDriver wd) {
-		
-		String tab_id = getForumTabId(wd);
-		return wd.findElement(By.id(tab_id.replace("label", "content"))); 
-	}
 	
 	public static List<String> getFullEntryList(WebDriver wd){
 		ArrayList <String> entries_titles = new ArrayList<String>();
 		
-		WebElement tab_content = getForumTabContent(wd);
+		WebElement tab_content = CourseNavigationUtilities.getTabContent(wd, FORUM_ICON);
 		List<WebElement> entries = tab_content.findElements(By.className("entry-title"));
 		for(WebElement entry: entries) {
 			entries_titles.add(entry.findElement(FORUMENTRYLIST_ENTRYTITLE).getText());
@@ -59,7 +46,7 @@ public class ForumNavigationUtilities {
 	public static List<String> getUserEntries(WebDriver wd, String user_name){
 		ArrayList <String> entries_titles = new ArrayList<String>();
 		
-		WebElement tab_content = getForumTabContent(wd);
+		WebElement tab_content = CourseNavigationUtilities.getTabContent(wd, FORUM_ICON);
 		List<WebElement> entries = tab_content.findElements(By.className("entry-title"));
 		for(WebElement entry: entries) {
 			//if user name is the publisher of the entry... 
@@ -70,7 +57,7 @@ public class ForumNavigationUtilities {
 	}
 	
 	public static WebElement getEntry(WebDriver wd, String entry_name) throws ElementNotFoundException {
-		WebElement tab_content = getForumTabContent(wd);
+		WebElement tab_content = CourseNavigationUtilities.getTabContent(wd, FORUM_ICON);
 		List<WebElement> entries = tab_content.findElements(By.className("entry-title"));
 		for(WebElement entry: entries) {
     		try {

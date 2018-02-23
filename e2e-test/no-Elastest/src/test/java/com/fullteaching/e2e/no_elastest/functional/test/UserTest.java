@@ -45,7 +45,7 @@ abstract public class UserTest {
     }
 	
     @Before 
-    public void setUp() throws NotLoggedException, BadUserException {
+    public void setUp() throws NotLoggedException, BadUserException, ElementNotFoundException {
 		
     	String appHost = getProperty("fullTeachingUrl");
         if (appHost != null) {

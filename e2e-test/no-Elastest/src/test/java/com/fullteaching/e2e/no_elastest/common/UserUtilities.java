@@ -45,7 +45,7 @@ public class UserUtilities {
 			user_field.sendKeys(user);
 			pass_field.sendKeys(password);
 			
-			submit_field.click();
+			Click.element(wd, submit_field);
 			
 		}
 		catch(TimeoutException tOe) {
@@ -61,13 +61,13 @@ public class UserUtilities {
 		
 	}
 	
-	public static WebDriver checkLogin(WebDriver wd, String user) throws NotLoggedException, BadUserException{
+	public static WebDriver checkLogin(WebDriver wd, String user) throws NotLoggedException, BadUserException, ElementNotFoundException{
 		log.info("[INI]checkLogin");
 		//Wait to settings button to be present
 		try {
 			WebElement settings_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(SETTINGS_BUTTON));
 		
-			settings_button.click();
+			Click.element(wd, settings_button);
 		}catch(TimeoutException toe) {
 			throw new NotLoggedException(toe.getMessage());
 		}
@@ -80,7 +80,7 @@ public class UserUtilities {
 		return wd;
 	}
 	
-	public static String getUserName(WebDriver wd, boolean goBack, String host) throws NotLoggedException, BadUserException{
+	public static String getUserName(WebDriver wd, boolean goBack, String host) throws NotLoggedException, BadUserException, ElementNotFoundException{
 		log.info("[INI]getUserName");
 		//Wait to settings button to be present
 		try {
@@ -88,7 +88,7 @@ public class UserUtilities {
 			WebElement settings_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(SETTINGS_BUTTON));
 			
 			if(!NavigationUtilities.amIHere(wd, host+"/settings")) {
-				settings_button.click();
+				Click.element(wd, settings_button);
 			}
 			else {
 				goBack = false;
@@ -111,17 +111,17 @@ public class UserUtilities {
 		
 	}
 	
-	public static WebDriver logOut(WebDriver wd, String host) throws NotLoggedException {
+	public static WebDriver logOut(WebDriver wd, String host) throws NotLoggedException, ElementNotFoundException {
 		log.info("[INI]logOut");
 		//press logout link
 		try {
 			WebElement arrow_button  = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(MAINMENU_ARROW));
 		
-			arrow_button.click();
+			Click.element(wd, arrow_button);
 			
 			WebElement logout_button  = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(LOGOUT_BUTTON));
 			
-			logout_button.click();
+			Click.element(wd, logout_button);
 			
 			//go to home as the log out has been done
 			NavigationUtilities.getUrlAndWaitFooter(wd, login_url.replace("__HOST__", host));

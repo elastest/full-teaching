@@ -102,45 +102,31 @@ public class CourseNavigationUtilities {
 		boolean found = false;
 		WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(COURSELIST));
     	
-    	//find the newly create course
-    	List<WebElement> courses = courses_list.findElements(By.tagName("li"));
-    	int i = 1;
-    	for (WebElement c : courses) {
-    		try {
-    			log.debug("Course ["+i+"] "+c.getText());
-    			WebElement title = c.findElement(By.className("title"));
-    			String title_text = title.getText();
-    			if(oldName.equals(title_text)) {
-    				
-    				WebElement edit_name_button = wd.findElement(By.xpath(FIRSTCOURSE_XPATH+EDITCOURSE_BUTTON_XPATH));
+		try {
+			//find the course 
+			WebElement c = getCourseElement(wd, oldName);
+			
+			WebElement edit_name_button = c.findElement(EDITCOURSE_BUTTON);
     	    		
-    	    		Click.element(wd,By.xpath(FIRSTCOURSE_XPATH+EDITCOURSE_BUTTON_XPATH));//if "normal" click doesn't work => Click.byJS(driver,edit_name_button);
+    	    Click.element(wd,edit_name_button);
     	    		
-    	    		//wait for edit modal
-    	    		WebElement edit_modal = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(EDITDELETE_MODAL));
+    	    //wait for edit modal
+    	    WebElement edit_modal = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(EDITDELETE_MODAL));
     				//change name
-    				WebElement name_field = edit_modal.findElement(By.id(EDITCOURSE_MODAL_NAMEFIELD_ID));
-
-    				name_field.clear();
-    				name_field.sendKeys(newName);
+    		WebElement name_field = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(EDITCOURSE_MODAL_NAMEFIELD));
+    		name_field.clear();
+    		name_field.sendKeys(newName);
     				
-    				//save
-    				WebElement save_button = edit_modal.findElement(By.id(EDITCOURSE_MODAL_SAVE_ID));
-    				Click.element(wd, By.id(EDITCOURSE_MODAL_SAVE_ID));
-    				found=true;
-    				break;
-    			}
-    		}
-    		catch(NoSuchElementException csee) {
-    			//do nothing and look for the next item
-    		}
-    		i++;
+    		//save
+    		WebElement save_button = edit_modal.findElement(By.id(EDITCOURSE_MODAL_SAVE_ID));
+    		Click.element(wd, EDITCOURSE_MODAL_SAVE);
+    		
+		}catch(NoSuchElementException csee) {
+    		log.info("[END] changeCourseName KO: changeCourseName - Course \"{}\" probably doesn't exists",oldName);
+			throw new ElementNotFoundException("changeCourseName - Course "+oldName +"probably doesn't exists");
     	}
+    		
     	
-    	if (!found) {
-    		log.info("[END] changeCourseName KO: changeCourseName - Course \"{}\"doesn't exists",oldName);
-    		throw new ElementNotFoundException("changeCourseName - Course "+oldName +"doesn't exists");
-    	}
     	log.info("[END] changeCourseName OK");
     	return wd;
 		
@@ -198,7 +184,8 @@ public class CourseNavigationUtilities {
 	
 	public static WebDriver go2Tab(WebDriver wd, By icon) throws ElementNotFoundException {
 		
-		WebElement icon_element = wd.findElement(icon);
+		
+		WebElement icon_element = wd.findElement(COURSE_TABS).findElement(icon);
 		WebElement tab =  DOMMannager.getParent(wd, DOMMannager.getParent(wd, icon_element));
 		String id = tab.getAttribute("id");
 		wd = Click.element(wd,tab);
@@ -208,5 +195,16 @@ public class CourseNavigationUtilities {
 	
 	}
 	
+	public static String getTabId(WebDriver wd, By icon) {
+		WebElement icon_element = wd.findElement(COURSE_TABS).findElement(icon);
+		WebElement tab =  DOMMannager.getParent(wd, DOMMannager.getParent(wd, icon_element));
+		return tab.getAttribute("id");
+	}
+	
+	public static WebElement getTabContent(WebDriver wd, By icon) {
+		
+		String tab_id = getTabId(wd, icon);
+		return wd.findElement(By.id(tab_id.replace("label", "content"))); 
+	}
 	
 }

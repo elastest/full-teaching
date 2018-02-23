@@ -137,7 +137,7 @@ abstract public class LoggedForumTest {
     	    	//go to forum tab to check if enabled:
     	    	//load forum
     	    	driver = CourseNavigationUtilities.go2Tab(driver, FORUM_ICON);
-    	    	if(ForumNavigationUtilities.isForumEnabled(ForumNavigationUtilities.getForumTabContent(driver))) {
+    	    	if(ForumNavigationUtilities.isForumEnabled(CourseNavigationUtilities.getTabContent(driver, FORUM_ICON))) {
     	    		activated_forum_on_some_test = true;
     	        	//Load list of entries
     	    		List <String> entries_list = ForumNavigationUtilities.getFullEntryList(driver);
@@ -197,7 +197,7 @@ abstract public class LoggedForumTest {
     		course.findElement(COURSELIST_COURSETITLE).click();
 	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(TABS_DIV_ID)));
 	    	driver = CourseNavigationUtilities.go2Tab(driver, FORUM_ICON);
-	    	Assert.assertEquals("Forum not activated",ForumNavigationUtilities.isForumEnabled(ForumNavigationUtilities.getForumTabContent(driver)),true);
+	    	Assert.assertEquals("Forum not activated",ForumNavigationUtilities.isForumEnabled(CourseNavigationUtilities.getTabContent(driver,FORUM_ICON)),true);
 	    	
 	    	driver = Click.element(driver, FORUM_NEWENTRY_ICON);
 	    	
