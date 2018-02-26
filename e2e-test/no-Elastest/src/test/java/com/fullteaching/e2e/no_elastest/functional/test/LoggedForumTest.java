@@ -199,22 +199,7 @@ abstract public class LoggedForumTest {
 	    	driver = CourseNavigationUtilities.go2Tab(driver, FORUM_ICON);
 	    	Assert.assertEquals("Forum not activated",ForumNavigationUtilities.isForumEnabled(CourseNavigationUtilities.getTabContent(driver,FORUM_ICON)),true);
 	    	
-	    	driver = Click.element(driver, FORUM_NEWENTRY_ICON);
-	    	
-	    	//wait for modal
-	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_NEWENTRY_MODAL));
-	    	
-	    	//fill new Entry
-	    	WebElement title = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_NEWENTRY_MODAL_TITLE));
-	    	title.sendKeys(newEntryTitle);
-	    	WebElement comment = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_NEWENTRY_MODAL_CONTENT));
-	    	comment.sendKeys(newEntryContent);
-	    	
-	    	//Publish
-	    	Click.element(driver,FORUM_NEWENTRY_MODAL_POSTBUTTON);
-
-	    	//Wait to publish
-	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUMENTRYLIST_ENTRIESUL));
+	    	driver = ForumNavigationUtilities.newEntry(driver, newEntryTitle, newEntryContent);
     		
 	    	//Check entry... 
 	    	WebElement newEntry = ForumNavigationUtilities.getEntry(driver, newEntryTitle);
@@ -238,6 +223,77 @@ abstract public class LoggedForumTest {
     		Assert.fail("Failed to navigate to course forum:: "+ enfe.getClass()+ ": "+enfe.getLocalizedMessage());
     	}
     	
+    }
+    
+    @Test
+    public void forumNewCommentTest() {
+    	Calendar calendar = Calendar.getInstance();
+    	calendar.setTimeInMillis(System.currentTimeMillis());
+
+    	int mYear = calendar.get(Calendar.YEAR);
+    	int mMonth = calendar.get(Calendar.MONTH);
+    	int mDay = calendar.get(Calendar.DAY_OF_MONTH);
+    	int mHour = calendar.get(Calendar.HOUR_OF_DAY);
+    	int mMinute = calendar.get(Calendar.MINUTE);
+    	int mSecond = calendar.get(Calendar.SECOND);
+    	
+    	String newEntryTitle = "";
+    	try {
+	    	//check if course have any entry for comment
+	    	if (!NavigationUtilities.amIHere(driver, COURSES_URL.replace("__HOST__", host))) {	
+				driver = NavigationUtilities.toCoursesHome(driver);	
+			}
+    	
+			WebElement course = CourseNavigationUtilities.getCourseElement(driver, courseName);
+			course.findElement(COURSELIST_COURSETITLE).click();
+	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(TABS_DIV_ID)));
+	    	driver = CourseNavigationUtilities.go2Tab(driver, FORUM_ICON);
+	    	Assert.assertEquals("Forum not activated",ForumNavigationUtilities.isForumEnabled(CourseNavigationUtilities.getTabContent(driver,FORUM_ICON)),true);
+	    	
+	    	List <String> entries_list = ForumNavigationUtilities.getFullEntryList(driver);
+	    	WebElement entry; 
+			if (entries_list.size()<=0) {//if not new entry
+				newEntryTitle = "New Comment Test "+ mDay+mMonth+mYear+mHour+mMinute+mSecond;
+		    	String newEntryContent = "This is the content written on the "+mDay+" of "+months[mMonth-1]+", " +mHour+":"+mMinute+","+mSecond ;
+				driver = ForumNavigationUtilities.newEntry(driver, newEntryTitle, newEntryContent);
+				entry = ForumNavigationUtilities.getEntry(driver, newEntryTitle);
+			}
+			else {
+				entry = ForumNavigationUtilities.getEntry(driver, entries_list.get(0));
+			}
+			//go to entry 
+			driver = Click.element(driver, entry.findElement(FORUMENTRYLIST_ENTRYTITLE));
+			WebElement commentList = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUMCOMMENTLIST));
+			
+			//new comment
+			WebElement newCommentIcon = commentList.findElement(FORUMCOMMENTLIST_NEWCOMMENT_ICON);
+	    	driver = Click.element(driver, newCommentIcon);
+	    	Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_NEWCOMMENT_MODAL));
+	    	String newCommentContent = "COMMENT TEST"+ mDay+mMonth+mYear+mHour+mMinute+mSecond+". This is the comment written on the "+mDay+" of "+months[mMonth-1]+", " +mHour+":"+mMinute+","+mSecond ;
+	
+	    	WebElement comment_field = driver.findElement(FORUM_NEWCOMMENT_MODAL_TEXTFIELD);
+	    	comment_field.sendKeys(newCommentContent);
+	    	
+	    	driver = Click.element(driver, FORUM_NEWCOMMENT_MODAL_POSTBUTTON);
+	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUMCOMMENTLIST));
+	    	List<WebElement>comments = ForumNavigationUtilities.getComments(driver);
+	    	
+	    	//asserts
+	    	Assert.assertEquals("Comment list empty or only original comment",comments.size()>1,true);
+	    	boolean commentFound = false;
+	    	for (WebElement comment : comments) {
+	    		//check if it is new comment
+	    		if (comment.findElement(FORUMCOMMENTLIST_COMMENT_CONTENT).getText().equals(newCommentContent)) {
+	    			commentFound = true;
+	    	    	Assert.assertEquals("Bad user in comment", comment.findElement(FORUMCOMMENTLIST_COMMENT_USER).getText(),userName);
+	    		}
+	    	}
+	    	Assert.assertEquals("Comment not found",commentFound, true);
+	    	
+    	}catch(ElementNotFoundException enfe) {
+    		Assert.fail("Failed to navigate to course forum:: "+ enfe.getClass()+ ": "+enfe.getLocalizedMessage());
+    	}
+
     }
     
     protected  String months[] = {"January", "February", "March", "April",

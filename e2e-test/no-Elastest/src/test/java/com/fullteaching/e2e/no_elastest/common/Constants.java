@@ -93,7 +93,11 @@ public final class Constants {
     public static final String FORUM_NEWENTRY_MODAL_TITLE_ID = "inputTitle";
     public static final String FORUM_NEWENTRY_MODAL_CONTENT_ID = "inputComment";
     public static final String FORUM_NEWENTRY_MODAL_POSTBUTTON_ID = "post-modal-btn";
-    
+    public static final String FORUMCOMMENTLIST_NEWCOMMENT_ICON_CLASS = "forum-icon";
+    public static final String FORUM_NEWCOMMENT_MODAL_ID = "course-details-modal";
+    public static final String FORUM_NEWCOMMENT_MODAL_TEXTFIELD_ID = "inputComment";
+    public static final String FORUM_NEWCOMMENT_MODAL_POSTBUTTON_ID = "post-modal-btn";
+
 
     public static final String SETTINGS_USEREMAIL_ID = "stng-user-mail";
     
@@ -128,6 +132,7 @@ public final class Constants {
     public static final By EDITDELETE_MODAL = By.id(EDITDELETE_MODAL_ID);
     public static final By LOGIN_MODAL = By.id(LOGIN_MODAL_ID);
     public static final By FORUM_NEWENTRY_MODAL = By.id(FORUM_NEWENTRY_MODAL_ID);
+    public static final By FORUM_NEWCOMMENT_MODAL = By.id(FORUM_NEWCOMMENT_MODAL_ID);
    
     //OTHER ELEMENTS
     public static final By FOOTER = By.className(FOOTER_CLASS);
@@ -154,6 +159,8 @@ public final class Constants {
     
     public static final By FORUM_NEWENTRY_MODAL_TITLE = By.id(FORUM_NEWENTRY_MODAL_TITLE_ID);
     public static final By FORUM_NEWENTRY_MODAL_CONTENT = By.id(FORUM_NEWENTRY_MODAL_CONTENT_ID);
+    public static final By FORUM_NEWCOMMENT_MODAL_TEXTFIELD = By.id(FORUM_NEWCOMMENT_MODAL_TEXTFIELD_ID);
+    public static final By FORUM_NEWCOMMENT_MODAL_POSTBUTTON = By.id(FORUM_NEWCOMMENT_MODAL_POSTBUTTON_ID);
     
     public static final By COURSELIST_COURSETITLE = By.className(COURSELIST_COURSETITLE_CLASS);
     public static final By EDITCOURSE_MODAL_NAMEFIELD = By.id(EDITCOURSE_MODAL_NAMEFIELD_ID);
@@ -167,6 +174,8 @@ public final class Constants {
     
     public static final By FORUM_NEWENTRY_ICON = By.id(FORUM_NEWENTRY_ICON_ID);
     public static final By FORUM_EDITENTRY_ICON = By.id(FORUM_EDITENTRY_ICON_ID);
+    public static final By FORUMCOMMENTLIST_NEWCOMMENT_ICON = By.className(FORUMCOMMENTLIST_NEWCOMMENT_ICON_CLASS);
+    
     //KEYS
 	public static final String SELECTALL = Keys.chord(Keys.CONTROL, "a");
 	public static final String NEWLINE = Keys.chord(Keys.ENTER);

@@ -1,5 +1,6 @@
 package com.fullteaching.e2e.no_elastest.common;
 
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -109,5 +110,32 @@ public class ForumNavigationUtilities {
 			}
 		}
 		return user_comments;
+	}
+	
+	public static WebDriver newEntry(WebDriver wd, String newEntryTitle, String newEntryContent) throws ElementNotFoundException {
+		wd = CourseNavigationUtilities.go2Tab(wd, FORUM_ICON);
+    	Assert.assertEquals("Forum not activated",ForumNavigationUtilities.isForumEnabled(CourseNavigationUtilities.getTabContent(wd,FORUM_ICON)),true);
+    	
+    	wd = Click.element(wd, FORUM_NEWENTRY_ICON);
+    	
+    	//wait for modal
+    	Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(FORUM_NEWENTRY_MODAL));
+    	
+    	//fill new Entry
+    	WebElement title = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(FORUM_NEWENTRY_MODAL_TITLE));
+    	title.sendKeys(newEntryTitle);
+    	WebElement comment = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(FORUM_NEWENTRY_MODAL_CONTENT));
+    	comment.sendKeys(newEntryContent);
+    	
+    	//Publish
+    	Click.element(wd,FORUM_NEWENTRY_MODAL_POSTBUTTON);
+
+    	//Wait to publish
+    	Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(FORUMENTRYLIST_ENTRIESUL));
+		
+    	//Check entry... 
+    	WebElement newEntry = ForumNavigationUtilities.getEntry(wd, newEntryTitle);
+    	
+    	return wd;
 	}
 }
