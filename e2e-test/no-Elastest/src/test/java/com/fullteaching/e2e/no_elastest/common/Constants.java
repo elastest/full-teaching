@@ -97,6 +97,10 @@ public final class Constants {
     public static final String FORUM_NEWCOMMENT_MODAL_ID = "course-details-modal";
     public static final String FORUM_NEWCOMMENT_MODAL_TEXTFIELD_ID = "inputComment";
     public static final String FORUM_NEWCOMMENT_MODAL_POSTBUTTON_ID = "post-modal-btn";
+    public static final String FORUMCOMMENTLIST_COMMENT_REPLY_ICON_CLASS = "replay-icon";
+    public static final String FORUMCOMMENTLIST_MODAL_NEWREPLY_ID = "course-details-modal";
+    public static final String FORUMCOMMENTLIST_MODAL_NEWREPLY_TEXTFIELD_ID = "inputComment";
+    public static final String FORUMCOMMENTLIST_COMMENT_DIV_CLASS = "comment-div";
 
 
     public static final String SETTINGS_USEREMAIL_ID = "stng-user-mail";
@@ -161,6 +165,9 @@ public final class Constants {
     public static final By FORUM_NEWENTRY_MODAL_CONTENT = By.id(FORUM_NEWENTRY_MODAL_CONTENT_ID);
     public static final By FORUM_NEWCOMMENT_MODAL_TEXTFIELD = By.id(FORUM_NEWCOMMENT_MODAL_TEXTFIELD_ID);
     public static final By FORUM_NEWCOMMENT_MODAL_POSTBUTTON = By.id(FORUM_NEWCOMMENT_MODAL_POSTBUTTON_ID);
+    public static final By FORUMCOMMENTLIST_MODAL_NEWREPLY = By.id(FORUMCOMMENTLIST_MODAL_NEWREPLY_ID);
+    public static final By FORUMCOMMENTLIST_MODAL_NEWREPLY_TEXTFIELD = By.id(FORUMCOMMENTLIST_MODAL_NEWREPLY_TEXTFIELD_ID);
+    public static final By FORUMCOMMENTLIST_COMMENT_DIV = By.className(FORUMCOMMENTLIST_COMMENT_DIV_CLASS);
     
     public static final By COURSELIST_COURSETITLE = By.className(COURSELIST_COURSETITLE_CLASS);
     public static final By EDITCOURSE_MODAL_NAMEFIELD = By.id(EDITCOURSE_MODAL_NAMEFIELD_ID);
@@ -175,6 +182,7 @@ public final class Constants {
     public static final By FORUM_NEWENTRY_ICON = By.id(FORUM_NEWENTRY_ICON_ID);
     public static final By FORUM_EDITENTRY_ICON = By.id(FORUM_EDITENTRY_ICON_ID);
     public static final By FORUMCOMMENTLIST_NEWCOMMENT_ICON = By.className(FORUMCOMMENTLIST_NEWCOMMENT_ICON_CLASS);
+    public static final By FORUMCOMMENTLIST_COMMENT_REPLY_ICON = By.className(FORUMCOMMENTLIST_COMMENT_REPLY_ICON_CLASS);
     
     //KEYS
 	public static final String SELECTALL = Keys.chord(Keys.CONTROL, "a");

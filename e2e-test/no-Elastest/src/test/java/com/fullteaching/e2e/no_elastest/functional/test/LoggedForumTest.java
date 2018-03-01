@@ -296,6 +296,82 @@ abstract public class LoggedForumTest {
 
     }
     
+    @Test
+    public void forumNewReply2CommentTest() {
+    	Calendar calendar = Calendar.getInstance();
+    	calendar.setTimeInMillis(System.currentTimeMillis());
+
+    	int mYear = calendar.get(Calendar.YEAR);
+    	int mMonth = calendar.get(Calendar.MONTH);
+    	int mDay = calendar.get(Calendar.DAY_OF_MONTH);
+    	int mHour = calendar.get(Calendar.HOUR_OF_DAY);
+    	int mMinute = calendar.get(Calendar.MINUTE);
+    	int mSecond = calendar.get(Calendar.SECOND);
+    	
+    	String newEntryTitle = "";
+    	try {
+	    	//check if course have any entry for comment
+	    	if (!NavigationUtilities.amIHere(driver, COURSES_URL.replace("__HOST__", host))) {	
+				driver = NavigationUtilities.toCoursesHome(driver);	
+			}
+    	
+			WebElement course = CourseNavigationUtilities.getCourseElement(driver, courseName);
+			course.findElement(COURSELIST_COURSETITLE).click();
+	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(TABS_DIV_ID)));
+	    	driver = CourseNavigationUtilities.go2Tab(driver, FORUM_ICON);
+	    	Assert.assertEquals("Forum not activated",ForumNavigationUtilities.isForumEnabled(CourseNavigationUtilities.getTabContent(driver,FORUM_ICON)),true);
+	    	
+	    	List <String> entries_list = ForumNavigationUtilities.getFullEntryList(driver);
+	    	WebElement entry; 
+			if (entries_list.size()<=0) {//if not new entry
+				newEntryTitle = "New Comment Test "+ mDay+mMonth+mYear+mHour+mMinute+mSecond;
+		    	String newEntryContent = "This is the content written on the "+mDay+" of "+months[mMonth-1]+", " +mHour+":"+mMinute+","+mSecond ;
+				driver = ForumNavigationUtilities.newEntry(driver, newEntryTitle, newEntryContent);
+				entry = ForumNavigationUtilities.getEntry(driver, newEntryTitle);
+			}
+			else {
+				entry = ForumNavigationUtilities.getEntry(driver, entries_list.get(0));
+			}
+			//go to entry 
+			driver = Click.element(driver, entry.findElement(FORUMENTRYLIST_ENTRYTITLE));
+			WebElement commentList = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUMCOMMENTLIST));
+			List<WebElement>comments = ForumNavigationUtilities.getComments(driver);
+			
+			//go to first comment
+			WebElement comment = comments.get(0);
+			driver = Click.element(driver, comment.findElement(FORUMCOMMENTLIST_COMMENT_REPLY_ICON));
+	    	
+			String newReplyContent = "This is the reply written on the "+mDay+" of "+months[mMonth-1]+", " +mHour+":"+mMinute+","+mSecond ;
+
+			//reply
+			Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUMCOMMENTLIST_MODAL_NEWREPLY));
+			
+			WebElement textField = driver.findElement(FORUMCOMMENTLIST_MODAL_NEWREPLY_TEXTFIELD);
+			textField.sendKeys(newReplyContent);
+			driver = Click.element(driver, FORUM_NEWCOMMENT_MODAL_POSTBUTTON);
+			commentList = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUMCOMMENTLIST));
+			comments = ForumNavigationUtilities.getComments(driver);
+
+			//getComment replies 
+			List <WebElement> replies = ForumNavigationUtilities.getReplies(driver,comments.get(0)); 
+			WebElement newReply = null;
+			for(WebElement reply: replies) {
+				if(reply.findElement(FORUMCOMMENTLIST_COMMENT_CONTENT).getText().equals(newReplyContent))
+					newReply= reply;				
+			}
+			//assert reply
+			Assert.assertNotNull("Reply not found", newReply);
+	    	Assert.assertEquals("Bad user in comment", newReply.findElement(FORUMCOMMENTLIST_COMMENT_USER).getText(),userName);
+	    	
+			//nested reply
+	    	
+			//assert nested reply
+			
+    	}catch(ElementNotFoundException enfe) {
+    		Assert.fail("Failed to navigate to course forum:: "+ enfe.getClass()+ ": "+enfe.getLocalizedMessage());
+    	}
+    }
+    
     protected  String months[] = {"January", "February", "March", "April",
             "May", "June", "July", "August", "September",
             "October", "November", "December"};

@@ -138,4 +138,19 @@ public class ForumNavigationUtilities {
     	
     	return wd;
 	}
+
+
+	public static List<WebElement> getReplies(WebDriver driver, WebElement comment) {
+		List<WebElement> replies= new ArrayList<WebElement>();
+		
+		//get all comment-div 
+		List<WebElement> subcomments = comment.findElements(FORUMCOMMENTLIST_COMMENT_DIV);
+		
+		//ignore first it is original comment
+		for (int i = 1; i<subcomments.size(); i++) {
+			replies.add(subcomments.get(i));
+		}
+		
+		return replies;
+	}
 }
