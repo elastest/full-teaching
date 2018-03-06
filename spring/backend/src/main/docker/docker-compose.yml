@@ -13,7 +13,7 @@ services:
 
   full-teaching-openvidu-server-kms:
     container_name: docker-compose-full-teaching-openvidu-server-kms
-    image: openvidu/openvidu-server-kms
+    image: openvidu/openvidu-server-kms:1.1.0
     ports:
       - 8443:8443
     environment:
@@ -25,6 +25,7 @@ services:
     image: elastest/demonstrator-noelastest_full-teaching
     links:
       - full-teaching-mysql:mysql
+      - full-teaching-openvidu:openvidu
     ports:
       - 5000:5000
     environment:
