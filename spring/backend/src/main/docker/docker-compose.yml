@@ -25,7 +25,7 @@ services:
     image: elastest/demonstrator-noelastest_full-teaching
     links:
       - full-teaching-mysql:mysql
-      - full-teaching-openvidu:openvidu
+      - full-teaching-openvidu-server-kms:openvidu
     ports:
       - 5000:5000
     environment:
