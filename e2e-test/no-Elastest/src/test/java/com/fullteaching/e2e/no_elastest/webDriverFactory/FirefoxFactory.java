@@ -21,4 +21,8 @@ public class FirefoxFactory {
 		}
 		
 	}
+	
+	public static WebDriver newWebDriver() {
+		return  new FirefoxDriver();
+	}
 }

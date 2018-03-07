@@ -24,4 +24,16 @@ public class ChromeFactory {
 			driver = null;
 		}
 	}
+	
+	public static WebDriver newWebDriver() {
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--start-maximized");
+		return new ChromeDriver(options);
+	}
+	
+	public static void disposeWebDriver(WebDriver wd) {
+		
+		wd.close();
+	}
+		
 }

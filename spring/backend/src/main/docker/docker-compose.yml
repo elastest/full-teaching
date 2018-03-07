@@ -19,7 +19,8 @@ services:
     environment:
       - KMS_STUN_IP=193.147.51.12
       - KMS_STUN_PORT=3478
-
+      - openvidu.publicurl=https://${hostIP}:8443/
+      
   full-teaching:
     container_name: docker-compose-full-teaching
     image: elastest/demonstrator-noelastest_full-teaching
@@ -36,3 +37,6 @@ services:
       - MYSQL_ENV_MYSQL_DATABASE=full_teaching
       - MYSQL_ENV_MYSQL_USER=ft-root
       - MYSQL_ENV_MYSQL_PASSWORD=pass
+    depends_on:
+      - full-teaching-mysql
+      - full-teaching-openvidu-server-kms

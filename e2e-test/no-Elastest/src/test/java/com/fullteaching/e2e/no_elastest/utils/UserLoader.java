@@ -9,6 +9,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openqa.selenium.WebDriver;
+
+import com.fullteaching.e2e.no_elastest.webDriverFactory.ChromeFactory;
+import com.fullteaching.e2e.no_elastest.webDriverFactory.FirefoxFactory;
+
+import io.github.bonigarcia.wdm.ChromeDriverManager;
+import io.github.bonigarcia.wdm.FirefoxDriverManager;
+
 public class UserLoader {
 
 	public static int USERNAME = 0;
@@ -21,6 +29,7 @@ public class UserLoader {
 	private static Map<String,User> users;
 	
 	private static String usersDefaultFile = "src/test/resources/inputs/default_user_file.csv";
+	private static String oneTeacherMultipleStudentsFile = "src/test/resources/inputs/session_test_file.csv";
 	
 	public static void loadUsers (List<User> userlst, boolean override) {
 		if (override == true || users == null ) 
@@ -62,6 +71,19 @@ public class UserLoader {
 						field[PASSWORD], 
 						field[ROLES].split(cvsRolesSplitBy));
 	}
+
+	
+	public static Collection<String[]> getSessionParameters() throws IOException{
+		String line = "";
+	     
+		List<String[]> paramList = new ArrayList<String[]>();
+		
+        BufferedReader br = new BufferedReader(new FileReader(oneTeacherMultipleStudentsFile));
+        while ((line = br.readLine()) != null) {
+        	paramList.add(line.split(cvsMainFieldsSplitBy));
+        }  
+        return paramList;
+	}
 	
 	public static User retrieveUser(String name) {
 		return users.get(name);
@@ -72,5 +94,19 @@ public class UserLoader {
 			loadUsers();
 		}
 		return users.values();
+	}
+	
+	public static WebDriver allocateNewBrowser(String browser) {
+		WebDriver driver = null;
+		switch (browser){
+			case "chrome":
+				ChromeDriverManager.getInstance().setup();
+				driver = ChromeFactory.newWebDriver();
+				break;
+			case "firefox":
+				FirefoxDriverManager.getInstance().setup();			
+				driver = FirefoxFactory.newWebDriver();
+		}
+		return driver;
 	}
 }

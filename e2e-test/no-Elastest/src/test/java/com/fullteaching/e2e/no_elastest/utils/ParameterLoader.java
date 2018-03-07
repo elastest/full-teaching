@@ -46,6 +46,10 @@ public class ParameterLoader {
 		
 		return records;
 	}
+	
+	public static Collection<String[]> sessionParameters() throws IOException{
+		return UserLoader.getSessionParameters();
+	}
 
 	private static boolean isStudent(User user) {
 		String[] roles = user.getRoles();

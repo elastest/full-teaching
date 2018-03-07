@@ -60,6 +60,8 @@ public final class Constants {
     public static final String FORUM_ICON_XPATH = "./div[1]/div[3]/div/i";
     public static final String FILES_ICON_XPATH = "./div[1]/div[4]/div/i";
     public static final String ATTENDERS_ICON_XPATH = "./div[1]/div[5]/div/i"; 
+    
+    public static final String SESSIONLIST_NEWSESSION_ICON_CLASS = "add-element-icon";
         
     public static final String EDITDESCRIPTION_BUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[4]/md-tab-group/div[2]/div[1]/div/div[1]/a";
     public static final String EDITDESCRIPTION_CONTENTBOX_CLASS = "ui-editor-content";
@@ -102,7 +104,20 @@ public final class Constants {
     public static final String FORUMCOMMENTLIST_MODAL_NEWREPLY_TEXTFIELD_ID = "inputComment";
     public static final String FORUMCOMMENTLIST_COMMENT_DIV_CLASS = "comment-div";
 
-
+    public static final String SESSIONLIST_NEWSESSION_MODAL_ID = "course-details-modal";
+    public static final String SESSIONLIST_NEWSESSION_MODAL_TITLE_ID = "inputTitle";
+    public static final String SESSIONLIST_NEWSESSION_MODAL_CONTENT_ID = "inputComment";
+    public static final String SESSIONLIST_NEWSESSION_MODAL_DATE_ID = "inputDate";
+    public static final String SESSIONLIST_NEWSESSION_MODAL_TIME_ID = "inputTime";
+    public static final String SESSIONLIST_NEWSESSION_MODAL_POSTBUTTON_ID = "post-modal-btn";
+    public static final String SESSIONLIST_SESSION_ROW_CLASS = "session-data";
+    public static final String SESSIONLIST_SESSION_NAME_CLASS = "session-title";
+    public static final String SESSIONLIST_SESSION_ACCESS_CLASS = "session-ready";
+    public static final String SESSIONLIST_SESSIONEDIT_ICON_CLASS = "forum-icon";
+    public static final String SESSIONLIST_EDIT_MODAL_ID = "put-delete-modal";
+    public static final String SESSIONLIST_EDITMODAL_DELETE_DIV_CLASS = "delete-div";
+    
+    
     public static final String SETTINGS_USEREMAIL_ID = "stng-user-mail";
     
     //BUTTONS
@@ -127,7 +142,8 @@ public final class Constants {
     public static final By BACK_TO_DASHBOARD = By.className(COURSE_BACK_TO_DASHBOARD_CLASS);
     
     public static final By FORUM_NEWENTRY_MODAL_POSTBUTTON = By.id(FORUM_NEWENTRY_MODAL_POSTBUTTON_ID);
-    
+    public static final By SESSIONLIST_NEWSESSION_MODAL_POSTBUTTON = By.id(SESSIONLIST_NEWSESSION_MODAL_POSTBUTTON_ID);
+
     //TABS
     public static final By FORUMTAB = By.xpath(FORUMTAB_XPATH); //ALERT! not working for some tests
     
@@ -137,7 +153,9 @@ public final class Constants {
     public static final By LOGIN_MODAL = By.id(LOGIN_MODAL_ID);
     public static final By FORUM_NEWENTRY_MODAL = By.id(FORUM_NEWENTRY_MODAL_ID);
     public static final By FORUM_NEWCOMMENT_MODAL = By.id(FORUM_NEWCOMMENT_MODAL_ID);
-   
+    public static final By SESSIONLIST_NEWSESSION_MODAL = By.id(SESSIONLIST_NEWSESSION_MODAL_ID);
+    public static final By SESSIONLIST_EDIT_MODAL = By.id(SESSIONLIST_EDIT_MODAL_ID);
+    
     //OTHER ELEMENTS
     public static final By FOOTER = By.className(FOOTER_CLASS);
     public static final By MAINMENU_ARROW = By.id(MAINMENU_ARROW_ID);
@@ -172,6 +190,14 @@ public final class Constants {
     public static final By COURSELIST_COURSETITLE = By.className(COURSELIST_COURSETITLE_CLASS);
     public static final By EDITCOURSE_MODAL_NAMEFIELD = By.id(EDITCOURSE_MODAL_NAMEFIELD_ID);
     
+    public static final By SESSIONLIST_NEWSESSION_MODAL_TITLE = By.id(SESSIONLIST_NEWSESSION_MODAL_TITLE_ID);
+    public static final By SESSIONLIST_NEWSESSION_MODAL_CONTENT = By.id(SESSIONLIST_NEWSESSION_MODAL_CONTENT_ID);
+    public static final By SESSIONLIST_NEWSESSION_MODAL_DATE = By.id(SESSIONLIST_NEWSESSION_MODAL_DATE_ID);
+    public static final By SESSIONLIST_NEWSESSION_MODAL_TIME = By.id(SESSIONLIST_NEWSESSION_MODAL_TIME_ID);
+    public static final By SESSIONLIST_SESSION_ROW = By.className(SESSIONLIST_SESSION_ROW_CLASS);
+    public static final By SESSIONLIST_SESSION_NAME = By.className(SESSIONLIST_SESSION_NAME_CLASS);
+    public static final By SESSIONLIST_EDITMODAL_DELETE_DIV = By.className(SESSIONLIST_EDITMODAL_DELETE_DIV_CLASS);
+    public static final By SESSIONLIST_SESSION_ACCESS = By.className(SESSIONLIST_SESSION_ACCESS_CLASS);
     //ICONS
     public static final By FORUM_ICON = By.xpath(FORUM_ICON_XPATH);
     public static final By HOME_ICON = By.xpath(HOME_ICON_XPATH);
@@ -183,6 +209,10 @@ public final class Constants {
     public static final By FORUM_EDITENTRY_ICON = By.id(FORUM_EDITENTRY_ICON_ID);
     public static final By FORUMCOMMENTLIST_NEWCOMMENT_ICON = By.className(FORUMCOMMENTLIST_NEWCOMMENT_ICON_CLASS);
     public static final By FORUMCOMMENTLIST_COMMENT_REPLY_ICON = By.className(FORUMCOMMENTLIST_COMMENT_REPLY_ICON_CLASS);
+    
+    public static final By SESSIONLIST_NEWSESSION_ICON = By.className(SESSIONLIST_NEWSESSION_ICON_CLASS);
+    public static final By SESSIONLIST_SESSIONEDIT_ICON = By.className(SESSIONLIST_SESSIONEDIT_ICON_CLASS);
+    
     
     //KEYS
 	public static final String SELECTALL = Keys.chord(Keys.CONTROL, "a");
