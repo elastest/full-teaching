@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,11 +38,11 @@ public class VideoSessionController {
 	String SECRET;
 	String URL;
 	
-    @Autowired
-	public VideoSessionController(@Value("${openvidu.url}") String openviduUrl,	@Value("${openvidu.secret}") String secret){
-    	this.SECRET = secret;
-    	this.URL = openviduUrl;
-		this.openVidu = new OpenVidu(openviduUrl, secret);
+	public VideoSessionController() {
+    	this.SECRET = System.getenv("openvidu.secret") != null ? System.getenv("openvidu.secret") : "MY_SECRET";
+    	this.URL = System.getenv("openvidu.url") != null ? System.getenv("openvidu.url") : "https://localhost:8443/";
+    	System.out.println(" ------------ OPENVIDU_URL ---------------- : " + this.URL);
+		this.openVidu = new OpenVidu(this.URL, this.SECRET);
 	}
 	
 	@RequestMapping(value = "/get-sessionid-token/{id}", method = RequestMethod.GET)
@@ -76,7 +75,7 @@ public class VideoSessionController {
 
 					sessionId = s.getSessionId();
 					token = s.generateToken(new TokenOptions.Builder()
-							.data("{\"name\": \"" + this.user.getLoggedUser().getNickName() + "\"}")
+							.data("{\"name\": \"" + this.user.getLoggedUser().getNickName() + "\", \"isTeacher\": true}")
 							.build());
 					
 					responseJson.put(0, sessionId);
@@ -96,7 +95,7 @@ public class VideoSessionController {
 					io.openvidu.java.client.Session s = this.lessonIdSession.get(id_i);
 					sessionId = s.getSessionId();
 					token = s.generateToken(new TokenOptions.Builder()
-							.data("{\"name\": \"" + this.user.getLoggedUser().getNickName() + "\"}")
+							.data("{\"name\": \"" + this.user.getLoggedUser().getNickName() + "\", \"isTeacher\": false}")
 							.build());
 					
 					responseJson.put(0, sessionId);

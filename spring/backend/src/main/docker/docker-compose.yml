@@ -10,6 +10,8 @@ services:
       - MYSQL_DATABASE=full_teaching
       - MYSQL_USER=ft-root
       - MYSQL_PASSWORD=pass
+    ports:
+      - 3306:3306
 
   full-teaching-openvidu-server-kms:
     container_name: docker-compose-full-teaching-openvidu-server-kms

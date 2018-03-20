@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -84,10 +84,16 @@ export class VideoSessionComponent implements OnInit {
 
     // Stablishing OpenVidu session
     this.generateParticipantInfo();
-    window.onbeforeunload = () => {
-      this.removeUser();
-      this.leaveSession();
-    }
+  }
+
+  @HostListener('window:beforeunload')
+  beforeunloadHandler() {
+    this.removeUser();
+    this.leaveSession();
+  }
+
+  ngAfterViewInit() {
+    document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
   }
 
   ngOnInit() {
@@ -95,7 +101,8 @@ export class VideoSessionComponent implements OnInit {
     this.getParamsAndJoin();
 
     let wsUri = environment.CHAT_URL;
-    this.websocket = new WebSocket(wsUri);
+    //this.websocket = new WebSocket(wsUri);
+    this.websocket = new WebSocket("wss://" + window.location.hostname + ":" + window.location.port + "/chat")
 
     this.websocket.onopen = (event: Event) => { // Connection is open
       // New welcome chat line
@@ -215,6 +222,7 @@ export class VideoSessionComponent implements OnInit {
             this.streamIndexSmall = this.getStreamIndexByName(this.teacherName);
           } else {
             this.streamIndex = this.getStreamIndexByName(this.teacherName);
+            this.studentAccessGranted = false;
           }
         }
       }
@@ -248,6 +256,8 @@ export class VideoSessionComponent implements OnInit {
     this.leaveSession();
     // Delete the dark overlay (if side menu opened) when the component is destroyed
     $("#sidenav-overlay").remove();
+
+    document.getElementsByTagName('body')[0].style.overflowY = 'initial';
   }
 
   sendMessage() {
@@ -447,7 +457,7 @@ export class VideoSessionComponent implements OnInit {
   }
 
   joinSession() {
-    this.OV = new OpenVidu(environment.OPENVIDU_URL);
+    this.OV = new OpenVidu();
     this.OVSession = this.OV.initSession(this.OVSessionId);
 
     this.OVSession.on('streamCreated', (event) => {
@@ -480,7 +490,7 @@ export class VideoSessionComponent implements OnInit {
           if (this.authenticationService.isTeacher()) {
             this.OVPublisher = this.OV.initPublisher('nothing');
           } else {
-            this.OVPublisher = this.OV.initPublisher('nothing', {audio:false, video:false});
+            this.OVPublisher = this.OV.initPublisher('nothing', {audioActive:false, videoActive:false});
           }
           this.OVPublisher.on('accessAllowed', (event) => {
             console.warn("ACCESS ALLOWED");
