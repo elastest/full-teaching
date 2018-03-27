@@ -2,6 +2,7 @@ package com.fullteaching.backend.session;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.json.simple.JSONObject;
@@ -60,7 +61,8 @@ public class VideoSessionController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Session session = sessionRepository.findOne(id_i);
+		Optional<Session> o_session = sessionRepository.findById(id_i);
+		Session session = o_session.get();
 		if (session != null) { // sessionId belongs to a real Session
 			String sessionId;
 			String token;

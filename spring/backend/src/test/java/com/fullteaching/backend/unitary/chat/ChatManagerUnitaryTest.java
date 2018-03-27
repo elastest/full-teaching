@@ -1,15 +1,15 @@
 package com.fullteaching.backend.unitary.chat;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.util.Assert;
+
 import org.springframework.web.socket.WebSocketSession;
 
 import com.fullteaching.backend.AbstractUnitTest;
@@ -30,34 +30,34 @@ public class ChatManagerUnitaryTest extends AbstractUnitTest {
 	@Mock
 	ExecutorService executor;
 	
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 
 	@Test
 	public void newChatManagerTest() {
 		ChatManager chm = new ChatManager(10);
-		Assert.notNull(chm);
+		assertNotNull(chm);
 	}
 
 	@Test
 	public void addChatUser2ManagerTest() {
 		ChatManager chm = new ChatManager(10);
-		Assert.notNull(chm);
+		assertNotNull(chm);
 		WebSocketChatUser wschu = new WebSocketChatUser(session, user_name, color);
 		chm.newUser(wschu);
-		Assert.isTrue(wschu.equals(chm.getUser(user_name)));
-		Assert.isTrue(chm.getUsers().size()==1);
+		assertTrue(wschu.equals(chm.getUser(user_name)));
+		assertTrue(chm.getUsers().size()==1);
 		
 		chm.newUser(wschu);
-		Assert.isTrue(chm.getUsers().size()==1); //the user hasn't been added again
+		assertTrue(chm.getUsers().size()==1); //the user hasn't been added again
 			
 	}
 
 	@Test
 	public void addChat2ManagerTest() {
 		ChatManager chm = new ChatManager(1);
-		Assert.notNull(chm);
+		assertNotNull(chm);
 		
 		WebSocketChatUser wschu = new WebSocketChatUser(session, user_name, color);
 		
@@ -66,8 +66,8 @@ public class ChatManagerUnitaryTest extends AbstractUnitTest {
 			
 			ch.addUser(wschu);
 			Chat newch = chm.newChat(chat_name, 5, TimeUnit.SECONDS, teacher_name);
-			Assert.notNull(newch);
-			Assert.isTrue(chat_name.equals(newch.getName()));
+			assertNotNull(newch);
+			assertTrue(chat_name.equals(newch.getName()));
 			
 		} catch (InterruptedException | TimeoutException e1) {
 			e1.printStackTrace();
@@ -86,7 +86,7 @@ public class ChatManagerUnitaryTest extends AbstractUnitTest {
 			fail("//no more capacity -> execption not thrown");
 			
 		} catch (TimeoutException e) { //if there is not more capacity
-			Assert.isTrue(e.getMessage().equals("There is no enough capacity to create a new chat"));
+			assertTrue(e.getMessage().equals("There is no enough capacity to create a new chat"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("EXCEPTION ok -> e:"+e.getClass().getName());
@@ -100,9 +100,9 @@ public class ChatManagerUnitaryTest extends AbstractUnitTest {
 		
 		try {
 			chm.newChat(chat_name, 50000, TimeUnit.SECONDS, teacher_name);
-			Assert.notNull(chm);
+			assertNotNull(chm);
 
-			Assert.isTrue(chm.getChats().size()==1);
+			assertTrue(chm.getChats().size()==1);
 			
 		} catch (InterruptedException | TimeoutException e1) {
 			e1.printStackTrace();
@@ -116,12 +116,12 @@ public class ChatManagerUnitaryTest extends AbstractUnitTest {
 	@Test
 	public void getChatByNameFromManagerTest() {
 		ChatManager chm = new ChatManager(10);
-		Assert.notNull(chm);
+		assertNotNull(chm);
 
 		try {
 			Chat newch = chm.newChat(chat_name, 50000, TimeUnit.SECONDS, teacher_name);
 		
-			Assert.isTrue(newch.equals(chm.getChat(chat_name)));
+			assertTrue(newch.equals(chm.getChat(chat_name)));
 			
 		} catch (InterruptedException | TimeoutException e1) {
 			e1.printStackTrace();
@@ -139,8 +139,8 @@ public class ChatManagerUnitaryTest extends AbstractUnitTest {
 		WebSocketChatUser wschu = new WebSocketChatUser(session, user_name, color);
 		chm.newUser(wschu);
 		
-		Assert.notNull(chm);
-		Assert.isTrue(chm.getUsers().size()==1);
+		assertNotNull(chm);
+		assertTrue(chm.getUsers().size()==1);
 		
 	}
 
@@ -150,8 +150,8 @@ public class ChatManagerUnitaryTest extends AbstractUnitTest {
 		WebSocketChatUser wschu = new WebSocketChatUser(session, user_name, color);
 		chm.newUser(wschu);
 		
-		Assert.notNull(chm);
-		Assert.isTrue(wschu.equals(chm.getUser(user_name)));
+		assertNotNull(chm);
+		assertTrue(wschu.equals(chm.getUser(user_name)));
 	}
 
 	@Test
@@ -160,26 +160,26 @@ public class ChatManagerUnitaryTest extends AbstractUnitTest {
 		WebSocketChatUser wschu = new WebSocketChatUser(session, user_name, color);
 		chm.newUser(wschu);
 		
-		Assert.notNull(chm);
-		Assert.isTrue(wschu.equals(chm.getUser(user_name)));
+		assertNotNull(chm);
+		assertTrue(wschu.equals(chm.getUser(user_name)));
 		
 		chm.removeUserFromChatManager(wschu);
-		Assert.isTrue(chm.getUser(user_name)==null);
+		assertTrue(chm.getUser(user_name)==null);
 	}
 
 	@Test
 	public void checkIfChatExistsTest() {
 		ChatManager chm = new ChatManager(10);
-		Assert.notNull(chm);
+		assertNotNull(chm);
 		Chat ch = new Chat (chm, chat_name, executor, teacher_name);
 		WebSocketChatUser wschu = new WebSocketChatUser(session, user_name, color);
 		ch.addUser(wschu);
 		try {
 			Chat newch = chm.newChat(chat_name, 5, TimeUnit.SECONDS, teacher_name);
-			Assert.notNull(newch);
+			assertNotNull(newch);
 			
-			Assert.isTrue(chm.chatExists(chat_name));
-			Assert.isTrue(!chm.chatExists("no_chat"));
+			assertTrue(chm.chatExists(chat_name));
+			assertTrue(!chm.chatExists("no_chat"));
 
 		} catch (InterruptedException | TimeoutException e1) {
 			e1.printStackTrace();
@@ -193,18 +193,18 @@ public class ChatManagerUnitaryTest extends AbstractUnitTest {
 	@Test
 	public void checkIfUserAtLeastIOneChatTest() {
 		ChatManager chm = new ChatManager(10);
-		Assert.notNull(chm);
+		assertNotNull(chm);
 		try {
 			Chat newch = chm.newChat(chat_name, 5, TimeUnit.SECONDS, teacher_name);
-			Assert.notNull(newch);
+			assertNotNull(newch);
 			
 			WebSocketChatUser wschu = new WebSocketChatUser(session, user_name, color);
 			//user in no chat
-			Assert.isTrue(!chm.userAtLeastInOneChat(wschu));
+			assertTrue(!chm.userAtLeastInOneChat(wschu));
 			
 			chm.getChat(chat_name).addUser(wschu);
 			
-			Assert.isTrue(chm.userAtLeastInOneChat(wschu));
+			assertTrue(chm.userAtLeastInOneChat(wschu));
 			
 		} catch (InterruptedException | TimeoutException e1) {
 			e1.printStackTrace();
@@ -219,24 +219,24 @@ public class ChatManagerUnitaryTest extends AbstractUnitTest {
 	@Test
 	public void closeChatTest() {
 		ChatManager chm = new ChatManager(10);
-		Assert.notNull(chm);
+		assertNotNull(chm);
 		
 		try {
 			Chat newch = chm.newChat(chat_name, 5, TimeUnit.SECONDS, teacher_name);
-			Assert.notNull(newch);
+			assertNotNull(newch);
 			
 			Chat newch2 = chm.newChat(chat_name+"2", 5, TimeUnit.SECONDS, teacher_name);
-			Assert.notNull(newch2);
+			assertNotNull(newch2);
 			
 			chm.closeChat(newch);
-			Assert.isTrue(!chm.chatExists(newch.getName()));
+			assertTrue(!chm.chatExists(newch.getName()));
 			
 			//try to close unknown chat
 			try {
 				chm.closeChat(newch); 
 				}
 			catch (IllegalArgumentException e) {
-				Assert.isTrue(true);
+				assertTrue(true);
 			}
 			
 		} catch (InterruptedException | TimeoutException e1) {

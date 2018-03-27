@@ -1,13 +1,13 @@
 package com.fullteaching.backend.utils;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import java.io.IOException;
 
 import javax.servlet.http.HttpSession;
 
-import org.junit.Assert;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
@@ -50,7 +50,7 @@ public class ForumTestUtils {
 			
 			int expected = HttpStatus.CREATED.value();
 
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status,"failure - expected HTTP status "+expected);
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();

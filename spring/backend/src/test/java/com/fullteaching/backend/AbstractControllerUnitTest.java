@@ -24,8 +24,7 @@ import com.fullteaching.backend.security.AuthorizationService;
 import com.fullteaching.backend.session.SessionRepository;
 import com.fullteaching.backend.user.UserComponent;
 import com.fullteaching.backend.user.UserRepository;
-
-import io.openvidu.java.client.OpenVidu;
+import com.fullteaching.backend.AbstractUnitTest;
 
 @WebAppConfiguration
 public abstract class AbstractControllerUnitTest extends AbstractUnitTest {

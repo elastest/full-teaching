@@ -1,5 +1,7 @@
 package com.fullteaching.backend.comment;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +59,8 @@ public class CommentController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		CourseDetails cd = courseDetailsRepository.findOne(id_courseDetails);
+		Optional<CourseDetails> ocd = courseDetailsRepository.findById(id_courseDetails);
+		CourseDetails cd = ocd.get();
 		
 		ResponseEntity<Object> userAuthorized = authorizationService.checkAuthorizationUsers(cd, cd.getCourse().getAttenders());
 		if (userAuthorized != null) { // If the user is not an attender of the course
@@ -72,7 +75,9 @@ public class CommentController {
 			
 			//The comment is a root comment
 			if (comment.getCommentParent() == null){
-				Entry entry = entryRepository.findOne(id_entry);
+				Optional<Entry> o_entry = entryRepository.findById(id_entry);
+				Entry entry = o_entry.get();
+				
 				if(entry != null){
 					entry.getComments().add(comment);
 					/*Saving the modified entry: Cascade relationship between entry and comments
@@ -87,13 +92,15 @@ public class CommentController {
 			
 			//The comment is a replay to another existing comment
 			else{
-				Comment cParent = commentRepository.findOne(comment.getCommentParent().getId());
+				Optional<Comment> o_cParent = commentRepository.findById(comment.getCommentParent().getId());
+				Comment cParent = o_cParent.get();
 				if(cParent != null){
 					cParent.getReplies().add(comment);
 					/*Saving the modified parent comment: Cascade relationship between comment and 
 					 its replies will add the new comment to CommentRepository*/
 					commentRepository.save(cParent);
-					Entry entry = entryRepository.findOne(id_entry);
+					Optional<Entry> o_entry = entryRepository.findById(id_entry);
+					Entry entry = o_entry.get();
 					/*Entire entry is returned*/
 					return new ResponseEntity<>(entry, HttpStatus.CREATED);
 				}else{

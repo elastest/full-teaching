@@ -1,12 +1,13 @@
 package com.fullteaching.backend.integration.security;
 
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class AutorizationServiceUnitaryTest extends AbstractUnitTest {
 	@Autowired
 	private AuthorizationService service;
 	
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		if(user.getLoggedUser()==null) {
 			String[] roles = {"STUDENT"};
@@ -38,7 +39,7 @@ public class AutorizationServiceUnitaryTest extends AbstractUnitTest {
 		ResponseEntity<Object> r = service.checkBackendLogged();
 		
 		
-		Assert.assertEquals("Expeceted null", null, r);
+		assertEquals(null, r,"Expeceted null");
 		
 		
 		user.setLoggedUser(null);
@@ -47,10 +48,10 @@ public class AutorizationServiceUnitaryTest extends AbstractUnitTest {
 		int status2 = r2.getStatusCodeValue();
 		int expected2 = HttpStatus.UNAUTHORIZED.value();
 		
-		Assert.assertTrue("failure login - expected HTTP status "+
+		assertTrue(status2==expected2,
+				"failure login - expected HTTP status "+
 				expected2 +
-				" but was: "+status2, 
-				status2==expected2);
+				" but was: "+status2);
 		
 		user.setLoggedUser(null);
 	}
@@ -66,21 +67,21 @@ public class AutorizationServiceUnitaryTest extends AbstractUnitTest {
 		int status1 = r.getStatusCodeValue();
 		int expected1 = HttpStatus.NOT_MODIFIED.value();
 		
-		Assert.assertEquals("failure - expected HTTP status "+expected1, expected1, status1);
+		assertEquals( expected1, status1,"failure - expected HTTP status "+expected1);
 		
 		
 		ResponseEntity <Object> r2 = service.checkAuthorization(o, u);
 		int status2 = r2.getStatusCodeValue();
 		int expected2 = HttpStatus.UNAUTHORIZED.value();
 		
-		Assert.assertTrue("failure login - expected HTTP status "+
-				expected2 +
-				" but was: "+status2, 
-				status2==expected2);
+		assertTrue(status2==expected2,
+				"failure login - expected HTTP status "+
+						expected2 +
+						" but was: "+status2);
 		
 		ResponseEntity <Object> r3 = service.checkAuthorization(o, user.getLoggedUser());
 		
-		Assert.assertEquals("Expeceted null", null, r3);
+		assertEquals(null, r3, "Expeceted null");
 
 		
 	}
@@ -100,22 +101,22 @@ public class AutorizationServiceUnitaryTest extends AbstractUnitTest {
 		int status1 = r.getStatusCodeValue();
 		int expected1 = HttpStatus.BAD_REQUEST.value();
 		
-		Assert.assertEquals("failure - expected HTTP status "+expected1, expected1, status1);
+		assertEquals(expected1, status1, "failure - expected HTTP status "+expected1);
 		
 		
 		ResponseEntity <Object> r2 = service.checkAuthorizationUsers(o, u);
 		int status2 = r2.getStatusCodeValue();
 		int expected2 = HttpStatus.UNAUTHORIZED.value();
 		
-		Assert.assertTrue("failure login - expected HTTP status "+
-				expected2 +
-				" but was: "+status2, 
-				status2==expected2);
+		assertTrue(status2==expected2,
+				"failure login - expected HTTP status "+
+						expected2 +
+						" but was: "+status2);
 		
 		u.add(user.getLoggedUser());
 		ResponseEntity <Object> r3 = service.checkAuthorizationUsers(o, u);
 		
-		Assert.assertEquals("Expeceted null", null, r3);
+		assertEquals(null, r3,"Expeceted null");
 		
 	}
 

@@ -1,6 +1,7 @@
 package com.fullteaching.backend.course;
 
 import java.util.Set;
+import java.io.Serializable;
 import java.util.HashSet;
 
 import javax.persistence.CascadeType;
@@ -20,8 +21,10 @@ import com.fullteaching.backend.session.Session;
 import com.fullteaching.backend.coursedetails.CourseDetails;
 
 @Entity
-public class Course {
+public class Course implements Serializable {
 	
+	private static final long serialVersionUID = -1234594587165771952L;
+
 	public interface SimpleCourseList {}
 	
 	@Id

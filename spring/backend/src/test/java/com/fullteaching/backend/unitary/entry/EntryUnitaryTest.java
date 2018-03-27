@@ -4,9 +4,9 @@ package com.fullteaching.backend.unitary.entry;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.util.Assert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.fullteaching.backend.AbstractUnitTest;
 import com.fullteaching.backend.comment.Comment;
@@ -15,7 +15,7 @@ import com.fullteaching.backend.user.User;
 
 public class EntryUnitaryTest extends AbstractUnitTest {
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 
@@ -27,21 +27,21 @@ public class EntryUnitaryTest extends AbstractUnitTest {
 		long date = System.currentTimeMillis();
 		
 		Entry e2 = new Entry();
-		Assert.notNull(e2);
+		assertNotNull(e2);
 		
 		Entry e = new Entry("Test Entry",date,u);
-		Assert.notNull(e);
-		Assert.isTrue("Test Entry".equals(e.getTitle()));
-		Assert.isTrue(date==e.getDate());
-		Assert.isTrue(u.equals(e.getUser()));
+		assertNotNull(e);
+		assertTrue("Test Entry".equals(e.getTitle()));
+		assertTrue(date==e.getDate());
+		assertTrue(u.equals(e.getUser()));
 	}
 
 	@Test
 	public void setAndGetEntryTitleTest() {
 		Entry e = new Entry();
 		e.setTitle("This title");
-		Assert.notNull(e);
-		Assert.isTrue("This title".equals(e.getTitle()));
+		assertNotNull(e);
+		assertTrue("This title".equals(e.getTitle()));
 	}
 
 	@Test
@@ -49,8 +49,8 @@ public class EntryUnitaryTest extends AbstractUnitTest {
 		Entry e = new Entry();
 		long date = System.currentTimeMillis();
 		e.setDate(date);
-		Assert.notNull(e);
-		Assert.isTrue(date==e.getDate());
+		assertNotNull(e);
+		assertTrue(date==e.getDate());
 
 	}
 
@@ -61,9 +61,9 @@ public class EntryUnitaryTest extends AbstractUnitTest {
 		User u =  new User("mock", "Pass1234", "mock", null, roles);
 
 		Entry e = new Entry();
-		Assert.notNull(e);
+		assertNotNull(e);
 		e.setUser(u);
-		Assert.isTrue(u.equals(e.getUser()));
+		assertTrue(u.equals(e.getUser()));
 
 	}
 
@@ -74,8 +74,8 @@ public class EntryUnitaryTest extends AbstractUnitTest {
 		
 		Entry e = new Entry();
 		e.setComments(comments);
-		Assert.notNull(e);
-		Assert.isTrue(comments.equals(e.getComments()));
+		assertNotNull(e);
+		assertTrue(comments.equals(e.getComments()));
 
 	}
 

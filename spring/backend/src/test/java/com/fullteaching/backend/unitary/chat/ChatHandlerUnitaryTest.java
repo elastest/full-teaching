@@ -1,13 +1,12 @@
 package com.fullteaching.backend.unitary.chat;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -22,17 +21,17 @@ public class ChatHandlerUnitaryTest extends AbstractUnitTest {
 	@Mock
 	private WebSocketSession session;
 	
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 
-	@Ignore
+	@Disabled
 	@Test
 	public void testAfterConnectionEstablishedWebSocketSession() {
 		try {
 			
 			chh.afterConnectionEstablished(session);
-			Assert.isTrue(true);
+			assertTrue(true);
 		} catch (Exception e) {
 			
 			e.printStackTrace();
@@ -42,12 +41,12 @@ public class ChatHandlerUnitaryTest extends AbstractUnitTest {
 	
 
 
-	@Ignore
+	@Disabled
 	@Test
 	public void testAfterConnectionClosedWebSocketSessionCloseStatus() {
 		try {
 			chh.afterConnectionClosed(session, CloseStatus.NORMAL);
-			Assert.isTrue(true);
+			assertTrue(true);
 
 		} catch (Exception e) {
 			e.printStackTrace();

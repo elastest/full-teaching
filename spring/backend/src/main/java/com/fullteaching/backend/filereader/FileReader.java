@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -12,8 +13,10 @@ import org.apache.tika.parser.ParseContext;
 import org.apache.tika.sax.BodyContentHandler;
 import org.xml.sax.SAXException;
 
-public class FileReader {
-	
+public class FileReader implements Serializable{
+
+	private static final long serialVersionUID = 2211331555694532140L;
+
 	public String parseToPlainText(File file) throws Exception {
 		
 		InputStream fileStream = new FileInputStream(file);

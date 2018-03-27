@@ -1,5 +1,7 @@
 package com.fullteaching.backend.entry;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,8 +50,10 @@ public class EntryController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		CourseDetails cd = courseDetailsRepository.findOne(id_i);
 		
+		Optional<CourseDetails> ocd = courseDetailsRepository.findById(id_i);
+		CourseDetails cd = ocd.get();
+
 		ResponseEntity<Object> userAuthorized = authorizationService.checkAuthorizationUsers(cd, cd.getCourse().getAttenders());
 		if (userAuthorized != null) { // If the user is not an attender of the course
 			return userAuthorized;
