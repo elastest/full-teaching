@@ -4,9 +4,9 @@ package com.fullteaching.backend.unitary.comment;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.util.Assert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.fullteaching.backend.AbstractUnitTest;
 import com.fullteaching.backend.comment.Comment;
@@ -14,14 +14,14 @@ import com.fullteaching.backend.user.User;
 
 public class CommentUnitaryTest extends AbstractUnitTest {
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 
 	@Test
 	public void newForumEntryCommentTest() {
 		Comment cm = new Comment();
-		Assert.notNull(cm);
+		assertNotNull(cm);
 		
 		String[] roles = {"TEACHER"};
 		User u =  new User("mock", "Pass1234", "mock", null, roles);
@@ -29,20 +29,20 @@ public class CommentUnitaryTest extends AbstractUnitTest {
 		String message = "This is the message";
 		Comment cm2 = new Comment(message, date, u);
 	
-		Assert.notNull(cm2);
-		Assert.notNull(cm2.getReplies());
-		Assert.isTrue(u.equals(cm2.getUser()));
-		Assert.isTrue(date== cm2.getDate());
-		Assert.isTrue(message.equals(cm2.getMessage()));
+		assertNotNull(cm2);
+		assertNotNull(cm2.getReplies());
+		assertTrue(u.equals(cm2.getUser()));
+		assertTrue(date== cm2.getDate());
+		assertTrue(message.equals(cm2.getMessage()));
 		
 		Comment cm3 = new Comment(message, date, u, cm2);
 		
-		Assert.notNull(cm3);
-		Assert.notNull(cm3.getReplies());
-		Assert.isTrue(u.equals(cm3.getUser()));
-		Assert.isTrue(date== cm3.getDate());
-		Assert.isTrue(message.equals(cm3.getMessage()));
-		Assert.isTrue(cm2.equals(cm3.getCommentParent()));
+		assertNotNull(cm3);
+		assertNotNull(cm3.getReplies());
+		assertTrue(u.equals(cm3.getUser()));
+		assertTrue(date== cm3.getDate());
+		assertTrue(message.equals(cm3.getMessage()));
+		assertTrue(cm2.equals(cm3.getCommentParent()));
 	}
 
 
@@ -51,8 +51,8 @@ public class CommentUnitaryTest extends AbstractUnitTest {
 		Comment cm = new Comment();
 		String message = "This is the message";
 		cm.setMessage(message);
-		Assert.notNull(cm);
-		Assert.isTrue(message.equals(cm.getMessage()));
+		assertNotNull(cm);
+		assertTrue(message.equals(cm.getMessage()));
 	}
 
 	@Test
@@ -60,8 +60,8 @@ public class CommentUnitaryTest extends AbstractUnitTest {
 		Comment cm = new Comment();
 		Long date = System.currentTimeMillis();
 		cm.setDate(date);
-		Assert.notNull(cm);
-		Assert.isTrue(date== cm.getDate());
+		assertNotNull(cm);
+		assertTrue(date== cm.getDate());
 	}
 
 	@Test
@@ -77,9 +77,9 @@ public class CommentUnitaryTest extends AbstractUnitTest {
 		
 		Comment cm = new Comment();
 		cm.setReplies(replies);
-		Assert.notNull(cm);
-		Assert.notNull(cm.getReplies());
-		Assert.isTrue(replies.equals(cm.getReplies()));
+		assertNotNull(cm);
+		assertNotNull(cm.getReplies());
+		assertTrue(replies.equals(cm.getReplies()));
 	}
 
 	@Test
@@ -89,7 +89,7 @@ public class CommentUnitaryTest extends AbstractUnitTest {
 		
 		Comment cm = new Comment();
 		cm.setUser(u);
-		Assert.notNull(cm);
+		assertNotNull(cm);
 	}
 
 	@Test
@@ -102,7 +102,7 @@ public class CommentUnitaryTest extends AbstractUnitTest {
 		
 		Comment cm = new Comment();
 		cm.setCommentParent(parent);
-		Assert.notNull(cm);
+		assertNotNull(cm);
 	}
 
 }

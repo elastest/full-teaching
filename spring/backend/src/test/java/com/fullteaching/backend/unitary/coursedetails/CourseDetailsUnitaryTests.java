@@ -3,9 +3,9 @@ package com.fullteaching.backend.unitary.coursedetails;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.util.Assert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.fullteaching.backend.AbstractUnitTest;
 import com.fullteaching.backend.course.Course;
@@ -16,7 +16,7 @@ import com.fullteaching.backend.user.User;
 
 public class CourseDetailsUnitaryTests extends AbstractUnitTest {
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 
@@ -26,14 +26,14 @@ public class CourseDetailsUnitaryTests extends AbstractUnitTest {
 		User u =  new User("mock", "Pass1234", "mock", null, roles);
 
 		CourseDetails cd = new CourseDetails();
-		Assert.notNull(cd);
+		assertNotNull(cd);
 		
 		Course c = new Course("to modify", "/../assets/images/default_session_image.png", u);
 
 		CourseDetails cd2 = new CourseDetails(c);
 		
-		Assert.notNull(cd2);
-		Assert.isTrue(cd2.getCourse().equals(c));
+		assertNotNull(cd2);
+		assertTrue(cd2.getCourse().equals(c));
 		
 	}
 
@@ -41,8 +41,8 @@ public class CourseDetailsUnitaryTests extends AbstractUnitTest {
 	public void setAndGetCourseDetailsInfoTest() {
 		CourseDetails cd = new CourseDetails();
 		cd.setInfo("this is info");
-		Assert.notNull(cd);
-		Assert.isTrue("this is info".equals(cd.getInfo()));
+		assertNotNull(cd);
+		assertTrue("this is info".equals(cd.getInfo()));
 	}
 
 	@Test
@@ -50,8 +50,8 @@ public class CourseDetailsUnitaryTests extends AbstractUnitTest {
 		CourseDetails cd = new CourseDetails();
 		Forum forum = new Forum();
 		cd.setForum(forum);
-		Assert.notNull(cd);
-		Assert.isTrue(forum.equals(cd.getForum()));
+		assertNotNull(cd);
+		assertTrue(forum.equals(cd.getForum()));
 	}
 
 	@Test
@@ -59,8 +59,8 @@ public class CourseDetailsUnitaryTests extends AbstractUnitTest {
 		CourseDetails cd = new CourseDetails();
 		List<FileGroup> files= new ArrayList<FileGroup>();
 		cd.setFiles(files);
-		Assert.notNull(cd);
-		Assert.isTrue(files.equals(cd.getFiles()));
+		assertNotNull(cd);
+		assertTrue(files.equals(cd.getFiles()));
 	}
 
 	@Test
@@ -72,8 +72,8 @@ public class CourseDetailsUnitaryTests extends AbstractUnitTest {
 		Course c = new Course("to modify", "/../assets/images/default_session_image.png", u);
 
 		cd.setCourse(c);
-		Assert.notNull(cd);
-		Assert.isTrue(cd.getCourse().equals(c));
+		assertNotNull(cd);
+		assertTrue(cd.getCourse().equals(c));
 
 	}
 

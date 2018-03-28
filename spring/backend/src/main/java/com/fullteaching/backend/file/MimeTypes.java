@@ -118,7 +118,8 @@ private static HashMap<String, String> mimeTypeMapping;
 
 static {
 mimeTypeMapping = new HashMap<String, String>(200) {
-  private void put1(String key, String value) {
+	private static final long serialVersionUID = -7020786636808097959L;
+	private void put1(String key, String value) {
     if (put(key, value) != null) {
       throw new IllegalArgumentException("Duplicated extension: " + key);
     }

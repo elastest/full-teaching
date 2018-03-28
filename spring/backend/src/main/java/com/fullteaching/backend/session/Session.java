@@ -1,5 +1,7 @@
 package com.fullteaching.backend.session;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,8 +14,10 @@ import com.fullteaching.backend.course.Course;
 import com.fullteaching.backend.course.Course.SimpleCourseList;
 
 @Entity
-public class Session {
+public class Session implements Serializable{
 	
+	private static final long serialVersionUID = 6426900403882469733L;
+
 	@JsonView(SimpleCourseList.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

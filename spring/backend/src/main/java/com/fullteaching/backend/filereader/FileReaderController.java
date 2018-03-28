@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.validator.routines.EmailValidator;
@@ -73,8 +74,9 @@ public class FileReaderController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Course c = courseRepository.findOne(id_course);
-		
+		Optional<Course> o_course = courseRepository.findById(id_course);
+		Course c = o_course.get();
+				
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course
 			return teacherAuthorized;
@@ -149,7 +151,7 @@ public class FileReaderController {
 		}
 		
 		//Saving the attenders (all of them, just in case a field of the bidirectional relationship is missing in a Course or a User)
-		userRepository.save(newPossibleAttenders);	
+		userRepository.saveAll(newPossibleAttenders);	
 		//Saving the modified course
 		courseRepository.save(c);
 		

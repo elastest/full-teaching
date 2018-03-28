@@ -1,11 +1,11 @@
 package com.fullteaching.backend.integration.entry;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
@@ -23,7 +23,7 @@ public class EntryControllerTest extends AbstractLoggedControllerUnitTest {
 	
 	private static String newEntry_uri ="/api-entries/forum/";
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		super.setUp();
 	}
@@ -42,7 +42,7 @@ public class EntryControllerTest extends AbstractLoggedControllerUnitTest {
 		Entry entry = new Entry("Test Entry",System.currentTimeMillis(),loggedUser);
 		entry.getComments().add(cm);
 		
-		Assert.assertTrue((forumId>-1)&&(cdId>-1));
+		assertTrue((forumId>-1)&&(cdId>-1));
 		
 		Gson gson = new Gson();
 		String entry_request = gson.toJson(entry);
@@ -50,17 +50,17 @@ public class EntryControllerTest extends AbstractLoggedControllerUnitTest {
 		//test ok 
 		try {
 			
-			MvcResult result =  mvc.perform(post(newEntry_uri+forumId)//fakeID
+			MvcResult result =  mvc.perform(post(newEntry_uri+cdId)
 					                .contentType(MediaType.APPLICATION_JSON_VALUE)
 					                .session((MockHttpSession) httpSession)
-					                .content(entry_request+String.valueOf(cdId))
+					                .content(entry_request)
 					                ).andReturn();
 			
 			int status = result.getResponse().getStatus();
 			
 			int expected = HttpStatus.CREATED.value();
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -78,7 +78,7 @@ public class EntryControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.UNAUTHORIZED.value();
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -96,7 +96,7 @@ public class EntryControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.BAD_REQUEST.value();
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

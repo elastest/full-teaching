@@ -1,5 +1,7 @@
 package com.fullteaching.backend.forum;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +40,8 @@ public class ForumController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
-		CourseDetails cd = courseDetailsRepository.findOne(id_i);
+		Optional<CourseDetails> o_cd = courseDetailsRepository.findById(id_i);
+		CourseDetails cd = o_cd.get();
 		
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(cd, cd.getCourse().getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course

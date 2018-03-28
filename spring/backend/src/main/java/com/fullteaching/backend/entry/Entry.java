@@ -1,6 +1,7 @@
 package com.fullteaching.backend.entry;
 
 import java.util.List;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.persistence.CascadeType;
@@ -15,7 +16,9 @@ import com.fullteaching.backend.comment.Comment;
 import com.fullteaching.backend.user.User;
 
 @Entity
-public class Entry {
+public class Entry implements Serializable{
+
+	private static final long serialVersionUID = -8235742718749641924L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

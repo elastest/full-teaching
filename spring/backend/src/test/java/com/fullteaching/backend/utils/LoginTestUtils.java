@@ -2,6 +2,7 @@ package com.fullteaching.backend.utils;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -9,7 +10,7 @@ import java.util.Base64;
 
 import javax.servlet.http.HttpSession;
 
-import org.junit.Assert;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -38,10 +39,9 @@ public class LoginTestUtils {
 		System.out.println(result_login.getResponse().toString());
 		int status_login = result_login.getResponse().getStatus();
 		
-		Assert.assertTrue("failure login - expected HTTP status "+
-											HttpStatus.OK.value() +
-											" but was: "+status_login, 
-					status_login==HttpStatus.OK.value());
+		assertTrue( status_login==HttpStatus.OK.value(), 
+					"failure login - expected HTTP status "+ HttpStatus.OK.value() +" but was: "+status_login);
+		
 		if (loggedUser==null) {
 			String content = result_login.getResponse().getContentAsString();
 			loggedUser = json2User(content);

@@ -1,5 +1,7 @@
 package com.fullteaching.backend.session;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +43,9 @@ public class SessionController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Course course = courseRepository.findOne(id_i);
-		
+		Optional<Course> o_course = courseRepository.findById(id_i);
+		Course course = o_course.get();
+				
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(course, course.getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course
 			return teacherAuthorized;
@@ -68,7 +71,8 @@ public class SessionController {
 			return authorized;
 		};
 		
-		Session s = sessionRepository.findOne(session.getId());
+		Optional<Session> os = sessionRepository.findById(session.getId());
+		Session s = os.get();
 		
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(s, s.getCourse().getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course
@@ -99,17 +103,20 @@ public class SessionController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Session session = sessionRepository.findOne(id_i);
+		Optional<Session> os = sessionRepository.findById(id_i);
+		Session session = os.get();
+		
 		
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(session, session.getCourse().getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course
 			return teacherAuthorized;
 		} else {
-		
-			Course course = courseRepository.findOne(session.getCourse().getId());
+			Optional<Course> o_course = courseRepository.findById(session.getCourse().getId());
+			Course course = o_course.get();
+
 			if (course != null){
 				course.getSessions().remove(session);
-				sessionRepository.delete(id_i);
+				sessionRepository.deleteById(id_i);
 				courseRepository.save(course);
 				return new ResponseEntity<>(session, HttpStatus.OK);
 			}

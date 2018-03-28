@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -73,14 +74,20 @@ public class FileGroupController {
 		};
 		
 		long id_i = -1;
+		CourseDetails cd = null;
+		FileGroup fParent = null;
 		try {
 			id_i = Long.parseLong(courseDetailsId);
-		} catch(NumberFormatException e){
+			Optional<CourseDetails> o_cd = courseDetailsRepository.findById(id_i);
+			cd = o_cd.get();
+			if (fileGroup.getFileGroupParent() != null){
+				Optional<FileGroup> o_fg = fileGroupRepository.findById(fileGroup.getFileGroupParent().getId());
+				fParent = o_fg.get();
+			}
+		} catch(Exception e){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		
-		CourseDetails cd = courseDetailsRepository.findOne(id_i);
-		
+				
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(cd, cd.getCourse().getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course
 			return teacherAuthorized;
@@ -97,16 +104,19 @@ public class FileGroupController {
 			}
 			
 			//fileGroup is a child of an existing FileGroup
-			else{
-				FileGroup fParent = fileGroupRepository.findOne(fileGroup.getFileGroupParent().getId());
+			else{				
 				if(fParent != null){
 					fParent.getFileGroups().add(fileGroup);
 					/*Saving the modified parent FileGroup: Cascade relationship between FileGroup and 
 					 its FileGroup children will add the new fileGroup to FileGroupRepository*/
 					fileGroupRepository.save(fParent);
-					CourseDetails cd2 = courseDetailsRepository.findOne(id_i);
-					/*Entire courseDetails is returned*/
-					return new ResponseEntity<>(cd2, HttpStatus.CREATED);
+					try {
+						Optional<CourseDetails> o_cd2 = courseDetailsRepository.findById(id_i);
+						CourseDetails cd2 = o_cd2.get();					/*Entire courseDetails is returned*/
+						return new ResponseEntity<>(cd2, HttpStatus.CREATED);
+					}catch(Exception e) {
+						return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+					}
 				}else{
 					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 				}
@@ -130,14 +140,20 @@ public class FileGroupController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Course c = courseRepository.findOne(id_course);
+		Optional<Course> o_course = courseRepository.findById(id_course);
+		Course c = o_course.get();
+		FileGroup fg = null; 
 		
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course
 			return teacherAuthorized;
 		} else {
-		
-			FileGroup fg = fileGroupRepository.findOne(fileGroup.getId());
+			try {
+				Optional<FileGroup> o_fg = fileGroupRepository.findById(fileGroup.getId());
+				fg = o_fg.get();
+			}catch(Exception e) {
+				return new ResponseEntity<>(HttpStatus.NOT_MODIFIED); 
+			}
 			
 			if (fg != null){
 				fg.setTitle(fileGroup.getTitle());
@@ -181,17 +197,20 @@ public class FileGroupController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Course c = courseRepository.findOne(id_course);
+		Optional<Course> o_course = courseRepository.findById(id_course);
+		Course c = o_course.get();
 		
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course
 			return teacherAuthorized;
 		} else {
-		
-			FileGroup sourceFg = fileGroupRepository.findOne(id_source);
-			FileGroup targetFg = fileGroupRepository.findOne(id_target);
-			File fileMoved = fileRepository.findOne(id_file);
+			Optional<FileGroup> o_fg = fileGroupRepository.findById(id_source);
+			FileGroup sourceFg = o_fg.get();
+			Optional<FileGroup> o_fg2 = fileGroupRepository.findById(id_target);
+			FileGroup targetFg = o_fg2.get();
 			
+			Optional<File> o_fileMoved = fileRepository.findById(id_file);
+			File fileMoved = o_fileMoved.get();
 			sourceFg.getFiles().remove(fileMoved);
 			targetFg.getFiles().add(pos, fileMoved);
 			
@@ -201,7 +220,7 @@ public class FileGroupController {
 			List<FileGroup> l = new ArrayList<>();
 			l.add(sourceFg);
 			l.add(targetFg);
-			fileGroupRepository.save(l);
+			fileGroupRepository.saveAll(l);
 			
 			//Returning the FileGroups of the course
 			return new ResponseEntity<>(c.getCourseDetails().getFiles(), HttpStatus.OK);
@@ -229,15 +248,24 @@ public class FileGroupController {
 		}catch(NumberFormatException e){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		
-		Course c = courseRepository.findOne(id_course);
+
+		FileGroup fg = null;
+		Course c = null;
+		try {
+			Optional<FileGroup> o_fg = fileGroupRepository.findById(id_fileGroup);
+			fg = o_fg.get();
+			Optional<Course> o_course = courseRepository.findById(id_course);
+			c = o_course.get();
+			
+		}catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+		}
 		
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course
 			return teacherAuthorized;
 		} else {
-		
-			FileGroup fg = fileGroupRepository.findOne(id_fileGroup);
+			
 			
 			if (fg != null){
 				for (int i = 0; i < fg.getFiles().size(); i++){
@@ -269,23 +297,24 @@ public class FileGroupController {
 		
 		long id_fileGroup = -1;
 		long id_course = -1;
+		Course c = null;
+		FileGroup fg = null;
 		try{
 			id_fileGroup = Long.parseLong(fileGroupId);
 			id_course = Long.parseLong(courseId);
-		}catch(NumberFormatException e){
+			Optional<Course> o_course = courseRepository.findById(id_course);
+			c = o_course.get();
+			Optional<FileGroup> o_fg = fileGroupRepository.findById(id_fileGroup);
+			fg = o_fg.get();		
+		}catch(Exception e){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		
-		Course c = courseRepository.findOne(id_course);
 		
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course
 			return teacherAuthorized;
 		} else {
-		
-			FileGroup fg = fileGroupRepository.findOne(id_fileGroup);
-			
 			if (fg != null){
 				
 				if (this.isProductionStage()){
@@ -341,14 +370,16 @@ public class FileGroupController {
 		}
 		
 		
-		Course c = courseRepository.findOne(id_course);
+		Optional<Course> o_course = courseRepository.findById(id_course);
+		Course c = o_course.get();
 		
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course
 			return teacherAuthorized;
 		} else {
 		
-			FileGroup fg = fileGroupRepository.findOne(id_fileGroup);
+			Optional<FileGroup> o_fg = fileGroupRepository.findById(id_fileGroup);
+			FileGroup fg = o_fg.get();
 			
 			if (fg != null){
 				File file = null;
@@ -380,12 +411,12 @@ public class FileGroupController {
 					
 				}else{
 					//The file to delete does not exist or does not have a fileGroup parent
-					fileRepository.delete(id_file);
+					fileRepository.deleteById(id_file);
 					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 				}
 			}else{
 				//The fileGroup parent does not exist
-				fileRepository.delete(id_file);
+				fileRepository.deleteById(id_file);
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 		}

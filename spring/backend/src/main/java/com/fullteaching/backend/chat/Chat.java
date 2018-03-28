@@ -1,5 +1,6 @@
 package com.fullteaching.backend.chat;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
@@ -7,8 +8,10 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
-public class Chat {
+public class Chat implements Serializable{
 
+	private static final long serialVersionUID = -2695740804550879339L;
+	
 	private ChatManager chatManager;
 	private String name;
 	private String teacher;

@@ -1,5 +1,7 @@
 package com.fullteaching.backend.file;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,7 +10,9 @@ import javax.persistence.Id;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
-public class File {
+public class File implements Serializable{
+
+	private static final long serialVersionUID = 7598732384142099575L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

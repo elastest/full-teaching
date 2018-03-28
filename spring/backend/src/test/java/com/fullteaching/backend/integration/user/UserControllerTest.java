@@ -3,15 +3,15 @@
  */
 package com.fullteaching.backend.integration.user;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import javax.servlet.http.HttpSession;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fullteaching.backend.AbstractControllerUnitTest;
 import com.fullteaching.backend.utils.LoginTestUtils;
+import com.fullteaching.backend.utils.RandomString;
 
 /**
  * @author gtunon
@@ -35,8 +36,8 @@ public class UserControllerTest extends AbstractControllerUnitTest {
 	static String login_uri = "/api-logIn";
 	
 	//userStrings
-	static String ok_parameters = "[\"unique@gmail.com\", \"Mock66666\", \"fakeUser\", \"IGNORE\"]";
-	static String ko_parameters1 = "[\"unique@gmail.com\", \"Mock66666\", \"repeatedUser\", \"IGNORE\"]";
+	static String ok_parameters = "[\"{{aleat}}@gmail.com\", \"Mock66666\", \"fakeUser\", \"IGNORE\"]";
+	static String ok_parameters1 = "[\"unique@gmail.com\", \"Mock66666\", \"fakeUser\", \"IGNORE\"]";
 	static String ko_parameters2 = "[\"unique_unique@gmail.com\", \"Mock\", \"InvalidPassword\", \"IGNORE\"]";
 	static String ko_parameters3 = "[\"nonvalidMAIL\", \"Mock66666\", \"fakeUser\", \"IGNORE\"]";
 	
@@ -48,7 +49,7 @@ public class UserControllerTest extends AbstractControllerUnitTest {
 	//roles
 	String[] roles = {"STUDENT"};
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		super.setUp();
 	}
@@ -60,6 +61,7 @@ public class UserControllerTest extends AbstractControllerUnitTest {
 	public void controllerNewUserTest() {
 
 		/*Test OK*/
+		ok_parameters= ok_parameters.replace("{{aleat}}", (new RandomString(6)).nextString());
 		try {
 			MvcResult result =  mvc.perform(post(new_user_uri)
 					                .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -70,7 +72,7 @@ public class UserControllerTest extends AbstractControllerUnitTest {
 			
 			int expected = HttpStatus.CREATED.value();
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,14 +83,14 @@ public class UserControllerTest extends AbstractControllerUnitTest {
 		try {
 			MvcResult result =  mvc.perform(post(new_user_uri)
 					                .contentType(MediaType.APPLICATION_JSON_VALUE)
-					                .content(ko_parameters1)
+					                .content(ok_parameters) //is the same user as before so fails
 					                ).andReturn();
 		
 			int status = result.getResponse().getStatus();
 			
 			int expected = HttpStatus.CONFLICT.value();
 
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,7 +109,7 @@ public class UserControllerTest extends AbstractControllerUnitTest {
 			
 			int expected = HttpStatus.BAD_REQUEST.value();
 
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 				
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -126,7 +128,7 @@ public class UserControllerTest extends AbstractControllerUnitTest {
 			
 			int expected = HttpStatus.FORBIDDEN.value();
 
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -143,7 +145,7 @@ public class UserControllerTest extends AbstractControllerUnitTest {
 	public void userChangePasswordTest() throws Exception {
 	
 			/*Create new user*/
-			LoginTestUtils.registerUserIfNotExists(mvc, ok_parameters);
+			LoginTestUtils.registerUserIfNotExists(mvc, ok_parameters1);
 			
 			/*Login user*/
 			HttpSession session = LoginTestUtils.logIn(mvc, "unique@gmail.com", "Mock66666");
@@ -157,10 +159,9 @@ public class UserControllerTest extends AbstractControllerUnitTest {
 				).andReturn();
 			
 			int status_pass = result_pass.getResponse().getStatus();
-			Assert.assertTrue("failure login - expected HTTP status "+
-													HttpStatus.OK.value() +
-													" but was: "+status_pass, 
-								status_pass==HttpStatus.OK.value());
+			assertTrue(status_pass==HttpStatus.OK.value(), "failure login - expected HTTP status "+
+					HttpStatus.OK.value() +
+					" but was: "+status_pass);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Exception: newUserTest - OK");
@@ -175,10 +176,10 @@ public class UserControllerTest extends AbstractControllerUnitTest {
 				).andReturn();
 			
 			int status_bad1 = result_bad1.getResponse().getStatus();
-			Assert.assertTrue("failure login - expected HTTP status "+
-													HttpStatus.CONFLICT.value() +
-													" but was: "+status_bad1, 
-										status_bad1==HttpStatus.CONFLICT.value());
+			assertTrue(status_bad1==HttpStatus.CONFLICT.value(),
+					"failure login - expected HTTP status "+
+							HttpStatus.CONFLICT.value() +
+							" but was: "+status_bad1);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Exception: newUserTest - OK");
@@ -193,10 +194,10 @@ public class UserControllerTest extends AbstractControllerUnitTest {
 				).andReturn();
 			
 			int status_bad2 = result_bad2.getResponse().getStatus();
-			Assert.assertTrue("failure login - expected HTTP status "+
-													HttpStatus.NOT_MODIFIED.value() +
-													" but was: "+status_bad2, 
-										status_bad2==HttpStatus.NOT_MODIFIED.value());
+			assertTrue(status_bad2==HttpStatus.NOT_MODIFIED.value(),
+					"failure login - expected HTTP status "+
+							HttpStatus.NOT_MODIFIED.value() +
+							" but was: "+status_bad2);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Exception: newUserTest - OK");

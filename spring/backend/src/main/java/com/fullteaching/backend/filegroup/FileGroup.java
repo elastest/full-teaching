@@ -1,6 +1,7 @@
 package com.fullteaching.backend.filegroup;
 
 import java.util.List;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.persistence.CascadeType;
@@ -18,7 +19,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fullteaching.backend.file.File;
 
 @Entity
-public class FileGroup {
+public class FileGroup implements Serializable{
+
+	private static final long serialVersionUID = -8799138483991758289L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

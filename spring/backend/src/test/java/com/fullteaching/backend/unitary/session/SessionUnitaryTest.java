@@ -1,8 +1,8 @@
 package com.fullteaching.backend.unitary.session;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.util.Assert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.fullteaching.backend.AbstractUnitTest;
 import com.fullteaching.backend.course.Course;
@@ -15,7 +15,7 @@ public class SessionUnitaryTest extends AbstractUnitTest {
 	private static String title = "Session Title";
 	private static String description = "Session Description";
 	
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 
@@ -23,15 +23,15 @@ public class SessionUnitaryTest extends AbstractUnitTest {
 	public void newSessionTest() {
 		//Empty Session
 		Session emptySession = new Session();
-		Assert.notNull(emptySession);
+		assertNotNull(emptySession);
 		
 		//Not empty
 		Long date = System.currentTimeMillis();
 		Session session = new Session(title, description, date);
-		Assert.notNull(session);
-		Assert.isTrue(date == session.getDate());
-		Assert.isTrue(title.equals(session.getTitle()));
-		Assert.isTrue(description.equals(session.getDescription()));
+		assertNotNull(session);
+		assertTrue(date == session.getDate());
+		assertTrue(title.equals(session.getTitle()));
+		assertTrue(description.equals(session.getDescription()));
 		
 		//with course 
 		String[] roles = {"STUDENT"};
@@ -39,11 +39,11 @@ public class SessionUnitaryTest extends AbstractUnitTest {
 		Course c= CourseTestUtils.newCourseWithCd("course", u, null, "this is the info", false);
 		
 		Session c_session = new Session(title, description, date, c);
-		Assert.notNull(c_session);
-		Assert.isTrue(date == c_session.getDate());
-		Assert.isTrue(title.equals(c_session.getTitle()));
-		Assert.isTrue(description.equals(c_session.getDescription()));
-		Assert.isTrue(c.equals(c_session.getCourse()));
+		assertNotNull(c_session);
+		assertTrue(date == c_session.getDate());
+		assertTrue(title.equals(c_session.getTitle()));
+		assertTrue(description.equals(c_session.getDescription()));
+		assertTrue(c.equals(c_session.getCourse()));
 	}
 
 
@@ -51,16 +51,16 @@ public class SessionUnitaryTest extends AbstractUnitTest {
 	public void setAndGetSessionTitleTest() {
 		Session session = new Session();
 		session.setTitle(title);
-		Assert.notNull(session);
-		Assert.isTrue(title.equals(session.getTitle()));
+		assertNotNull(session);
+		assertTrue(title.equals(session.getTitle()));
 	}
 
 	@Test
 	public void setAndGetSessionDescriptionTest() {
 		Session session = new Session();
 		session.setDescription(description);
-		Assert.notNull(session);
-		Assert.isTrue(description.equals(session.getDescription()));
+		assertNotNull(session);
+		assertTrue(description.equals(session.getDescription()));
 	}
 
 	@Test
@@ -68,8 +68,8 @@ public class SessionUnitaryTest extends AbstractUnitTest {
 		Session session = new Session();
 		Long date = System.currentTimeMillis();
 		session.setDate(date);
-		Assert.notNull(session);
-		Assert.isTrue(date == session.getDate());	
+		assertNotNull(session);
+		assertTrue(date == session.getDate());	
 	}
 
 	@Test
@@ -80,8 +80,8 @@ public class SessionUnitaryTest extends AbstractUnitTest {
 		
 		Session session = new Session();
 		session.setCourse(c);
-		Assert.notNull(session);
-		Assert.isTrue(c.equals(session.getCourse()));		
+		assertNotNull(session);
+		assertTrue(c.equals(session.getCourse()));		
 	}
 
 	@Test
@@ -92,14 +92,14 @@ public class SessionUnitaryTest extends AbstractUnitTest {
 		session2.setId(1);
 		Session session3 = new Session();
 		session3.setId(2);
-		Assert.notNull(session1);
-		Assert.notNull(session2);
-		Assert.notNull(session3);
-		Assert.isTrue(session1.equals(session2));	
-		Assert.isTrue(session1.equals(session1));
-		Assert.isTrue(!session1.equals(null));
-		Assert.isTrue(!session1.equals("not_a_session"));
-		Assert.isTrue(!session1.equals(session3));
+		assertNotNull(session1);
+		assertNotNull(session2);
+		assertNotNull(session3);
+		assertTrue(session1.equals(session2));	
+		assertTrue(session1.equals(session1));
+		assertTrue(!session1.equals(null));
+		assertTrue(!session1.equals("not_a_session"));
+		assertTrue(!session1.equals(session3));
 		
 	}
 
