@@ -153,4 +153,19 @@ public class ForumNavigationUtilities {
 		
 		return replies;
 	}
+	
+	public static WebDriver enableForum(WebDriver driver) throws ElementNotFoundException {
+		WebElement edit_button =  Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_EDITENTRY_ICON));
+		driver = Click.element(driver,FORUM_EDITENTRY_ICON);
+		WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("put-delete-modal")));
+		//press disable
+		WebElement enable_button = edit_modal.findElement(ENABLEFORUM_BUTTON);
+		driver = Click.withNRetries(driver, ENABLEFORUM_BUTTON, 3, By.id("put-modal-btn"));
+		//enable_button.click();
+		WebElement save_button = edit_modal.findElement(By.id("put-modal-btn"));
+		driver = Click.element(driver, By.id("put-modal-btn"));
+		WebElement forum_tab_content = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-2")));
+		Assert.assertTrue("The forum is not dissabled", ForumNavigationUtilities.isForumEnabled(forum_tab_content));
+		return driver;
+	}
 }

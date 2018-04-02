@@ -197,6 +197,7 @@ abstract public class LoggedForumTest {
     		course.findElement(COURSELIST_COURSETITLE).click();
 	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(TABS_DIV_ID)));
 	    	driver = CourseNavigationUtilities.go2Tab(driver, FORUM_ICON);
+	    	
 	    	Assert.assertEquals("Forum not activated",ForumNavigationUtilities.isForumEnabled(CourseNavigationUtilities.getTabContent(driver,FORUM_ICON)),true);
 	    	
 	    	driver = ForumNavigationUtilities.newEntry(driver, newEntryTitle, newEntryContent);
