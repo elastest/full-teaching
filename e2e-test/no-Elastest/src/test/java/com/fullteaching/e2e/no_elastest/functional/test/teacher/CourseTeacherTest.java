@@ -263,11 +263,11 @@ abstract public class CourseTeacherTest {
     		String old_name = course.findElement(By.className("title")).getText();
     		String edition_name = "EDITION TEST_"+System.currentTimeMillis();
     		
-    		CourseNavigationUtilities.changeCourseName(driver, old_name, edition_name);
+    		driver = CourseNavigationUtilities.changeCourseName(driver, old_name, edition_name);
     		//check if course exists
 	    	Assert.assertTrue("The course title hasn't been found in the list ¿Have been created?",CourseNavigationUtilities.checkIfCourseExists(driver, edition_name));
 
-	    	//return to old name
+	    	//return to old name	    	
 	    	driver = CourseNavigationUtilities.changeCourseName(driver, edition_name, old_name);
 	    	Assert.assertTrue("The course title hasn't been reset",CourseNavigationUtilities.checkIfCourseExists(driver, old_name));
 
