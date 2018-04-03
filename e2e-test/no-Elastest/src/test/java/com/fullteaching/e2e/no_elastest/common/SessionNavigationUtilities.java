@@ -27,7 +27,7 @@ public class SessionNavigationUtilities {
 	}
 	
 	public static WebElement getSession(WebDriver wd, String session_name) throws ElementNotFoundException {
-		WebElement tab_content = CourseNavigationUtilities.getTabContent(wd, FORUM_ICON);
+		WebElement tab_content = CourseNavigationUtilities.getTabContent(wd, SESSION_ICON);
 		List<WebElement> sessions = tab_content.findElements(SESSIONLIST_SESSION_ROW);
 		for(WebElement session: sessions) {
     		try {

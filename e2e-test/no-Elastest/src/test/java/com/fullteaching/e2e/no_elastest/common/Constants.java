@@ -117,6 +117,9 @@ public final class Constants {
     public static final String SESSIONLIST_EDIT_MODAL_ID = "put-delete-modal";
     public static final String SESSIONLIST_EDITMODAL_DELETE_DIV_CLASS = "delete-div";
     
+    public static final String SESSION_LEFT_MENU_BUTTON_ID = "side-menu-button";
+    public static final String SESSION_EXIT_ICON_ID = "exit-icon";
+    
     
     public static final String SETTINGS_USEREMAIL_ID = "stng-user-mail";
     
@@ -143,6 +146,8 @@ public final class Constants {
     
     public static final By FORUM_NEWENTRY_MODAL_POSTBUTTON = By.id(FORUM_NEWENTRY_MODAL_POSTBUTTON_ID);
     public static final By SESSIONLIST_NEWSESSION_MODAL_POSTBUTTON = By.id(SESSIONLIST_NEWSESSION_MODAL_POSTBUTTON_ID);
+    
+    public static final By SESSION_LEFT_MENU_BUTTON = By.id(SESSION_LEFT_MENU_BUTTON_ID);
 
     //TABS
     public static final By FORUMTAB = By.xpath(FORUMTAB_XPATH); //ALERT! not working for some tests
@@ -213,6 +218,7 @@ public final class Constants {
     public static final By SESSIONLIST_NEWSESSION_ICON = By.className(SESSIONLIST_NEWSESSION_ICON_CLASS);
     public static final By SESSIONLIST_SESSIONEDIT_ICON = By.className(SESSIONLIST_SESSIONEDIT_ICON_CLASS);
     
+    public static final By SESSION_EXIT_ICON = By.id(SESSION_EXIT_ICON_ID);
     
     //KEYS
 	public static final String SELECTALL = Keys.chord(Keys.CONTROL, "a");

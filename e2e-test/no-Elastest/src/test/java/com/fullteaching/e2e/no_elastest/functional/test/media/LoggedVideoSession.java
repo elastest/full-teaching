@@ -212,7 +212,8 @@ public class LoggedVideoSession {
 		} catch (ElementNotFoundException e) {
 			Assert.fail("Error while creating new SESSION");
 		}
-    	
+    
+    	//Teacher Join Session
     	try {
     		
 	    	List <String> session_titles = SessionNavigationUtilities.getFullSessionList(teacherDriver);
@@ -220,7 +221,7 @@ public class LoggedVideoSession {
 			
 	    	//Teacher to: JOIN SESSION.
 			WebElement session = SessionNavigationUtilities.getSession(teacherDriver,sessionName );
-			Click.element(teacherDriver, session.findElement(SESSIONLIST_SESSION_ACCESS));
+			teacherDriver = Click.element(teacherDriver, session.findElement(SESSIONLIST_SESSION_ACCESS));
 			
 			//Assert.assertTrue(condition);
 	    	//Check why this is failing... maybe urls are not correct? configuration on the project?
@@ -229,10 +230,76 @@ public class LoggedVideoSession {
 			Assert.fail("Error while creating new SESSION");
 		}
     	
+    	//Students Join Sessions
+    	try {
+    		for(WebDriver student_d: studentDriver) {
+    			
+    			if (!NavigationUtilities.amIHere(student_d, COURSES_URL.replace("__HOST__", host))) {	
+    				student_d = NavigationUtilities.toCoursesHome(student_d);	
+        		}
+        		List <String> courses = CourseNavigationUtilities.getCoursesList(student_d, host);
+        		
+        		Assert.assertTrue("No courses in the list",courses.size()>0);
+        		//Teacher go to Course and create a new session to join
+        	
+    			WebElement course = CourseNavigationUtilities.getCourseElement(student_d, courseName);
+    			
+    			course.findElement(COURSELIST_COURSETITLE).click();
+    	    	Wait.notTooMuch(student_d).until(ExpectedConditions.visibilityOfElementLocated(By.id(TABS_DIV_ID)));
+    	    	student_d = CourseNavigationUtilities.go2Tab(student_d, SESSION_ICON);
+    	    	
+		    	List <String> session_titles = SessionNavigationUtilities.getFullSessionList(student_d);
+		    	Assert.assertTrue("Session has not been created", session_titles.contains(sessionName)); 
+				
+		    	//Student to: JOIN SESSION.
+				WebElement session = SessionNavigationUtilities.getSession(student_d,sessionName );
+				student_d = Click.element(student_d, session.findElement(SESSIONLIST_SESSION_ACCESS));
+				
+				//Assert.assertTrue(condition);
+		    	//Check why this is failing... maybe urls are not correct? configuration on the project?
+    		}
+	    	
+		} catch (ElementNotFoundException e) {
+			Assert.fail("Error while creating new SESSION");
+		}
     	
+    	//Students Leave Sessions
+    	try {
+    		for(WebDriver student_d: studentDriver) {
+		    			
+		    	//student to: LEAVE SESSION.
+    			student_d = Click.element(student_d, SESSION_LEFT_MENU_BUTTON);
+				
+    			student_d = Click.element(student_d, SESSION_EXIT_ICON);
+				
+				//Wait for something
+				Wait.notTooMuch(student_d).until(ExpectedConditions.visibilityOfElementLocated(COURSE_TABS));
+				//Assert.assertTrue(condition);
+		    	//Check why this is failing... maybe urls are not correct? configuration on the project?
+    		}
+	    	
+		} catch (ElementNotFoundException e) {
+			Assert.fail("Error while leaving SESSION");
+		}
+    	//Teacher Leave Session
+    	try {
+			
+		    //student to: LEAVE SESSION.
+    		teacherDriver = Click.element(teacherDriver, SESSION_LEFT_MENU_BUTTON);
+				
+    		teacherDriver = Click.element(teacherDriver, SESSION_EXIT_ICON);
+				
+			//Wait for something
+			Wait.notTooMuch(teacherDriver).until(ExpectedConditions.visibilityOfElementLocated(COURSE_TABS));
+			//Assert.assertTrue(condition);
+	    	//Check why this is failing... maybe urls are not correct? configuration on the project?
+	    	
+		} catch (ElementNotFoundException e) {
+			Assert.fail("Error while leaving SESSION");
+		}
     	try {
     		//delete session by teacher
-			WebElement session = SessionNavigationUtilities.getSession(teacherDriver,sessionName );
+			WebElement session = SessionNavigationUtilities.getSession(teacherDriver,sessionName);
 			Click.element(teacherDriver, session.findElement(SESSIONLIST_SESSIONEDIT_ICON));
 	    	WebElement modal = Wait.notTooMuch(teacherDriver).until(ExpectedConditions.visibilityOfElementLocated(SESSIONLIST_EDIT_MODAL));
 	    	Click.element(teacherDriver, modal.findElement(SESSIONLIST_EDITMODAL_DELETE_DIV).findElement(By.tagName("label")));
