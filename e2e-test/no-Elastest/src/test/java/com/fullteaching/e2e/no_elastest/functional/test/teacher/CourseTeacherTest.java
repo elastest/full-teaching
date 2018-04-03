@@ -292,7 +292,7 @@ abstract public class CourseTeacherTest {
     		
     		//Modify the description
     		WebElement editdescription_button = driver.findElement(EDITDESCRIPTION_BUTTON);
-    		editdescription_button.click();
+    		driver = Click.element(driver, editdescription_button);
     		
     		//wait for editor md editor???'
     		WebElement editdescription_desc = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.className(EDITDESCRIPTION_CONTENTBOX_CLASS)));
@@ -313,7 +313,7 @@ abstract public class CourseTeacherTest {
     		
     		Assert.assertNotNull("Something went wrong while setting the Heading",option);
     		
-    		option.click();
+    		driver  = Click.element(driver, option);
     		
     		//Write the new Title.
     		editor = driver.findElement(By.className("ql-editor"));
@@ -328,7 +328,7 @@ abstract public class CourseTeacherTest {
 
     		Assert.assertNotNull("Something went wrong while setting the Subheading",option);
     		
-    		option.click();
+    		driver  = Click.element(driver, option);
     		
     		//Write the new SubTitle.
     		editor = driver.findElement(By.className("ql-editor"));
@@ -343,7 +343,7 @@ abstract public class CourseTeacherTest {
 
     		Assert.assertNotNull("Something went wrong while setting the Content",option);
     		
-    		option.click();
+    		driver  = Click.element(driver, option);
     		
     		//Write the new Content.
     		editor = driver.findElement(By.className("ql-editor"));
