@@ -1,13 +1,13 @@
 package com.fullteaching.backend.integration.session;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
@@ -26,13 +26,13 @@ public class SessionControllerTest extends AbstractLoggedControllerUnitTest {
 	private static String editSession_uri="/api-sessions/edit";
 	private static String deleteSession_uri="/api-sessions/delete/";
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		super.setUp();
 	}
 
 	@Test
-	public void newSessionTest() {
+	public void newSessionTest(){
 		
 		Course c = CourseTestUtils.newCourseWithCd("Course", loggedUser, null, "This is the info", false);
 		c = CourseTestUtils.createCourseIfNotExist(mvc, c, httpSession);
@@ -54,7 +54,7 @@ public class SessionControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.CREATED.value();
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -72,7 +72,7 @@ public class SessionControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.UNAUTHORIZED.value();
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -90,7 +90,7 @@ public class SessionControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.BAD_REQUEST.value();
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -130,7 +130,7 @@ public class SessionControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.OK.value();
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -148,7 +148,7 @@ public class SessionControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.UNAUTHORIZED.value();
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -167,7 +167,7 @@ public class SessionControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.BAD_REQUEST.value();
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -200,7 +200,7 @@ public class SessionControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.OK.value();
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -217,7 +217,7 @@ public class SessionControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.UNAUTHORIZED.value();
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -236,7 +236,7 @@ public class SessionControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.BAD_REQUEST.value();
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

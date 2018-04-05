@@ -1,5 +1,7 @@
 package com.fullteaching.backend.user;
 
+import java.io.Serializable;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -20,7 +22,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class UserComponent {
+public class UserComponent implements Serializable {
+
+	private static final long serialVersionUID = -7070832473325447034L;
 
 	private User user;
 

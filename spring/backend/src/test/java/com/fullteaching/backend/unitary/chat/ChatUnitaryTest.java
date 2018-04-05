@@ -2,11 +2,12 @@ package com.fullteaching.backend.unitary.chat;
 
 import java.util.concurrent.ExecutorService;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.mockito.Mock;
-import org.springframework.util.Assert;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.fullteaching.backend.AbstractUnitTest;
@@ -31,7 +32,7 @@ public class ChatUnitaryTest extends AbstractUnitTest {
 	@Mock 
 	ChatManager chatManager; 
 	
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 
@@ -40,7 +41,7 @@ public class ChatUnitaryTest extends AbstractUnitTest {
 		
 		Chat ch = new Chat (chatManager, chat_name, executor, teacher_name);
 		
-		Assert.notNull(ch);
+		assertNotNull(ch);
 	}
 
 	@Test
@@ -48,15 +49,15 @@ public class ChatUnitaryTest extends AbstractUnitTest {
 		
 		Chat ch = new Chat (chatManager, chat_name, executor, teacher_name);
 		
-		Assert.notNull(ch);
+		assertNotNull(ch);
 		WebSocketChatUser wschu = new WebSocketChatUser(session, user_name, color);
 		WebSocketChatUser wscht = new WebSocketChatUser(session, teacher_name, "teacherColor");
 		ch.addUser(wschu);
 		ch.addUser(wscht);
-		Assert.isTrue(ch.getUser(user_name).equals(wschu));
-		Assert.isTrue(ch.getUser(teacher_name).equals(wscht));
-		Assert.isTrue(ch.getUsers().size()==2);
-		Assert.isTrue(chat_name.equals(ch.getName()));
+		assertTrue(ch.getUser(user_name).equals(wschu));
+		assertTrue(ch.getUser(teacher_name).equals(wscht));
+		assertTrue(ch.getUsers().size()==2);
+		assertTrue(chat_name.equals(ch.getName()));
 	}
 
 	@Test
@@ -64,23 +65,23 @@ public class ChatUnitaryTest extends AbstractUnitTest {
 		
 		Chat ch = new Chat (chatManager, chat_name, executor, teacher_name);
 		
-		Assert.notNull(ch);
+		assertNotNull(ch);
 		WebSocketChatUser wschu = new WebSocketChatUser(session, user_name, color);
 		ch.addUser(wschu);
-		Assert.isTrue(ch.getUser(user_name).equals(wschu));
+		assertTrue(ch.getUser(user_name).equals(wschu));
 		
 		ch.removeUser(wschu);
-		Assert.isTrue(ch.getUser(user_name)==null);
+		assertTrue(ch.getUser(user_name)==null);
 		
 	}
 
-	@Ignore //unitary test on chatManager.closeChat
+	@Disabled //unitary test on chatManager.closeChat
 	@Test
 	public void closeChatTest() {
 		
 		Chat ch = new Chat (chatManager, chat_name, executor, teacher_name);
 		
-		Assert.notNull(ch);
+		assertNotNull(ch);
 		ch.close();
 		
 	}
@@ -91,7 +92,7 @@ public class ChatUnitaryTest extends AbstractUnitTest {
 		Chat ch = new Chat (chatManager, chat_name, executor, teacher_name);
 		WebSocketChatUser wschu = new WebSocketChatUser(session, user_name, color);
 		ch.addUser(wschu);
-		Assert.notNull(ch);
+		assertNotNull(ch);
 		ch.sendMessage(wschu, "Este mensaje");
 	}
 
@@ -103,7 +104,7 @@ public class ChatUnitaryTest extends AbstractUnitTest {
 		WebSocketChatUser wscht = new WebSocketChatUser(session, teacher_name, "teacherColor");
 		ch.addUser(wschu);
 		ch.addUser(wscht);
-		Assert.notNull(ch);
+		assertNotNull(ch);
 		ch.requestIntervention(wschu, true);
 	}
 
@@ -113,7 +114,7 @@ public class ChatUnitaryTest extends AbstractUnitTest {
 		Chat ch = new Chat (chatManager, chat_name, executor, teacher_name);
 		WebSocketChatUser wschu = new WebSocketChatUser(session, user_name, color);
 		ch.addUser(wschu);
-		Assert.notNull(ch);
+		assertNotNull(ch);
 		ch.grantIntervention(wschu.getName(), true);
 	}
 
@@ -123,8 +124,8 @@ public class ChatUnitaryTest extends AbstractUnitTest {
 		Chat ch = new Chat (chatManager, chat_name, executor, teacher_name);
 		WebSocketChatUser wschu = new WebSocketChatUser(session, user_name, color);
 		ch.addUser(wschu);
-		Assert.notNull(ch);
-		Assert.isTrue(ch.getUsers().contains(wschu));
+		assertNotNull(ch);
+		assertTrue(ch.getUsers().contains(wschu));
 	}
 
 
@@ -134,8 +135,8 @@ public class ChatUnitaryTest extends AbstractUnitTest {
 		Chat ch = new Chat (chatManager, chat_name, executor, teacher_name);
 		WebSocketChatUser wschu = new WebSocketChatUser(session, user_name, color);
 		ch.addUser(wschu);
-		Assert.notNull(ch);
-		Assert.isTrue(ch.getUser(wschu.getName()).equals(wschu));
+		assertNotNull(ch);
+		assertTrue(ch.getUser(wschu.getName()).equals(wschu));
 	}
 
 }

@@ -2,12 +2,12 @@ package com.fullteaching.backend.session;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,7 +61,8 @@ public class VideoSessionController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Session session = sessionRepository.findOne(id_i);
+		Optional<Session> o_session = sessionRepository.findById(id_i);
+		Session session = o_session.get();
 		if (session != null) { // sessionId belongs to a real Session
 			String sessionId;
 			String token;
@@ -76,7 +77,7 @@ public class VideoSessionController {
 
 					sessionId = s.getSessionId();
 					token = s.generateToken(new TokenOptions.Builder()
-							.data("{\"name\": \"" + this.user.getLoggedUser().getNickName() + "\"}")
+							.data("{\"name\": \"" + this.user.getLoggedUser().getNickName() + "\", \"isTeacher\": true}")
 							.build());
 					
 					responseJson.put(0, sessionId);
@@ -96,7 +97,7 @@ public class VideoSessionController {
 					io.openvidu.java.client.Session s = this.lessonIdSession.get(id_i);
 					sessionId = s.getSessionId();
 					token = s.generateToken(new TokenOptions.Builder()
-							.data("{\"name\": \"" + this.user.getLoggedUser().getNickName() + "\"}")
+							.data("{\"name\": \"" + this.user.getLoggedUser().getNickName() + "\", \"isTeacher\": false}")
 							.build());
 					
 					responseJson.put(0, sessionId);

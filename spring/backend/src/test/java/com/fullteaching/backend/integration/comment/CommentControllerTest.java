@@ -1,11 +1,10 @@
 package com.fullteaching.backend.integration.comment;
 
-import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
@@ -29,7 +28,7 @@ public class CommentControllerTest extends AbstractLoggedControllerUnitTest {
 	private static boolean forum = true;
 	
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		super.setUp();
 		
@@ -51,7 +50,7 @@ public class CommentControllerTest extends AbstractLoggedControllerUnitTest {
 		c = ForumTestUtils.newEntry(mvc, c, entry, httpSession);
 		
 		long entryId = c.getCourseDetails().getForum().getEntries().get(0).getId();
-		long forumId = c.getCourseDetails().getForum().getId();
+		long cdId = c.getCourseDetails().getId();
 		
 		Comment comment = new Comment();
 		comment.setMessage("New Comment");
@@ -63,7 +62,7 @@ public class CommentControllerTest extends AbstractLoggedControllerUnitTest {
 		//test ok 
 		try {
 			
-			MvcResult result =  mvc.perform(post(newComment_uri.replace("{entryId}", String.valueOf(entryId))+forumId)
+			MvcResult result =  mvc.perform(post(newComment_uri.replace("{entryId}", String.valueOf(entryId))+cdId)
 					                .contentType(MediaType.APPLICATION_JSON_VALUE)
 					                .session((MockHttpSession) httpSession)
 					                .content(request_OK)
@@ -76,8 +75,8 @@ public class CommentControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.CREATED.value();
 
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
-			Assert.assertEquals("failure - expected user x" , loggedUser,e.getComments().get(0).getUser());
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
+			assertEquals(loggedUser,e.getComments().get(0).getUser(),"failure - expected user x");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -86,7 +85,7 @@ public class CommentControllerTest extends AbstractLoggedControllerUnitTest {
 		//test UNAUTHORIZED 
 		try {
 			
-			MvcResult result =  mvc.perform(post(newComment_uri.replace("{entryId}", String.valueOf(entryId))+forumId)
+			MvcResult result =  mvc.perform(post(newComment_uri.replace("{entryId}", String.valueOf(entryId))+cdId)
 					                .contentType(MediaType.APPLICATION_JSON_VALUE)
 					                .content(request_OK)
 					                ).andReturn();
@@ -95,7 +94,7 @@ public class CommentControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.UNAUTHORIZED.value();
 
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,7 +115,7 @@ public class CommentControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.BAD_REQUEST.value();
 
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -138,7 +137,7 @@ public class CommentControllerTest extends AbstractLoggedControllerUnitTest {
 		c = ForumTestUtils.newEntry(mvc, c, entry, httpSession);
 		
 		long entryId = c.getCourseDetails().getForum().getEntries().get(0).getId();
-		long forumId = c.getCourseDetails().getForum().getId();
+		long cdId = c.getCourseDetails().getId();
 		
 		Comment parent = c.getCourseDetails().getForum().getEntries().get(0).getComments().get(0);
 		Comment comment = new Comment();
@@ -152,7 +151,7 @@ public class CommentControllerTest extends AbstractLoggedControllerUnitTest {
 		//test ok 
 		try {
 			
-			MvcResult result =  mvc.perform(post(newComment_uri.replace("{entryId}", String.valueOf(entryId))+forumId)
+			MvcResult result =  mvc.perform(post(newComment_uri.replace("{entryId}", String.valueOf(entryId))+cdId)
 					                .contentType(MediaType.APPLICATION_JSON_VALUE)
 					                .session((MockHttpSession) httpSession)
 					                .content(request_OK)
@@ -165,8 +164,8 @@ public class CommentControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.CREATED.value();
 
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
-			Assert.assertEquals("failure - expected user x" , loggedUser, e.getComments().get(0).getReplies().get(0).getUser());
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
+			assertEquals( loggedUser, e.getComments().get(0).getReplies().get(0).getUser(), "failure - expected user x");
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -175,7 +174,7 @@ public class CommentControllerTest extends AbstractLoggedControllerUnitTest {
 		//test UNAUTHORIZED 
 		try {
 			
-			MvcResult result =  mvc.perform(post(newComment_uri.replace("{entryId}", String.valueOf(entryId))+forumId)
+			MvcResult result =  mvc.perform(post(newComment_uri.replace("{entryId}", String.valueOf(entryId))+cdId)
 					                .contentType(MediaType.APPLICATION_JSON_VALUE)
 					                .content(request_OK)
 					                ).andReturn();
@@ -184,7 +183,7 @@ public class CommentControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.UNAUTHORIZED.value();
 
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -203,7 +202,7 @@ public class CommentControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.BAD_REQUEST.value();
 
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

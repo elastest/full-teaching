@@ -11,6 +11,8 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -47,6 +49,7 @@ import com.fullteaching.backend.security.AuthorizationService;
 import com.fullteaching.backend.user.User;
 import com.fullteaching.backend.user.UserRepository;
 import com.fullteaching.backend.user.UserComponent;
+import com.fullteaching.backend.file.MimeTypes;
 
 @RestController
 @RequestMapping("/api-load-files")
@@ -105,7 +108,8 @@ public class FileController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Course c = courseRepository.findOne(id_course);
+		Optional<Course> o_course = courseRepository.findById(id_course);
+		Course c = o_course.get();
 		
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course
@@ -152,7 +156,9 @@ public class FileController {
 					customFile.setLink(uploadedFile.getPath());
 					//ONLY ON DEVELOPMENT
 				}
-				fg = fileGroupRepository.findOne(id_fileGroup);
+				
+				Optional<FileGroup> o_fg = fileGroupRepository.findById(id_fileGroup);
+				fg = o_fg.get();
 				fg.getFiles().add(customFile);
 				fg.updateFileIndexOrder();
 				System.out.println("FILE SUCCESFULLY UPLOADED TO " + uploadedFile.getPath());
@@ -188,44 +194,52 @@ public class FileController {
 			return;
 		}
 		
-		Course c = courseRepository.findOne(id_course);
+		Optional<Course> o_course = courseRepository.findById(id_course);
+		Course c = o_course.get();
 		
 		ResponseEntity<Object> userAuthorized = authorizationService.checkAuthorizationUsers(c, c.getAttenders());
 		if (userAuthorized != null) { // If the user is not an attender of the course
 			response.sendError(401, "Unauthorized");
 			return;
 		} else {
-		
-			com.fullteaching.backend.file.File f = fileRepository.findOne(id_file);
+			com.fullteaching.backend.file.File f = null;
+			Path file= null;
 			
-			if (f != null){
-				if (this.isProductionStage()){
-					//ONLY ON PRODUCTION
-					this.productionFileDownloader(f.getNameIdent(), response);
-					//ONLY ON PRODUCTION
-				} else {
-					//ONLY ON DEVELOPMENT
-					Path file = FILES_FOLDER.resolve(f.getNameIdent());
-		
-					if (Files.exists(file)) {
-						try {
-							String fileExt = f.getFileExtension();
-							response.setContentType(MimeTypes.getMimeType(fileExt));
-									
-							// get your file as InputStream
-							InputStream is = new FileInputStream(file.toString());
-							// copy it to response's OutputStream
-							IOUtils.copy(is, response.getOutputStream());
-							response.flushBuffer();
-						} catch (IOException ex) {
-							throw new RuntimeException("IOError writing file to output stream");
-						}
-						
+			try {
+				Optional<com.fullteaching.backend.file.File> o_f = fileRepository.findById(id_file);
+				f = o_f.get();
+			
+				if (f != null){
+					if (this.isProductionStage()){
+						//ONLY ON PRODUCTION
+						this.productionFileDownloader(f.getNameIdent(), response);
+						//ONLY ON PRODUCTION
 					} else {
-						response.sendError(404, "File" + f.getNameIdent() + "(" + file.toAbsolutePath() + ") does not exist");
+						//ONLY ON DEVELOPMENT
+						file = FILES_FOLDER.resolve(f.getNameIdent());
+			
+						if (Files.exists(file)) {
+							try {
+								String fileExt = f.getFileExtension();
+								response.setContentType(MimeTypes.getMimeType(fileExt));
+										
+								// get your file as InputStream
+								InputStream is = new FileInputStream(file.toString());
+								// copy it to response's OutputStream
+								IOUtils.copy(is, response.getOutputStream());
+								response.flushBuffer();
+							} catch (IOException ex) {
+								throw new RuntimeException("IOError writing file to output stream");
+							}
+							
+						} else {
+							response.sendError(404, "File" + f.getNameIdent() + "(" + file.toAbsolutePath() + ") does not exist");
+						}
+						//ONLY ON DEVELOPMENT
 					}
-					//ONLY ON DEVELOPMENT
 				}
+			}catch (NoSuchElementException nsee) {
+				response.sendError(404, "File" + (f!= null ? f.getNameIdent() : id_file) + "(" + (file != null ? file.toAbsolutePath() : "...") + ") does not exist");
 			}
 		}
 	}
@@ -249,7 +263,8 @@ public class FileController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		User u = userRepository.findOne(id_user);
+		Optional<User> o_u = userRepository.findById(id_user);
+		User u = o_u.get();
 		
 		ResponseEntity<Object> userAuthorized = authorizationService.checkAuthorization(u, this.user.getLoggedUser());
 		if (userAuthorized != null) { // If the user is not the teacher of the course

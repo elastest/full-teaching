@@ -1,6 +1,7 @@
 package com.fullteaching.backend.forum;
 
 import java.util.List;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.persistence.CascadeType;
@@ -13,8 +14,10 @@ import javax.persistence.OneToMany;
 import com.fullteaching.backend.entry.Entry;
 
 @Entity
-public class Forum {
+public class Forum implements Serializable{
 	
+	private static final long serialVersionUID = 6760455059440066123L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;

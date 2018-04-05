@@ -1,16 +1,16 @@
 package com.fullteaching.backend.integration.filegroup;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
@@ -33,7 +33,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 	private static String deleteGroup_uri="/api-files/delete/file-group/{fileGroupId}/course/";//{courseId}
 	private static String deleteFile_uri="/api-files/delete/file/{fileId}/file-group/{fileGroupId}/course/";//{courseId}
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		super.setUp();
 	}
@@ -66,7 +66,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			String content = result.getResponse().getContentAsString();
 			cd = CourseTestUtils.json2CourseDetails(content);
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -85,7 +85,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.UNAUTHORIZED.value();
 
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -105,7 +105,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.BAD_REQUEST.value();
 
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -130,7 +130,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.CREATED.value();
 		
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -154,7 +154,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.BAD_REQUEST.value();
 		
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -192,8 +192,8 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 
 			FileGroup fg1 = FileTestUtils.json2FileGroup(result.getResponse().getContentAsString());
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
-			Assert.assertEquals("not modified", "Modified FileGroup", fg1.getTitle());
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
+			assertEquals("Modified FileGroup", fg1.getTitle(), "not modified");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -212,7 +212,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.UNAUTHORIZED.value();
 
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -232,7 +232,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.BAD_REQUEST.value();
 
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -254,7 +254,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.NOT_MODIFIED.value();
 
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -299,15 +299,15 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 
 			List<FileGroup> fglst = FileTestUtils.json2fileGroupList(result.getResponse().getContentAsString());
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 			/*check the filegroups*/
-			Assert.assertEquals("failure - not moved", 1, fglst.get(0).getFiles().size());
-			Assert.assertEquals("failure - not moved", 2, fglst.get(1).getFiles().size());
+			assertEquals(1, fglst.get(0).getFiles().size(),"failure - not moved");
+			assertEquals(2, fglst.get(1).getFiles().size(),"failure - not moved");
 			
-			Assert.assertEquals("failure - order fail" , 0, fglst.get(0).getFiles().get(0).getIndexOrder());
-			Assert.assertEquals("failure - order fail" , 0, fglst.get(1).getFiles().get(0).getIndexOrder());
-			Assert.assertEquals("failure - order fail" , 1, fglst.get(1).getFiles().get(1).getIndexOrder());
+			assertEquals( 0, fglst.get(0).getFiles().get(0).getIndexOrder(), "failure - order fail");
+			assertEquals( 0, fglst.get(1).getFiles().get(0).getIndexOrder(), "failure - order fail");
+			assertEquals( 1, fglst.get(1).getFiles().get(1).getIndexOrder(), "failure - order fail");
 
 			
 		} catch (Exception e) {
@@ -332,7 +332,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 
 			//FileGroup fg1 = FileTestUtils.json2FileGroup(result.getResponse().getContentAsString());
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -356,7 +356,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -389,7 +389,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.NOT_MODIFIED.value();
 	
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 		
 			
 		} catch (Exception e) {
@@ -400,7 +400,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 		//NOT_MODIFIED 2
 		try {
 
-			MvcResult result =  mvc.perform(put(modifyFile_uri.replace("{fileGroupId}", "564")+c.getId())//notExisting fileGroup
+			MvcResult result =  mvc.perform(put(modifyFile_uri.replace("{fileGroupId}", ""+fg.getId())+c.getId())//notExisting fileGroup
 					                .contentType(MediaType.APPLICATION_JSON_VALUE)
 					                .session((MockHttpSession) httpSession)
 					                .content(not_modified)
@@ -410,7 +410,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			int expected = HttpStatus.NOT_MODIFIED.value();
 	
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 		
 			
 		} catch (Exception e) {
@@ -439,10 +439,10 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 
 			FileGroup fg_r = FileTestUtils.json2FileGroup(result.getResponse().getContentAsString());
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 			/*check the filename*/
-			Assert.assertEquals("failure - not modified", "Modified File", fg_r.getFiles().get(0).getName());
+			assertEquals("Modified File", fg_r.getFiles().get(0).getName(), "failure - not modified");
 		
 			
 		} catch (Exception e) {
@@ -463,7 +463,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 
 			//FileGroup fg1 = FileTestUtils.json2FileGroup(result.getResponse().getContentAsString());
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -485,7 +485,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			
 			
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -515,7 +515,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			int expected = HttpStatus.OK.value();
 
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 					
 			
 		} catch (Exception e) {
@@ -536,7 +536,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			int expected = HttpStatus.BAD_REQUEST.value();
 
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 					
 			
 		} catch (Exception e) {
@@ -557,7 +557,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			int expected = HttpStatus.BAD_REQUEST.value();
 
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 					
 			
 		} catch (Exception e) {
@@ -576,7 +576,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			int expected = HttpStatus.UNAUTHORIZED.value();
 
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 					
 			
 		} catch (Exception e) {
@@ -613,7 +613,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			int expected = HttpStatus.OK.value();
 
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 					
 			
 		} catch (Exception e) {
@@ -635,7 +635,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			int expected = HttpStatus.BAD_REQUEST.value();
 
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 					
 			
 		} catch (Exception e) {
@@ -657,7 +657,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			int expected = HttpStatus.BAD_REQUEST.value();
 
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 					
 			
 		} catch (Exception e) {
@@ -677,7 +677,7 @@ public class FileGroupControllerTest extends AbstractLoggedControllerUnitTest {
 			int expected = HttpStatus.UNAUTHORIZED.value();
 
 			
-			Assert.assertEquals("failure - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure - expected HTTP status "+expected);
 					
 			
 		} catch (Exception e) {

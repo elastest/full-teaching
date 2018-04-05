@@ -1,8 +1,8 @@
 package com.fullteaching.backend.unitary.course;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.springframework.util.Assert;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.fullteaching.backend.AbstractUnitTest;
 import com.fullteaching.backend.course.Course;
@@ -16,7 +16,7 @@ public class CourseUnitaryTest extends AbstractUnitTest {
 	private static User teacher;
 	
 	
-	@BeforeClass
+	@BeforeAll
 	public static void initialize() {
 		String [] roles = {"ROLE_TEACHER"};
 		teacher = new User("mock_teacher","mock2222","t_mocky", null,roles);
@@ -25,29 +25,29 @@ public class CourseUnitaryTest extends AbstractUnitTest {
 	@Test
 	public void newCourseTest() {
 		Course c2 = new Course();
-		Assert.notNull(c2);
+		assertNotNull(c2);
 		
 		Course c = new Course(title, image, teacher);
-		Assert.notNull(c);
-		Assert.isTrue(c.getTeacher().equals(teacher));
-		Assert.isTrue(c.getImage().equals(image));
-		Assert.isTrue(c.getTitle().equals(title));
-		Assert.notNull(c.getSessions());
-		Assert.notNull(c.getAttenders());
-		Assert.isNull(c.getCourseDetails());
+		assertNotNull(c);
+		assertTrue(c.getTeacher().equals(teacher));
+		assertTrue(c.getImage().equals(image));
+		assertTrue(c.getTitle().equals(title));
+		assertNotNull(c.getSessions());
+		assertNotNull(c.getAttenders());
+		assertNull(c.getCourseDetails());
 		
 		CourseDetails cd = new CourseDetails();
 		
 		Course c3 = new Course(title, image, teacher, cd);
-		Assert.notNull(c3);
-		Assert.isTrue(c3.getTeacher().equals(teacher));
-		Assert.isTrue(c3.getImage().equals(image));
-		Assert.isTrue(c3.getTitle().equals(title));
-		Assert.notNull(c3.getSessions());
-		Assert.notNull(c3.getAttenders());
-		Assert.notNull(c3.getCourseDetails());
+		assertNotNull(c3);
+		assertTrue(c3.getTeacher().equals(teacher));
+		assertTrue(c3.getImage().equals(image));
+		assertTrue(c3.getTitle().equals(title));
+		assertNotNull(c3.getSessions());
+		assertNotNull(c3.getAttenders());
+		assertNotNull(c3.getCourseDetails());
 		
-		Assert.isTrue(c3.getCourseDetails().equals(cd));
+		assertTrue(c3.getCourseDetails().equals(cd));
 	}
 
 
@@ -55,28 +55,28 @@ public class CourseUnitaryTest extends AbstractUnitTest {
 	public void setAndGetCourseTitleTest() {
 		Course c = new Course();
 		c.setTitle(title);
-		Assert.isTrue(c.getTitle().equals(title));
+		assertTrue(c.getTitle().equals(title));
 	}
 
 	@Test
 	public void setAndGetCourseImageTest() {
 		Course c = new Course();
 		c.setImage(image);
-		Assert.isTrue(c.getImage().equals(image));
+		assertTrue(c.getImage().equals(image));
 	}
 
 	@Test
 	public void setAndGetCourseTeacherTest() {
 		Course c = new Course();
 		c.setTeacher(teacher);
-		Assert.isTrue(c.getTeacher().equals(teacher));
+		assertTrue(c.getTeacher().equals(teacher));
 	}
 
 	@Test
 	public void setAndGetCourseDetailsTest() {
 		Course c = new Course();
 		c.setCourseDetails(new CourseDetails());
-		Assert.notNull(c.getCourseDetails());
+		assertNotNull(c.getCourseDetails());
 	}
 
 	@Test
@@ -88,10 +88,10 @@ public class CourseUnitaryTest extends AbstractUnitTest {
 		Course c2 = new Course(title, image, teacher);
 		c1.setId((long) Math.floor((Math.random()*Long.MAX_VALUE)));
 		
-		Assert.isTrue(c1.equals(c1));
-		Assert.isTrue(!c1.equals("not_a_course"));
-		Assert.isTrue(!c1.equals(c2));
-		Assert.isTrue(!c1.equals(null));
+		assertTrue(c1.equals(c1));
+		assertTrue(!c1.equals("not_a_course"));
+		assertTrue(!c1.equals(c2));
+		assertTrue(!c1.equals(null));
 		
 	}
 

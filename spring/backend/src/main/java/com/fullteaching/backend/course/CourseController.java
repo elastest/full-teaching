@@ -2,6 +2,7 @@ package com.fullteaching.backend.course;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.validator.routines.EmailValidator;
@@ -62,7 +63,7 @@ public class CourseController {
 		}
 		Set<Long> s = new HashSet<>();
 		s.add(id_i);
-		Collection<User> users = userRepository.findAll(s);
+		Collection<User> users = userRepository.findAllById(s);
 		Collection<Course> courses = new HashSet<>();
 		courses = courseRepository.findByAttenders(users);
 		return new ResponseEntity<>(courses ,HttpStatus.OK);
@@ -84,7 +85,8 @@ public class CourseController {
 		}catch(NumberFormatException e){
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		Course course = courseRepository.findOne(id_i);
+		Optional<Course> o_course = courseRepository.findById(id_i);
+		Course course = o_course.get();
 		return new ResponseEntity<>(course ,HttpStatus.OK);
 	}
 	
@@ -110,7 +112,8 @@ public class CourseController {
 		courseRepository.save(course);
 		courseRepository.flush();
 		
-		course = courseRepository.findOne(course.getId());
+		Optional<Course> o_course = courseRepository.findById(course.getId());
+		course = o_course.get();
 		return new ResponseEntity<>(course, HttpStatus.CREATED);
 	}
 	
@@ -123,8 +126,9 @@ public class CourseController {
 		if (authorized != null){
 			return authorized;
 		};
-
-		Course c = courseRepository.findOne(course.getId());
+		
+		Optional<Course> o_course = courseRepository.findById(course.getId());
+		Course c = o_course.get();
 		
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course
@@ -161,7 +165,8 @@ public class CourseController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
-		Course c = courseRepository.findOne(id_course);
+		Optional<Course> o_course = courseRepository.findById(id_course);
+		Course c = o_course.get();
 		
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course
@@ -174,7 +179,7 @@ public class CourseController {
 			for(User u: users){
 				u.getCourses().remove(c);
 			}
-			userRepository.save(users);
+			userRepository.saveAll(users);
 			c.getAttenders().clear();
 			
 			
@@ -203,7 +208,8 @@ public class CourseController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 
-		Course c = courseRepository.findOne(id_course);
+		Optional<Course> o_course = courseRepository.findById(id_course);
+		Course c = o_course.get();
 		
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course
@@ -245,7 +251,7 @@ public class CourseController {
 			}
 			
 			//Saving the attenders (all of them, just in case a field of the bidirectional relationship is missing in a Course or a User)
-			userRepository.save(newPossibleAttenders);	
+			userRepository.saveAll(newPossibleAttenders);	
 			//Saving the modified course
 			courseRepository.save(c);
 			
@@ -269,7 +275,8 @@ public class CourseController {
 			return authorized;
 		};
 
-		Course c = courseRepository.findOne(course.getId());
+		Optional<Course> o_course = courseRepository.findById(course.getId());
+		Course c = o_course.get();
 		
 		ResponseEntity<Object> teacherAuthorized = authorizationService.checkAuthorization(c, c.getTeacher());
 		if (teacherAuthorized != null) { // If the user is not the teacher of the course
@@ -286,7 +293,7 @@ public class CourseController {
 				}
 			}
 			
-			userRepository.save(courseAttenders);
+			userRepository.saveAll(courseAttenders);
 			
 			//Modifying the course attenders
 			c.setAttenders(course.getAttenders());

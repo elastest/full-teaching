@@ -2,6 +2,7 @@ package com.fullteaching.backend.utils;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Assert;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
@@ -24,6 +25,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fullteaching.backend.course.Course;
 import com.fullteaching.backend.coursedetails.CourseDetails;
 import com.fullteaching.backend.user.User;
+import com.fullteaching.backend.utils.LoginTestUtils;
+
 import com.google.gson.Gson;
 
 public class CourseTestUtils {
@@ -108,7 +111,7 @@ public class CourseTestUtils {
 			c.setAttenders(users);
 			int expected = HttpStatus.OK.value();
 			//http status 200 created!
-			Assert.assertEquals("failure CourseUtils.addAttenders  - expected HTTP status "+expected, expected, status);
+			assertEquals(expected, status, "failure CourseUtils.addAttenders  - expected HTTP status "+expected);
 			
 		} catch (Exception e) {
 		// TODO Auto-generated catch block

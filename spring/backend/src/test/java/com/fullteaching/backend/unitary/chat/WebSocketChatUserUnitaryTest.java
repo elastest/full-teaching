@@ -2,11 +2,13 @@ package com.fullteaching.backend.unitary.chat;
 
 import java.util.concurrent.ExecutorService;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.mockito.Mock;
-import org.springframework.util.Assert;
+
 import org.springframework.web.socket.WebSocketSession;
 
 import com.fullteaching.backend.AbstractUnitTest;
@@ -26,16 +28,16 @@ public class WebSocketChatUserUnitaryTest extends AbstractUnitTest {
 	@Mock
 	ExecutorService executor;
 	
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 	}
 
 	@Test
 	public void newWebSocketTest() {
 		WebSocketChatUser wschu = new WebSocketChatUser(session, name, color);
-		Assert.notNull(wschu);
-		Assert.isTrue(name.equals(wschu.getName()));
-		Assert.isTrue(color.equals(wschu.getColor()));
+		assertNotNull(wschu);
+		assertTrue(name.equals(wschu.getName()));
+		assertTrue(color.equals(wschu.getColor()));
 	}
 
 	@Test
@@ -44,14 +46,14 @@ public class WebSocketChatUserUnitaryTest extends AbstractUnitTest {
 		Chat ch = new Chat (null, chat_name, executor, teacher_name);
 		wschu.newChat(ch);
 		
-		Assert.notNull(wschu);
+		assertNotNull(wschu);
 
 	}
 
 	@Test
 	public void closeChat4UserTest() {
 		WebSocketChatUser wschu = new WebSocketChatUser(session, name, color);
-		Assert.notNull(wschu);
+		assertNotNull(wschu);
 		Chat ch = new Chat (null, chat_name, executor, teacher_name);
 		wschu.newChat(ch);
 		wschu.chatClosed(ch);
@@ -62,7 +64,7 @@ public class WebSocketChatUserUnitaryTest extends AbstractUnitTest {
 		WebSocketChatUser wschu = new WebSocketChatUser(session, name, color);
 		WebSocketChatUser wschu2 = new WebSocketChatUser(session, "Second User", "Grey");
 
-		Assert.notNull(wschu);
+		assertNotNull(wschu);
 		Chat ch = new Chat (null, chat_name, executor, teacher_name);
 		
 		ch.addUser(wschu); 
@@ -78,7 +80,7 @@ public class WebSocketChatUserUnitaryTest extends AbstractUnitTest {
 		WebSocketChatUser wschu = new WebSocketChatUser(session, name, color);
 		WebSocketChatUser wschu2 = new WebSocketChatUser(session, "Second User", "Grey");
 
-		Assert.notNull(wschu);
+		assertNotNull(wschu);
 		Chat ch = new Chat (null, chat_name, executor, teacher_name);
 		wschu.newChat(ch);
 		
@@ -88,23 +90,23 @@ public class WebSocketChatUserUnitaryTest extends AbstractUnitTest {
 	@Test
 	public void newMessageTest() {
 		WebSocketChatUser wschu = new WebSocketChatUser(session, name, color);
-		Assert.notNull(wschu);
+		assertNotNull(wschu);
 		Chat ch = new Chat (null, chat_name, executor, teacher_name);
 		wschu.newChat(ch);
 		wschu.newMessage(ch, wschu, "Nuevo mensaje");
 	}
 
-	@Ignore //already tested with newUserInChat
+	@Disabled //already tested with newUserInChat
 	@Test
 	public void testSendConnectedUsers() {
 		WebSocketChatUser wschu = new WebSocketChatUser(session, name, color);
-		Assert.notNull(wschu);
+		assertNotNull(wschu);
 	}
 
 	@Test
 	public void interventionPetitionTest() {
 		WebSocketChatUser wschu = new WebSocketChatUser(session, name, color);
-		Assert.notNull(wschu);
+		assertNotNull(wschu);
 		Chat ch = new Chat (null, chat_name, executor, teacher_name);
 		wschu.newChat(ch);
 		wschu.sendInterventionPetition(ch, wschu, true);
@@ -113,7 +115,7 @@ public class WebSocketChatUserUnitaryTest extends AbstractUnitTest {
 	@Test
 	public void grantInterventionTest() {
 		WebSocketChatUser wschu = new WebSocketChatUser(session, name, color);
-		Assert.notNull(wschu);
+		assertNotNull(wschu);
 		Chat ch = new Chat (null, chat_name, executor, teacher_name);
 		wschu.newChat(ch);
 		wschu.grantIntervention(ch, wschu, true);
