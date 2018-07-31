@@ -2,13 +2,30 @@ package com.fullteaching.e2e.no_elastest.functional.test.media;
 
 import static com.fullteaching.e2e.no_elastest.common.Constants.COURSELIST_COURSETITLE;
 import static com.fullteaching.e2e.no_elastest.common.Constants.COURSES_URL;
-import static com.fullteaching.e2e.no_elastest.common.Constants.FORUM_ICON;
+import static com.fullteaching.e2e.no_elastest.common.Constants.COURSE_TABS;
 import static com.fullteaching.e2e.no_elastest.common.Constants.LOCALHOST;
+import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_EDITMODAL_DELETE_DIV;
+import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_EDIT_MODAL;
+import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_NEWSESSION_ICON;
+import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_NEWSESSION_MODAL;
+import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_NEWSESSION_MODAL_CONTENT;
+import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_NEWSESSION_MODAL_DATE;
+import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_NEWSESSION_MODAL_POSTBUTTON;
+import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_NEWSESSION_MODAL_TIME;
+import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_NEWSESSION_MODAL_TITLE;
+import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_SESSIONEDIT_ICON;
+import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_SESSION_ACCESS;
+import static com.fullteaching.e2e.no_elastest.common.Constants.SESSION_EXIT_ICON;
+import static com.fullteaching.e2e.no_elastest.common.Constants.SESSION_ICON;
+import static com.fullteaching.e2e.no_elastest.common.Constants.SESSION_LEFT_MENU_BUTTON;
 import static com.fullteaching.e2e.no_elastest.common.Constants.TABS_DIV_ID;
-import static org.slf4j.LoggerFactory.getLogger;
 import static java.lang.invoke.MethodHandles.lookup;
+import static java.util.logging.Level.ALL;
+import static org.openqa.selenium.logging.LogType.BROWSER;
+import static org.openqa.selenium.remote.CapabilityType.LOGGING_PREFS;
+import static org.openqa.selenium.remote.DesiredCapabilities.chrome;
+import static org.slf4j.LoggerFactory.getLogger;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,7 +34,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +44,8 @@ import org.junit.runners.Parameterized.Parameters;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 
@@ -45,7 +63,7 @@ import com.fullteaching.e2e.no_elastest.utils.SetUp;
 import com.fullteaching.e2e.no_elastest.utils.UserLoader;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
 
-import static com.fullteaching.e2e.no_elastest.common.Constants.*;
+import io.github.bonigarcia.DriverCapabilities;
 
 @RunWith(Parameterized.class)
 public class LoggedVideoSession {
@@ -86,6 +104,14 @@ public class LoggedVideoSession {
 	private String sessionDate;
 	private String sessionHour;
 	
+	@DriverCapabilities
+	 DesiredCapabilities capabilities = chrome();
+	 {
+	        LoggingPreferences logPrefs = new LoggingPreferences();
+	        logPrefs.enable(BROWSER, ALL);
+	        capabilities.setCapability(LOGGING_PREFS, logPrefs);
+	    }
+	    
 	@Before 
 	public void setUp() throws BadUserException, ElementNotFoundException, NotLoggedException, TimeOutExeception {
 		 	
