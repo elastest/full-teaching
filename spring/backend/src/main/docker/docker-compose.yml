@@ -4,7 +4,7 @@ services:
 
   full-teaching-mysql:
     container_name: docker-compose-full-teaching-mysql
-    image: mysql:latest
+    image: mysql:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=pass
       - MYSQL_DATABASE=full_teaching
