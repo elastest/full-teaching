@@ -1,34 +1,38 @@
 import { Component, OnInit, OnChanges, Input, EventEmitter, trigger, state, animate, transition, style } from '@angular/core';
 import { Location } from '@angular/common';
-import { ActivatedRoute, Router, Params }   from '@angular/router';
-import { Subscription }             from 'rxjs/Subscription';
+import { ActivatedRoute, Router, Params } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 import { environment } from '../../../environments/environment';
 
 import { MaterializeAction } from 'angular2-materialize';
-import { FileUploader }      from 'ng2-file-upload';
-import { DragulaService }    from 'ng2-dragula/ng2-dragula';
-import { EditorModule }      from 'primeng/components/editor/editor';
+import { FileUploader } from 'ng2-file-upload';
+import { DragulaService } from 'ng2-dragula/ng2-dragula';
+import { EditorModule } from 'primeng/components/editor/editor';
 
 import { CommentComponent } from '../comment/comment.component';
 
 import { CourseDetailsModalDataService } from '../../services/course-details-modal-data.service';
-import { UploaderModalService }  from '../../services/uploader-modal.service';
-import { FilesEditionService }   from '../../services/files-edition.service';
-import { CourseService }         from '../../services/course.service';
-import { SessionService }        from '../../services/session.service';
-import { ForumService }          from '../../services/forum.service';
-import { FileService }           from '../../services/file.service';
+import { UploaderModalService } from '../../services/uploader-modal.service';
+import { FilesEditionService } from '../../services/files-edition.service';
+import { CourseService } from '../../services/course.service';
+import { SessionService } from '../../services/session.service';
+import { ForumService } from '../../services/forum.service';
+import { FileService } from '../../services/file.service';
 import { AuthenticationService } from '../../services/authentication.service';
-import { VideoSessionService }   from '../../services/video-session.service';
-import { AnimationService }      from '../../services/animation.service';
+import { VideoSessionService } from '../../services/video-session.service';
+import { AnimationService } from '../../services/animation.service';
 
-import { Session }       from '../../classes/session';
-import { Course }        from '../../classes/course';
-import { Entry }         from '../../classes/entry';
-import { Comment }       from '../../classes/comment';
-import { FileGroup }     from '../../classes/file-group';
-import { File }          from '../../classes/file';
-import { User }          from '../../classes/user';
+import { Session } from '../../classes/session';
+import { Course } from '../../classes/course';
+import { Entry } from '../../classes/entry';
+import { Comment } from '../../classes/comment';
+import { FileGroup } from '../../classes/file-group';
+import { File } from '../../classes/file';
+import { User } from '../../classes/user';
+
+import { OpenVidu, LocalRecorder, Publisher, VideoElementEvent } from "openvidu-browser";
+import { Forum } from '../../classes/forum';
+
 
 @Component({
   selector: 'app-course-details',
@@ -60,8 +64,8 @@ export class CourseDetailsComponent implements OnInit {
   tabId: number = 0;
 
   //POST MODAL
-  processingPost: boolean = false;
-  postModalMode: number = 3; //0 -> New entry | 1 -> New comment | 2 -> New session | 4 -> Add fileGroup | 5 -> Add file
+  processingPost = false;
+  postModalMode: number = 3; //0 -> New entry | 1 -> New comment | 2 -> New session | 4 -> Add fileGroup | 5 -> Add file | 6 -> New video comment
   postModalTitle: string = "New session";
   postModalEntry: Entry;
   postModalCommentReplay: Comment;
@@ -71,44 +75,54 @@ export class CourseDetailsComponent implements OnInit {
   inputDate: Date;
   inputTime: string;
 
+  // recording
+  recorder: LocalRecorder;
+  recordRadioEnabled = false;
+  recordType = 'video';
+  publisherErrorMessage = '';
+  recording = false;
+  paused = false;
+  OV: OpenVidu;
+  publisher: Publisher;
+
   //PUT-DELETE MODAL
-  processingPut: boolean = false;
+  processingPut = false;
   putdeleteModalMode: number = 0; //0 -> Modify session | 1 -> Modify forum | 2 -> Modify file group | 3 -> Modify file | 4 -> Add attenders
   putdeleteModalTitle: string = "Modify session";
-    //Sessions
+  //Sessions
   inputSessionTitle: string;
   inputSessionDescription: string;
   inputSessionDate: Date;
   inputSessionTime: string;
   updatedSession: Session;
   updatedSessionDate: string;
-  allowSessionDeletion: boolean = false;
-    //Forum
-  allowForumEdition: boolean = false;
+  allowSessionDeletion = false;
+  //Forum
+  allowForumEdition = false;
   checkboxForumEdition: string;
-    //Files
+  //Files
   inputFileTitle: string;
-    //Attenders
+  //Attenders
   inputAttenderSimple: string;
   inputAttenderMultiple: string;
   inputAttenderSeparator: string = "";
   attenderTabSelected: number = 0;
 
   //COURSE INFO TAB
-  processingCourseInfo: boolean = false;
+  processingCourseInfo = false;
   welcomeText: string;
-  welcomeTextEdition: boolean = false;
-  welcomeTextPreview: boolean = false;
+  welcomeTextEdition = false;
+  welcomeTextPreview = false;
   previewButton: string = 'preview';
 
   //FILES TAB
-  allowFilesEdition: boolean = false;
+  allowFilesEdition = false;
   filesEditionIcon: string = "mode_edit";
 
   //ATTENDERS TAB
-  allowAttendersEdition: boolean = false;
-  addAttendersError: boolean = false;
-  addAttendersCorrect: boolean = false;
+  allowAttendersEdition = false;
+  addAttendersError = false;
+  addAttendersCorrect = false;
   attErrorTitle: string;
   attErrorContent: string;
   attCorrectTitle: string;
@@ -116,8 +130,8 @@ export class CourseDetailsComponent implements OnInit {
   attendersEditionIcon: string = "mode_edit";
   arrayOfAttDels = [];
 
-  private actions2 = new EventEmitter<string|MaterializeAction>();
-  private actions3 = new EventEmitter<string|MaterializeAction>();
+  private actions2 = new EventEmitter<string | MaterializeAction>();
+  private actions3 = new EventEmitter<string | MaterializeAction>();
 
   subscription1: Subscription; //Subscription to service 'courseDetailsModalDataService' for receiving POST modal dialog changes
   subscription2: Subscription; //Subscription to service 'courseDetailsModalDataService' for receiving PUT/DELETE modal dialog changes
@@ -180,8 +194,7 @@ export class CourseDetailsComponent implements OnInit {
     this.subscription3 = this.filesEditionService.fileGroupDeletedAnnounced$.subscribe(
       fileGroupDeletedId => {
         //fileGroupDeletedId is the id of the FileGroup that has been deleted by the child component (FileGroupComponent)
-        if (this.recursiveFileGroupDeletion(this.course.courseDetails.files, fileGroupDeletedId)){
-          console.log("Succesful local deletion of FileGroup with id " + fileGroupDeletedId);
+        if (this.recursiveFileGroupDeletion(this.course.courseDetails.files, fileGroupDeletedId)) {
           if (this.course.courseDetails.files.length == 0) this.changeModeEdition(); //If there are no fileGroups, mode edit is closed
         }
       });
@@ -201,28 +214,30 @@ export class CourseDetailsComponent implements OnInit {
         }
       });
 
-      this.subscription5 = this.dragulaService.dropModel.subscribe((value) => {
-        this.changeFilesOrder(value);
-      });
+    this.subscription5 = this.dragulaService.dropModel.subscribe((value) => {
+      this.changeFilesOrder(value);
+    });
   }
 
   ngOnInit() {
-    this.route.params.forEach((params: Params) => {
-      let id = +params['id'];
-      this.tabId = +params['tabId'];
-      this.courseService.getCourse(id).subscribe(
-        course => {
-          console.log("Course " + course.id + ":");
-          console.log(course);
-          this.sortSessionsByDate(course.sessions);
-          this.course = course;
-          this.selectedEntry = this.course.courseDetails.forum.entries[0]; //selectedEntry default to first entry
-          if (this.course.sessions.length > 0) this.changeUpdatedSession(this.course.sessions[0]); //updatedSession default to first session
-          this.updateCheckboxForumEdition(this.course.courseDetails.forum.activated);
-          this.welcomeText = this.course.courseDetails.info;
-        },
-        error => console.log(error));
-    });
+    this.authenticationService.checkCredentials()
+      .then(() => {
+        this.route.params.forEach((params: Params) => {
+          let id = +params['id'];
+          this.tabId = +params['tabId'];
+          this.courseService.getCourse(id).subscribe(
+            course => {
+              this.sortSessionsByDate(course.sessions);
+              this.course = course;
+              this.selectedEntry = this.course.courseDetails.forum.entries[0]; //selectedEntry default to first entry
+              if (this.course.sessions.length > 0) this.changeUpdatedSession(this.course.sessions[0]); //updatedSession default to first session
+              this.updateCheckboxForumEdition(this.course.courseDetails.forum.activated);
+              this.welcomeText = this.course.courseDetails.info;
+            },
+            error => { });
+        });
+      })
+      .catch((e) => { });
   }
 
   ngOnDestroy() {
@@ -234,36 +249,37 @@ export class CourseDetailsComponent implements OnInit {
     this.dragulaService.destroy('drag-bag');
   }
 
-  goToSessionVideo(session: Session){
+  goToSessionVideo(session: Session) {
     this.videoSessionService.session = session;
     this.videoSessionService.course = this.course;
     if (this.isSessionReady(session)) this.router.navigate(['/session', session.id]);
   }
 
   updatePostModalMode(mode: number, title: string, header: Entry, commentReplay: Comment, fileGroup: FileGroup) {
+    // mode[0: "New Entry", 1: "New comment", 2: "New session", 3: "New VideoEntry", 4: "New FileGroup", 5: "Add files"]
     let objs = [mode, title, header, commentReplay, fileGroup];
     this.courseDetailsModalDataService.announcePostMode(objs);
   }
 
-  updatePutDeleteModalMode(mode: number, title: string){
+  updatePutDeleteModalMode(mode: number, title: string) {
     let objs = [mode, title];
     this.courseDetailsModalDataService.announcePutdeleteMode(objs);
   }
 
-  getLastEntryComment(entry: Entry){
+  getLastEntryComment(entry: Entry) {
     let comment = entry.comments[0];
-    for (let c of entry.comments){
+    for (let c of entry.comments) {
       if (c.date > comment.date) comment = c;
       comment = this.recursiveReplyDateCheck(comment);
     }
     return comment;
   }
 
-  numberToDate(d: number){
+  numberToDate(d: number) {
     return new Date(d);
   }
 
-  changeUpdatedSession(session: Session){
+  changeUpdatedSession(session: Session) {
     this.updatedSession = session;
     this.updatedSessionDate = (new Date(this.updatedSession.date)).toISOString().split("T")[0]; //YYYY-MM-DD format
     this.inputSessionTitle = this.updatedSession.title;
@@ -272,7 +288,7 @@ export class CourseDetailsComponent implements OnInit {
     this.inputSessionTime = this.dateToTimeInputFormat(this.inputSessionDate);
   }
 
-  changeModeEdition(){
+  changeModeEdition() {
     this.allowFilesEdition = !this.allowFilesEdition;
     if (this.allowFilesEdition) {
       this.filesEditionIcon = "keyboard_arrow_left";
@@ -283,7 +299,7 @@ export class CourseDetailsComponent implements OnInit {
     this.filesEditionService.announceModeEdit(this.allowFilesEdition);
   }
 
-  changeModeAttenders(){
+  changeModeAttenders() {
     this.allowAttendersEdition = !this.allowAttendersEdition;
     if (this.allowAttendersEdition) {
       this.attendersEditionIcon = "keyboard_arrow_left";
@@ -301,26 +317,24 @@ export class CourseDetailsComponent implements OnInit {
     return (possiblePutdeleteModes.indexOf(this.putdeleteModalMode.toString()) > -1);
   }
 
-  updateCheckboxForumEdition(b: boolean){
-    if (b){
+  updateCheckboxForumEdition(b: boolean) {
+    if (b) {
       this.checkboxForumEdition = "DEACTIVATION";
     } else {
       this.checkboxForumEdition = "ACTIVATION";
     }
   }
 
-  filesUploadStarted(event){
-    console.log("Started...");
+  filesUploadStarted(event) {
+    console.log("File upload started...");
   }
 
-  filesUploadCompleted(response){
-    console.log("Finished...");
-    console.log("Items uploaded successfully");
-    console.log(response);
+  filesUploadCompleted(response) {
     let fg = JSON.parse(response) as FileGroup;
-    console.log(fg);
-    for (let i = 0; i < this.course.courseDetails.files.length; i++){
-      if (this.course.courseDetails.files[i].id == fg.id){
+    console.log("File upload completed (items successfully uploadded). Response: ", fg);
+
+    for (let i = 0; i < this.course.courseDetails.files.length; i++) {
+      if (this.course.courseDetails.files[i].id == fg.id) {
         this.course.courseDetails.files[i] = fg;
         this.updatedFileGroup = fg;
         break;
@@ -335,18 +349,15 @@ export class CourseDetailsComponent implements OnInit {
 
     //If modal is opened in "New Entry" mode
     if (this.postModalMode === 0) {
-      console.log("Saving new Entry: Title -> " + this.inputTitle + "  |  Comment -> " + this.inputComment);
-      let e = new Entry(this.inputTitle, [new Comment(this.inputComment, null)]);
+      let e = new Entry(this.inputTitle, [new Comment(this.inputComment, '', false, null)]);
 
       this.forumService.newEntry(e, this.course.courseDetails.id).subscribe( //POST method requires an Entry and the CourseDetails id that contains its Forum
-        response  => {
-          console.log(response);
-          this.course.courseDetails.forum = response; //Only on succesful post we update the modified forum
-
+        response => {
+          this.course.courseDetails.forum.entries.push(response.entry as Entry); //Only on succesful post we update the modified forum
           this.processingPost = false;
-          this.actions2.emit({action:"modal",params:['close']});
+          this.actions2.emit({ action: "modal", params: ['close'] });
         },
-        error => {console.log(error); this.processingPost = false;}
+        error => { this.processingPost = false; }
       );
     }
 
@@ -356,97 +367,125 @@ export class CourseDetailsComponent implements OnInit {
       let hoursMins = this.inputTime.split(":");
       date.setHours(parseInt(hoursMins[0]), parseInt(hoursMins[1]));
       let s = new Session(this.inputTitle, this.inputComment, date.getTime());
-      console.log(s);
       this.sessionService.newSession(s, this.course.id).subscribe(
         response => {
-          console.log(response);
           this.sortSessionsByDate(response.sessions);
           this.course = response;
 
           this.processingPost = false;
-          this.actions2.emit({action:"modal",params:['close']});
+          this.actions2.emit({ action: "modal", params: ['close'] });
         },
-        error => {console.log(error); this.processingPost = false;}
+        error => { this.processingPost = false; }
       );
     }
 
     //If modal is opened in "New Comment" mode (replaying or not replaying)
     else if (this.postModalMode === 1) {
-      let c = new Comment(this.inputComment, this.postModalCommentReplay);
-      console.log(c);
+      let c = new Comment(this.inputComment, '', false, this.postModalCommentReplay);
       this.forumService.newComment(c, this.selectedEntry.id, this.course.courseDetails.id).subscribe(
         response => {
-          console.log(response);
           //Only on succesful post we locally update the created entry
           let ents = this.course.courseDetails.forum.entries;
           for (let i = 0; i < ents.length; i++) {
             if (ents[i].id == this.selectedEntry.id) {
-              this.course.courseDetails.forum.entries[i] = response; //The entry with the required ID is updated
+              this.course.courseDetails.forum.entries[i] = response.entry; //The entry with the required ID is updated
               this.selectedEntry = this.course.courseDetails.forum.entries[i];
               break;
             }
           }
 
           this.processingPost = false;
-          this.actions2.emit({action:"modal",params:['close']});
+          this.actions2.emit({ action: "modal", params: ['close'] });
         },
-        error => {console.log(error); this.processingPost = false;}
+        error => { this.processingPost = false; }
       );
     }
 
     //If modal is opened in "New FileGroup" mode
     else if (this.postModalMode === 4) {
       let f = new FileGroup(this.inputTitle, this.postModalFileGroup);
-      console.log(f);
       this.fileService.newFileGroup(f, this.course.courseDetails.id).subscribe(
         response => {
-          console.log(response);
           //Only on succesful post we locally update the entire course details
           this.course.courseDetails = response;
 
           this.processingPost = false; // Stop the loading animation
-          this.actions2.emit({action:"modal",params:['close']}); // CLose the modal
+          this.actions2.emit({ action: "modal", params: ['close'] }); // CLose the modal
           if (!this.allowFilesEdition) this.changeModeEdition(); // Activate file edition view if deactivated
         },
-        error => {console.log(error); this.processingPost = false;}
+        error => { this.processingPost = false; }
       );
     }
 
-    /*//If modal is opened in "New File" mode
-    else if (this.postModalMode === 5) {
-      let file = new File(1, this.inputTitle, "www.newlink.com");
-      console.log(file);
-      this.fileService.newFile(file, this.postModalFileGroup.id, this.course.courseDetails.id).subscribe(
+    //If modal is opened in "New Videoentry" mode
+    else if (this.postModalMode === 3) {
+      console.log('Sending new videoentry');
+      let e = new Entry(this.inputTitle, [new Comment(this.inputComment, 'new-url', this.recordType === 'audio', null)]);
+      this.forumService.newEntry(e, this.course.courseDetails.id).subscribe( //POST method requires an Entry and the CourseDetails id that contains its Forum
         response => {
-          console.log(response);
-
-          //Only on succesful post we locally update the root filegroup that contains the created file
-          for (let i = 0; i < this.course.courseDetails.files.length; i++) {
-            if (this.course.courseDetails.files[i].id == response.id) {
-              this.course.courseDetails.files[i] = response;
-              break;
-            }
-          }
-          this.actions2.emit({action:"modal",params:['close']});
+          this.recorder.uploadAsMultipartfile(this.URL_UPLOAD + this.course.id + '/comment/' + response.comment.id)
+            .then((responseAsText) => {
+              this.cleanRecording();
+              let comment: Comment = JSON.parse(responseAsText) as Comment;
+              let entry: Entry = response.entry as Entry;
+              let index = entry.comments.map((c) => { return c.id; }).indexOf(response.comment.id);
+              if (index != -1) {
+                entry.comments[index] = comment;
+              }
+              this.course.courseDetails.forum.entries.push(entry); //Only on succesful post we update the modified forum
+              this.processingPost = false;
+              this.actions2.emit({ action: "modal", params: ['close'] });
+            })
+            .catch((e) => { });
         },
-        error => console.log(error)
+        error => { this.processingPost = false; }
       );
-    }*/
+    }
+
+    //If modal is opened in "New Video Comment" mode (replaying or not replaying)
+    else if (this.postModalMode === 6) {
+      let c = new Comment(this.inputComment, 'new-url', this.recordType === 'audio', this.postModalCommentReplay);
+      this.forumService.newComment(c, this.selectedEntry.id, this.course.courseDetails.id).subscribe(
+        response => {
+          this.recorder.uploadAsMultipartfile(this.URL_UPLOAD + this.course.id + '/comment/' + response.comment.id)
+            .then((responseAsText) => {
+              this.cleanRecording();
+              let comment: Comment = JSON.parse(responseAsText) as Comment;
+              let entry: Entry = response.entry as Entry;
+
+              this.replaceComment(entry.comments, comment);
+
+              let ents = this.course.courseDetails.forum.entries;
+              for (let i = 0; i < ents.length; i++) {
+                if (ents[i].id == this.selectedEntry.id) {
+                  this.course.courseDetails.forum.entries[i] = entry; // The entry with the required ID is updated
+                  this.selectedEntry = this.course.courseDetails.forum.entries[i];
+                  break;
+                }
+              }
+
+              this.processingPost = false;
+              this.actions2.emit({ action: "modal", params: ['close'] });
+            })
+            .catch((e) => { });
+        },
+        error => { this.processingPost = false; }
+      );
+    }
   }
 
   //PUT existing Session or Forum
-  onPutDeleteSubmit(){
+  onPutDeleteSubmit() {
 
     this.processingPut = true;
 
     //If modal is opened in PUT existing Session
-    if(this.putdeleteModalMode === 0){
+    if (this.putdeleteModalMode === 0) {
       let modifiedDate: number = this.fromInputToNumberDate(this.updatedSessionDate, this.inputSessionTime);
       let s: Session = new Session(this.inputSessionTitle, this.inputSessionDescription, modifiedDate);
       s.id = this.updatedSession.id; //The new session must have the same id as the modified session in order to replace it
       this.sessionService.editSession(s).subscribe(
         response => {
-          console.log(response);
           //Only on succesful put we locally update the modified session
           for (let i = 0; i < this.course.sessions.length; i++) {
             if (this.course.sessions[i].id == response.id) {
@@ -456,37 +495,34 @@ export class CourseDetailsComponent implements OnInit {
             }
           }
           this.processingPut = false;
-          this.actions3.emit({action:"modal",params:['close']});
+          this.actions3.emit({ action: "modal", params: ['close'] });
         },
-        error => {console.log(error); this.processingPut = false;}
+        error => { this.processingPut = false; }
       );
     }
 
     //If modal is opened in PUT existing Forum
-    else if (this.putdeleteModalMode === 1){
+    else if (this.putdeleteModalMode === 1) {
       this.forumService.editForum(!this.course.courseDetails.forum.activated, this.course.courseDetails.id).subscribe(
         response => {
-          console.log("Forum updated: active = " + response);
           //Only on succesful put we locally update the modified session
           this.course.courseDetails.forum.activated = response;
           this.allowForumEdition = false;
           this.updateCheckboxForumEdition(response);
 
           this.processingPut = false;
-          this.actions3.emit({action:"modal",params:['close']});
+          this.actions3.emit({ action: "modal", params: ['close'] });
         },
-        error => {console.log(error); this.processingPut = false;}
+        error => { this.processingPut = false; }
       );
     }
 
     //If modal is opened in PUT existing FileGroup
-    else if (this.putdeleteModalMode === 2){
+    else if (this.putdeleteModalMode === 2) {
       let fg: FileGroup = new FileGroup(this.inputFileTitle, null);
       fg.id = this.updatedFileGroup.id;
       this.fileService.editFileGroup(fg, this.course.id).subscribe(
         response => {
-          console.log("FileGroup updated");
-          console.log(response);
           for (let i = 0; i < this.course.courseDetails.files.length; i++) {
             if (this.course.courseDetails.files[i].id == response.id) {
               this.course.courseDetails.files[i] = response; //The root fileGroup with the required ID is updated
@@ -496,20 +532,18 @@ export class CourseDetailsComponent implements OnInit {
           }
 
           this.processingPut = false;
-          this.actions3.emit({action:"modal",params:['close']});
+          this.actions3.emit({ action: "modal", params: ['close'] });
         },
-        error => {console.log(error); this.processingPut = false;}
+        error => { this.processingPut = false; }
       );
     }
 
     //If modal is opened in PUT existing File
-    else if (this.putdeleteModalMode === 3){
+    else if (this.putdeleteModalMode === 3) {
       let f: File = new File(1, this.inputFileTitle, "www.newlink.com");
       f.id = this.updatedFile.id;
       this.fileService.editFile(f, this.updatedFileGroup.id, this.course.id).subscribe(
         response => {
-          console.log("File updated");
-          console.log(response);
           for (let i = 0; i < this.course.courseDetails.files.length; i++) {
             if (this.course.courseDetails.files[i].id == response.id) {
               this.course.courseDetails.files[i] = response; //The root fileGroup with the required ID is updated
@@ -519,60 +553,56 @@ export class CourseDetailsComponent implements OnInit {
           }
 
           this.processingPut = false;
-          this.actions3.emit({action:"modal",params:['close']});
+          this.actions3.emit({ action: "modal", params: ['close'] });
         },
-        error => {console.log(error); this.processingPut = false;}
+        error => { this.processingPut = false; }
       );
     }
 
     //If modal is opened in Add attenders
-    else if (this.putdeleteModalMode === 4){
+    else if (this.putdeleteModalMode === 4) {
       //If the attenders are being added in the SIMPLE tab
-      if (this.attenderTabSelected === 0){
+      if (this.attenderTabSelected === 0) {
         console.log("Adding one attender in the SIMPLE tab");
         let arrayNewAttenders = [this.inputAttenderSimple];
         this.courseService.addCourseAttenders(this.course.id, arrayNewAttenders).subscribe(
           response => {
-            console.log("Course attenders modified (one attender added)");
-            console.log(response);
             let newAttenders = response.attendersAdded as User[];
             this.course.attenders = this.course.attenders.concat(newAttenders);
             this.handleAttendersMessage(response);
 
             this.processingPut = false;
-            this.actions3.emit({action:"modal",params:['close']});
+            this.actions3.emit({ action: "modal", params: ['close'] });
           },
-          error => {console.log(error); this.processingPut = false;}
+          error => { this.processingPut = false; }
         );
       }
       //If the attenders are being added in the MULTIPLE tab
-      else if (this.attenderTabSelected === 1){
+      else if (this.attenderTabSelected === 1) {
         console.log("Adding multiple attenders in the MULTIPLE tab");
 
         //The input text is divided into entire words (by whitespaces, new lines and the custom separator)
         let emailsFiltered = this.inputAttenderMultiple.replace('\n', ' ').replace('\r', ' ');
         if (this.inputAttenderSeparator) {
-          let regExSeparator = new RegExp(this.inputAttenderSeparator,'g');
+          let regExSeparator = new RegExp(this.inputAttenderSeparator, 'g');
           emailsFiltered = emailsFiltered.replace(regExSeparator, ' ');
         }
         let arrayNewAttenders = emailsFiltered.split(/\s+/).filter(v => v != '');
 
         this.courseService.addCourseAttenders(this.course.id, arrayNewAttenders).subscribe(
           response => { //response is an object with 4 arrays: attenders added, attenders that were already added, emails invalid and emails not registered
-            console.log("Course attenders modified (multiple attenders added)");
-            console.log(response);
             let newAttenders = response.attendersAdded as User[];
             this.course.attenders = this.course.attenders.concat(newAttenders);
             this.handleAttendersMessage(response);
 
             this.processingPut = false;
-            this.actions3.emit({action:"modal",params:['close']});
+            this.actions3.emit({ action: "modal", params: ['close'] });
           },
-          error => {console.log(error); this.processingPut = false;}
+          error => { this.processingPut = false; }
         );
       }
       //If the attenders are being added in the FILE UPLOAD tab
-      else if (this.attenderTabSelected === 2){
+      else if (this.attenderTabSelected === 2) {
         console.log("Adding attenders by file upload in the FILE UPLOAD tab");
         this.processingPut = false;
       }
@@ -580,13 +610,11 @@ export class CourseDetailsComponent implements OnInit {
   }
 
   //DELETE existing Session
-  deleteSession(){
+  deleteSession() {
     this.processingPut = true;
 
     this.sessionService.deleteSession(this.updatedSession.id).subscribe(
       response => {
-        console.log("Session deleted");
-        console.log(response);
         //Only on succesful put we locally delete the session
         for (let i = 0; i < this.course.sessions.length; i++) {
           if (this.course.sessions[i].id == response.id) {
@@ -597,80 +625,78 @@ export class CourseDetailsComponent implements OnInit {
         }
 
         this.processingPut = false;
-        this.actions3.emit({action:"modal",params:['close']});
+        this.actions3.emit({ action: "modal", params: ['close'] });
       },
-      error => {console.log(error); this.processingPut = false;}
+      error => { this.processingPut = false; }
     );
   }
 
   //Remove attender from course
-  deleteAttender(attender: User, j: number){
+  deleteAttender(attender: User, j: number) {
+    console.log("Deleting attender " + attender.nickName);
+
     this.arrayOfAttDels[j] = true; // Start deleting animation
 
     let c = new Course(this.course.title, this.course.image, this.course.courseDetails);
     c.id = this.course.id;
-    for (let i = 0; i < this.course.attenders.length; i++){
+    for (let i = 0; i < this.course.attenders.length; i++) {
       if (this.course.attenders[i].id !== attender.id) {
         c.attenders.push(new User(this.course.attenders[i])); //Inserting a new User object equal to the attender but "courses" array empty
       }
     }
-    console.log(this.course);
-    console.log(c);
     this.courseService.deleteCourseAttenders(c).subscribe(
       response => {
-        console.log("Course attenders modified (one attender deleted)");
-        console.log(response);
         this.course.attenders = response;
         this.arrayOfAttDels[j] = false;
         if (this.course.attenders.length <= 1) this.changeModeAttenders(); //If there are no attenders, mode edit is closed
       },
-      error => {console.log(error); this.arrayOfAttDels[j] = false;}
+      error => { this.arrayOfAttDels[j] = false; }
     );
   }
 
   //Updates the course info
-  updateCourseInfo(){
+  updateCourseInfo() {
+    console.log("Updating course info");
+
     this.processingCourseInfo = true;
 
     let c: Course = new Course(this.course.title, this.course.image, this.course.courseDetails);
     c.courseDetails.info = this.welcomeText;
     c.id = this.course.id;
-    console.log(c);
-    this.courseService.editCourse(c).subscribe(
+    this.courseService.editCourse(c, "updating course info").subscribe(
       response => {
-        console.log("Course info updated: ");
         //Only on succesful put we locally update the modified course
         this.course = response;
         this.welcomeText = this.course.courseDetails.info;
 
         this.processingCourseInfo = false;
       },
-      error => {console.log(error); this.processingCourseInfo = false;}
+      error => { this.processingCourseInfo = false; }
     )
   }
 
   //Closes the course info editing mode
-  closeUpdateCourseInfo(){
+  closeUpdateCourseInfo() {
     this.welcomeText = this.course.courseDetails.info;
     this.welcomeTextEdition = false;
     this.welcomeTextPreview = false;
     this.previewButton = 'preview';
   }
 
-  changeUrlTab(tab:number){
+  changeUrlTab(tab: number) {
     this.location.replaceState("/courses/" + this.course.id + "/" + tab);
   }
 
-  isEntryTeacher(entry: Entry){
+  isEntryTeacher(entry: Entry) {
     return (entry.user.roles.indexOf('ROLE_TEACHER') > -1);
   }
 
 
-  fileReaderUploadStarted(started: boolean){
+  fileReaderUploadStarted(started: boolean) {
     this.processingPut = started;
   }
 
-  fileReaderUploadCompleted(response){
+  fileReaderUploadCompleted(response) {
     console.log("File uploaded succesfully. Waiting for the system to add all students...  ");
     let objResponse = JSON.parse(response);
     if ("attendersAdded" in objResponse) {
@@ -684,7 +710,7 @@ export class CourseDetailsComponent implements OnInit {
 
       this.processingPut = false; // Stop the loading animation
       this.uploaderModalService.announceUploaderClosed(true); // Clear the uploader file queue
-      this.actions3.emit({action:"modal",params:['close']}); // Close the modal
+      this.actions3.emit({ action: "modal", params: ['close'] }); // Close the modal
     } else {
       this.processingPut = false;
       console.log("There has been an error: " + response);
@@ -692,17 +718,17 @@ export class CourseDetailsComponent implements OnInit {
   }
 
 
-//INTERNAL AUXILIAR METHODS
-//Sorts an array of Session by their 'date' attribute (the first are the erliest)
+  //INTERNAL AUXILIAR METHODS
+  //Sorts an array of Session by their 'date' attribute (the first are the erliest)
   sortSessionsByDate(sessionArray: Session[]): void {
-    sessionArray.sort(function(a,b) {return (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0);} );
+    sessionArray.sort(function (a, b) { return (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0); });
   }
 
   //Transforms a Date object into a single string ("HH:MM")
-  dateToTimeInputFormat(date:Date): string {
+  dateToTimeInputFormat(date: Date): string {
     let hours = date.getHours() < 10 ? "0" + date.getHours().toString() : date.getHours().toString();
     let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes().toString() : date.getMinutes().toString();
-    return(hours + ":" + minutes);
+    return (hours + ":" + minutes);
   }
 
   //Transforms two strings ("YYYY-MM-DD", "HH:MM") into a new Date object
@@ -715,8 +741,8 @@ export class CourseDetailsComponent implements OnInit {
   }
 
   //Returns the earliest Comment (by 'date' attribute) in the recursive structure of comments which has Comment 'c' as root
-  recursiveReplyDateCheck(c: Comment): Comment{
-    for (let r of c.replies){
+  recursiveReplyDateCheck(c: Comment): Comment {
+    for (let r of c.replies) {
       if (r.date > c.date) c = r;
       c = this.recursiveReplyDateCheck(r);
     }
@@ -724,11 +750,10 @@ export class CourseDetailsComponent implements OnInit {
   }
 
   //Delets a fileGroup from this.course.courseDetails.files recursively, given a fileGroup id
-  recursiveFileGroupDeletion(fileGroupLevel: FileGroup[], fileGroupDeletedId: number): boolean{
-    if (fileGroupLevel){
+  recursiveFileGroupDeletion(fileGroupLevel: FileGroup[], fileGroupDeletedId: number): boolean {
+    if (fileGroupLevel) {
       for (let i = 0; i < fileGroupLevel.length; i++) {
-        console.log("ONE STEP IN THE SEARCH");
-        if (fileGroupLevel[i].id == fileGroupDeletedId){
+        if (fileGroupLevel[i].id == fileGroupDeletedId) {
           fileGroupLevel.splice(i, 1);
           return true;
         }
@@ -741,35 +766,35 @@ export class CourseDetailsComponent implements OnInit {
   //Creates an error message when there is some problem when adding Attenders to a Course
   //It also generates a correct feedback message when any student has been correctly added to the Course
   handleAttendersMessage(response) {
-    let isError: boolean = false;
-    let isCorrect: boolean = false;
+    let isError = false;
+    let isCorrect = false;
     this.attErrorContent = "";
     this.attCorrectContent = "";
 
-    if (response.attendersAdded.length > 0){
-      for (let user of response.attendersAdded){
+    if (response.attendersAdded.length > 0) {
+      for (let user of response.attendersAdded) {
         this.attCorrectContent += "<span class='feedback-list'>" + user.name + "</span>";
       }
       isCorrect = true;
     }
-    if (response.attendersAlreadyAdded.length > 0){
+    if (response.attendersAlreadyAdded.length > 0) {
       this.attErrorContent += "<span class='feedback-span'>The following users were already added to the course</span>";
-      for (let user of response.attendersAlreadyAdded){
+      for (let user of response.attendersAlreadyAdded) {
         this.attErrorContent += "<span class='feedback-list'>" + user.name + "</span>";
       }
       isError = true;
     }
-    if (response.emailsValidNotRegistered.length > 0){
+    if (response.emailsValidNotRegistered.length > 0) {
       this.attErrorContent += "<span class='feedback-span'>The following users are not registered</span>";
-      for (let email of response.emailsValidNotRegistered){
+      for (let email of response.emailsValidNotRegistered) {
         this.attErrorContent += "<span class='feedback-list'>" + email + "</span>";
       }
       isError = true;
     }
-    if (response.emailsInvalid){
-      if (response.emailsInvalid.length > 0){
+    if (response.emailsInvalid) {
+      if (response.emailsInvalid.length > 0) {
         this.attErrorContent += "<span class='feedback-span'>These are not valid emails</span>";
-        for (let email of response.emailsInvalid){
+        for (let email of response.emailsInvalid) {
           this.attErrorContent += "<span class='feedback-list'>" + email + "</span>";
         }
         isError = true;
@@ -778,7 +803,7 @@ export class CourseDetailsComponent implements OnInit {
     if (isError) {
       this.attErrorTitle = "There have been some problems";
       this.addAttendersError = true;
-    } else if(response.attendersAdded.length == 0){
+    } else if (response.attendersAdded.length == 0) {
       this.attErrorTitle = "No emails there!";
       this.addAttendersError = true;
     }
@@ -788,33 +813,30 @@ export class CourseDetailsComponent implements OnInit {
     }
   }
 
-  changeFilesOrder(dragAndDropArray){
+  changeFilesOrder(dragAndDropArray) {
     const [bagName, el, target, source] = dragAndDropArray;
     let fileMoved = el.dataset.id;
     let fileGroupSource = source.dataset.id;
     let fileGroupTarget = target.dataset.id;
-    console.log(this.course.courseDetails.files);
     let fileNewPosition: number = this.getFilePosition(fileMoved, fileGroupTarget);
     this.fileService.editFileOrder(fileMoved, fileGroupSource, fileGroupTarget, fileNewPosition, this.course.id).subscribe(
       response => {
-        console.log("Order of files updated");
-        console.log(response);
         this.course.courseDetails.files = response;
       },
-      error => console.log(error)
+      error => { }
     );
   }
 
-  getFilePosition(fileMoved: number, fileGroupTarget: number): number{
+  getFilePosition(fileMoved: number, fileGroupTarget: number): number {
     let fileGroupFound: FileGroup = null;
     let i = 0;
-    while (!fileGroupFound && i < this.course.courseDetails.files.length){
+    while (!fileGroupFound && i < this.course.courseDetails.files.length) {
       fileGroupFound = this.findFileGroup(fileGroupTarget, this.course.courseDetails.files[i]);
       i++;
     }
-    if (fileGroupFound){
-      for (let j = 0; j < fileGroupFound.files.length; j++){
-        if (fileGroupFound.files[j].id == fileMoved){
+    if (fileGroupFound) {
+      for (let j = 0; j < fileGroupFound.files.length; j++) {
+        if (fileGroupFound.files[j].id == fileMoved) {
           return j;
         }
       }
@@ -824,28 +846,204 @@ export class CourseDetailsComponent implements OnInit {
 
 
   findFileGroup(id: number, currentFileGroup: FileGroup): FileGroup {
-      let i: number;
-      let currentChildFileGroup: FileGroup;
-      let result: FileGroup;
+    let i: number;
+    let currentChildFileGroup: FileGroup;
+    let result: FileGroup;
 
-      if (id == currentFileGroup.id) {
-          return currentFileGroup;
-      } else {
-          for (i = 0; i < currentFileGroup.fileGroups.length; i++) {
-              currentChildFileGroup = currentFileGroup.fileGroups[i];
-              result = this.findFileGroup(id, currentChildFileGroup);
-              if (result !== null) {
-                  return result;
-              }
-          }
-          return null;
+    if (id == currentFileGroup.id) {
+      return currentFileGroup;
+    } else {
+      for (i = 0; i < currentFileGroup.fileGroups.length; i++) {
+        currentChildFileGroup = currentFileGroup.fileGroups[i];
+        result = this.findFileGroup(id, currentChildFileGroup);
+        if (result !== null) {
+          return result;
+        }
       }
+      return null;
+    }
   }
 
-    isSessionReady(session: Session){
-      let d = new Date();
-      //return (d.toDateString() === this.numberToDate(session.date).toDateString());
-      return true;
+  isSessionReady(session: Session) {
+    let d = new Date();
+    //return (d.toDateString() === this.numberToDate(session.date).toDateString());
+    return true;
+  }
+
+  recordVideo(publisherOptions: any) {
+    this.recordRadioEnabled = false;
+    this.OV = new OpenVidu();
+    this.publisher = this.OV.initPublisher(
+      'post-video',
+      publisherOptions,
+      (err) => {
+        if (err) {
+          this.publisherErrorMessage = err.message;
+          console.warn(err);
+          if (err.name === 'SCREEN_EXTENSION_NOT_INSTALLED') {
+            this.publisherErrorMessage = 'In Chrome you need an extension installed to share your screen. Go to <a href="' + err.message + '">this link</a> to install the extension. YOU MUST REFRESH THE PAGE AFTER INSTALLING IT'
+          }
+        }
+      }
+    );
+    this.publisher.on('videoElementCreated', (e: VideoElementEvent) => {
+      if (publisherOptions.audio && !publisherOptions.video) {
+        $(e.element).css({ 'background-color': '#4d4d4d', 'padding': '50px' });
+        $(e.element).attr('poster', 'assets/images/volume.png');
+      }
+    })
+    this.publisher.on('videoPlaying', (e: VideoElementEvent) => {
+      this.recordRadioEnabled = true;
+      this.addRecordingControls(e.element);
+    });
+  }
+
+  startStopRecording() {
+    if (!this.recording) {
+      this.recorder = new LocalRecorder(this.publisher.stream);
+      this.recorder.record();
+      document.getElementById('record-start-stop').innerHTML = 'Finish';
+      document.getElementById('record-pause-resume').style.display = 'inline-block';
+    } else {
+      this.recorder.stop()
+        .then(() => {
+          document.getElementById('post-video').getElementsByTagName('video')[0].style.display = 'none';
+          this.removeRecordingControls();
+          let recordingPreview: HTMLVideoElement = this.recorder.preview('post-video');
+          recordingPreview.controls = true;
+          this.addPostRecordingControls(recordingPreview);
+        })
+        .catch((e) => { });
     }
+    this.recording = !this.recording;
+  }
+
+  pauseResumeRecording() {
+    if (!this.paused) {
+      this.recorder.pause();
+      document.getElementById('record-pause-resume').innerHTML = 'Resume';
+      document.getElementById('post-video').getElementsByTagName('video')[0].pause();
+    } else {
+      this.recorder.resume();
+      document.getElementById('record-pause-resume').innerHTML = 'Pause';
+      document.getElementById('post-video').getElementsByTagName('video')[0].play();
+    }
+    this.paused = !this.paused;
+  }
+
+  recordRadioChange(event) {
+    this.cleanRecording();
+    this.recordType = event.target.value;
+    this.recordVideo(this.getPublisherOptions(this.recordType));
+  }
+
+  cleanRecording() {
+    if (!!this.recorder) this.recorder.clean();
+    delete this.publisher;
+    this.recordRadioEnabled = true;
+    this.publisherErrorMessage = '';
+    this.recordType = 'video';
+    this.removeRecordingControls();
+    this.removePostRecordingControls();
+    let el = document.getElementById('post-video');
+    if (!!el) {
+      el = el.getElementsByTagName('video')[0];
+      if (!!el) {
+        el.outerHTML = '';
+      }
+    }
+    this.recording = false;
+    this.paused = false;
+  }
+
+  repeatRecording(type: string) {
+    this.cleanRecording();
+    this.recordType = type;
+    this.recordVideo(this.getPublisherOptions(type));
+  }
+
+  getPublisherOptions(option: string): any {
+    let options = {};
+    switch (option) {
+      case 'video':
+        options = {
+          audio: true,
+          video: true,
+          quality: 'MEDIUM'
+        }
+        break;
+      case 'audio':
+        options = {
+          audio: true,
+          video: false
+        }
+        break;
+      case 'screen':
+        options = {
+          audio: true,
+          video: true,
+          quality: 'MEDIUM',
+          screen: true
+        }
+        break;
+    }
+    return options;
+  }
+
+  private addRecordingControls(videoElement: HTMLVideoElement): void {
+    const dataNode = document.createElement('div');
+    dataNode.id = 'recording-controls';
+    dataNode.innerHTML =
+      '<a id="record-start-stop" class="btn waves-effect button-small button-small-margin" title="Start/End recording">Start</a>' +
+      '<a id="record-pause-resume" class="btn waves-effect button-small button-small-margin" title="Pause/Resume recording" style="display: none">Pause</a>' +
+      '<a id="record-cancel" class="btn waves-effect button-small button-small-margin" title="Cancel recording">Cancel</a>';
+    videoElement.parentNode.insertBefore(dataNode, videoElement.nextSibling);
+    document.getElementById('record-start-stop').addEventListener('click', this.startStopRecording.bind(this));
+    document.getElementById('record-pause-resume').addEventListener('click', this.pauseResumeRecording.bind(this));
+    document.getElementById('record-cancel').addEventListener('click', this.cleanRecording.bind(this));
+  }
+
+  private removeRecordingControls() {
+    let el = document.getElementById('recording-controls');
+    if (!!el) {
+      el.outerHTML = '';
+    }
+  }
+
+  private addPostRecordingControls(videoElement: HTMLVideoElement): void {
+    const dataNode = document.createElement('div');
+    dataNode.id = 'recording-post-controls';
+    dataNode.innerHTML =
+      '<a id="record-post-repeat" class="btn waves-effect button-small button-small-margin" title="Repeat recording">Repeat</a>' +
+      '<button id="record-post-send" class="btn waves-effect button-small button-small-margin" title="Send entry" type="submit">Send</button>';
+    videoElement.parentNode.insertBefore(dataNode, videoElement.nextSibling);
+    let recordTypeAux = this.recordType;
+    document.getElementById('record-post-repeat').addEventListener('click', this.repeatRecording.bind(this, recordTypeAux));
+  }
+
+  private removePostRecordingControls() {
+    let el = document.getElementById('recording-post-controls');
+    if (!!el) {
+      el.outerHTML = '';
+    }
+  }
+
+  private replaceComment(comments, newComment): boolean {
+    let rep = false;
+    for (let i = 0; i < comments.length; i++) {
+      if (comments[i].id === newComment.id) {
+        comments[i] = newComment;
+        return true;
+      }
+      if (comments[i].replies.length > 0) {
+        let replaced = this.replaceComment(comments[i].replies, newComment);
+        if (replaced) {
+          rep = true;
+          break;
+        }
+      }
+    }
+    return rep;
+  }
 
 }

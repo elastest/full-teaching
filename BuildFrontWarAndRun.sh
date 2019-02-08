@@ -1,6 +1,6 @@
 #!/bin/sh
-cd angular-cli-project
-ng build --output-path ./../spring/backend/src/main/resources/static
-cd ../spring/backend
+cd src/main/angular
+ng build --output-path ../resources/static
+cd ../../../
 mvn -DskipTests=true clean package
-java -jar target/full-teaching-0.5-SNAPSHOT.war
+java -jar target/full-teaching-1.0.0.war
