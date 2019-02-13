@@ -6,7 +6,8 @@ import { NgModule, DebugElement }      from '@angular/core';
 import { FormsModule }   from '@angular/forms';
 import { HttpModule }    from '@angular/http';
 
-import { Observable }    from 'rxjs';
+import { Observable, of }    from 'rxjs';
+
 import {} from 'jasmine';
 
 import { routing } from '../app.routing';
@@ -15,7 +16,37 @@ import { MaterializeModule }   from 'angular2-materialize';
 import { FileSelectDirective } from 'ng2-file-upload';
 import { FileDropDirective }   from 'ng2-file-upload';
 
-import { MaterialModule } from '@angular/material';
+import { MatCommonModule, MatRippleModule } from '@angular/material/core';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioButton } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTabsModule } from '@angular/material';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatExpansionPanel } from '@angular/material';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatStepperModule } from '@angular/material/stepper';
 
 import { NavbarComponent }        from '../components/navbar/navbar.component';
 import { FooterComponent }        from '../components/footer/footer.component';
@@ -43,17 +74,50 @@ import { UploaderModalService }   from '../services/uploader-modal.service';
 import { UserService }            from '../services/user.service';
 import { AnimationService }       from '../services/animation.service';
 
-import { CalendarModule }         from 'angular-calendar';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalendarComponent }      from '../components/calendar/calendar.component';
 import { TimeAgoPipe }            from 'time-ago-pipe';
 import { DragulaModule }          from 'ng2-dragula/ng2-dragula';
 import { EditorModule }           from 'primeng/components/editor/editor';
 import { ReCaptchaModule }        from 'angular2-recaptcha';
 
+const MATERIAL_MODULES = [
+MatAutocompleteModule,
+MatButtonModule,
+MatButtonToggleModule,
+MatCardModule,
+MatChipsModule,
+MatCheckboxModule,
+MatDatepickerModule,
+MatTableModule,
+MatDialogModule,
+MatFormFieldModule,
+MatGridListModule,
+MatIconModule,
+MatInputModule,
+MatListModule,
+MatMenuModule,
+MatPaginatorModule,
+MatProgressBarModule,
+MatProgressSpinnerModule,
+MatRippleModule,
+MatSelectModule,
+MatSidenavModule,
+MatSliderModule,
+MatSlideToggleModule,
+MatSnackBarModule,
+MatSortModule,
+MatStepperModule,
+MatTabsModule,
+MatToolbarModule,
+MatTooltipModule,
+MatCommonModule,
+];
 
 class MockAuthenticationService extends AuthenticationService {
   login(email, pass) {
-    return Observable.of(true);
+    return of(true);
   }
 }
 
@@ -91,9 +155,12 @@ describe('NavbarComponent Test', () => {
         FormsModule,
         HttpModule,
         MaterializeModule,
-        MaterialModule.forRoot(),
+        MATERIAL_MODULES,
         RouterTestingModule,
-        CalendarModule.forRoot(),
+        CalendarModule.forRoot({
+          provide: DateAdapter,
+          useFactory: adapterFactory
+        }),
         DragulaModule,
         EditorModule,
         ReCaptchaModule,

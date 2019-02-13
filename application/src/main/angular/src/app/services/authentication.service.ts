@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
+import { map, catchError } from 'rxjs/operators';
 
 import { User } from '../classes/user';
 
@@ -28,19 +28,19 @@ export class AuthenticationService {
     });
     let options = new RequestOptions({ headers });
 
-    return this.http.get(this.urlLogIn, options)
-      .map(response => {
+    return this.http.get(this.urlLogIn, options).pipe(
+      map(response => {
         this.processLogInResponse(response);
         return this.user;
-      })
-      .catch(error => Observable.throw(error));
+      }),
+      catchError(error => Observable.throw(error)));
   }
 
   logOut() {
 
     console.log("Logging out...");
 
-    return this.http.get(this.urlLogOut).map(
+    return this.http.get(this.urlLogOut).pipe(map(
       response => {
 
         console.log("Logout succesful!");
@@ -55,8 +55,8 @@ export class AuthenticationService {
         this.router.navigate(['']);
 
         return response;
-      })
-      .catch(error => Observable.throw(error));
+      }),
+      catchError(error => Observable.throw(error)));
   }
 
   private processLogInResponse(response) {

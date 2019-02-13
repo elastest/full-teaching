@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
+import { map, catchError } from "rxjs/operators";
 
 import { Session } from '../classes/session';
 import { Course } from '../classes/course';
@@ -20,11 +21,11 @@ export class VideoSessionService {
     console.log("Getting OpenVidu sessionId and token for lesson '" + mySessionId + "'");
 
     return this.http.get(this.urlSessions + "/get-sessionid-token/" + mySessionId)
-      .map(response => {
+      .pipe(map(response => {
         console.log("OpenVidu sessionId and token retrieval SUCCESS. Response: ", response);
         return (response.json());
-      })
-      .catch(error => this.handleError("ERROR getting OpenVidu sessionId and token: ", error));
+      }),
+      catchError(error => this.handleError("ERROR getting OpenVidu sessionId and token: ", error)));
   }
 
   removeUser(sessionName) {
@@ -36,11 +37,12 @@ export class VideoSessionService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers });
     return this.http.post(this.urlSessions + "/remove-user", jsonBody, options)
-      .map(response => {
+      .pipe(map(response => {
         console.log("User removed from session succesfully. Response: ", response.text());
         return (response.text());
-      })
-      .catch(error => this.handleError("ERROR removing user from session: ", error));
+      }),
+      catchError(error => this.handleError("ERROR removing user from session: ", error)));
+
   }
 
   private handleError(message: string, error: any) {

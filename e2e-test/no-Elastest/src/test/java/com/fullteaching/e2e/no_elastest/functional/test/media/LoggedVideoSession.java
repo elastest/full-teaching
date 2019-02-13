@@ -63,7 +63,7 @@ import com.fullteaching.e2e.no_elastest.utils.SetUp;
 import com.fullteaching.e2e.no_elastest.utils.UserLoader;
 import com.fullteaching.e2e.no_elastest.utils.Wait;
 
-import io.github.bonigarcia.DriverCapabilities;
+import io.github.bonigarcia.seljup.DriverCapabilities;
 
 @RunWith(Parameterized.class)
 public class LoggedVideoSession {

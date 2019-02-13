@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONException;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockMultipartFile;
@@ -28,9 +29,9 @@ import com.fullteaching.backend.filegroup.FileGroup;
 import com.google.gson.Gson;
 
 public class FileTestUtils {
-	
-	private static String newFile_uri="/api-files/";//{courseDetails_id}
-	private static String upload_uri="/api-load-files/upload/course/{courseId}/file-group/";//{fileGroupId}
+
+	protected static String newFile_uri="/api-files/";//{courseDetails_id}
+	protected static String upload_uri="/api-load-files/upload/course/{courseId}/file-group/";//{fileGroupId}
 	
 	private static MockMultipartFile firstFile = new MockMultipartFile("data", "filename.txt", "text/plain", "some xml".getBytes());
 	private static MockMultipartFile secondFile = new MockMultipartFile("data", "other.txt", "text/plain", "some other xml".getBytes());
@@ -64,7 +65,7 @@ public class FileTestUtils {
 	public static FileGroup uploadTestFile(MockMvc mvc, HttpSession httpSession, FileGroup fg, Course c, MockMultipartFile file) {
 		
 		try {
-			MvcResult result =  mvc.perform(MockMvcRequestBuilders.fileUpload(upload_uri.replace("{courseId}",""+c.getId())+fg.getId())
+			MvcResult result =  mvc.perform(MockMvcRequestBuilders.multipart(upload_uri.replace("{courseId}", "" + c.getId()) + fg.getId())
 	                .file(file)
 	                .session((MockHttpSession) httpSession)
 	                ).andReturn();
@@ -88,7 +89,7 @@ public class FileTestUtils {
 		return uploadTestFile(mvc,httpSession,fg,c,secondFile);
 	}
 	
-	public static FileGroup json2FileGroup(String json) throws JsonParseException, JsonMappingException, IOException {
+	public static FileGroup json2FileGroup(String json) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		json = json.replaceAll("\"" + "fileExtension" + "\"[ ]*:[^,}\\]]*[,]?", "");
 		json = json.replaceAll(",}","}");
@@ -122,7 +123,7 @@ public class FileTestUtils {
 		
 	}
 	
-	public static List<FileGroup> json2fileGroupList(String json) throws JsonParseException, JsonMappingException, IOException{
+	public static List<FileGroup> json2fileGroupList(String json) throws JsonParseException, JsonMappingException, JSONException, IOException{
 		json = json.replaceAll("\"" + "fileExtension" + "\"[ ]*:[^,}\\]]*[,]?", "");
 		json = json.replaceAll(",}","}");
 		

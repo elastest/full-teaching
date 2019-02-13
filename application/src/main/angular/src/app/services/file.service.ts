@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response, BrowserXhr } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map, catchError } from "rxjs/operators";
 
 import * as FileSaver from "file-saver";
 
@@ -29,11 +30,11 @@ export class FileService {
     let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.post(this.url + "/" + courseDetailsId, body, options)
-      .map(response => {
+      .pipe(map(response => {
         console.log("POST new filegroup SUCCESS. Response: ", (response.json() as CourseDetails));
         return (response.json() as CourseDetails);
-      })
-      .catch(error => this.handleError("POST new filegroup FAIL. Response: ", error));
+      }),
+      catchError(error => this.handleError("POST new filegroup FAIL. Response: ", error)));
   }
 
   //DELETE existing FileGroup. Requires the fileGroup id and its course's id
@@ -44,11 +45,11 @@ export class FileService {
     let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.delete(this.url + "/delete/file-group/" + fileGroupId + "/course/" + courseId, options)
-      .map(response => {
+      .pipe(map(response => {
         console.log("DELETE filegroup SUCCESS");
         return (response.json() as FileGroup);
-      })
-      .catch(error => this.handleError("DELETE filegroup FAIL. Response: ", error));
+      }),
+      catchError(error => this.handleError("DELETE filegroup FAIL. Response: ", error)));
   }
 
   //DELETE existing File. Requires the file id, the fileGroup id that owns it and their course's id
@@ -59,11 +60,11 @@ export class FileService {
     let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.delete(this.url + "/delete/file/" + fileId + "/file-group/" + fileGroupId + "/course/" + courseId, options)
-      .map(response => {
+      .pipe(map(response => {
         console.log("DELETE file SUCCESS");
         return (response.json() as File);
-      })
-      .catch(error => this.handleError("DELETE file FAIL. Response: ", error));
+      }),
+      catchError(error => this.handleError("DELETE file FAIL. Response: ", error)));
   }
 
   //PUT existing FileGroup. Requires the modified FileGroup and the course id
@@ -74,11 +75,11 @@ export class FileService {
     let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.put(this.url + "/edit/file-group/course/" + courseId, body, options)
-      .map(response => {
+      .pipe(map(response => {
         console.log("PUT existing filegroup SUCCESS. Response: ", (response.json() as FileGroup));
         return (response.json() as FileGroup);
-      })
-      .catch(error => this.handleError("PUT existing filegroup FAIL. Response: ", error));
+      }),
+      catchError(error => this.handleError("PUT existing filegroup FAIL. Response: ", error)));
   }
 
   //PUT 2 FileGroups. Requires the id of the file moved, the ids of the source and the target FileGroups, the id of the Course and the position of the file in the target FileGroup
@@ -89,11 +90,11 @@ export class FileService {
     let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.put(this.url + "/edit/file-order/course/" + courseId + "/file/" + fileMovedId + "/from/" + fileGroupSourceId + "/to/" + fileGroupTargetId + "/pos/" + filePosition, options)
-      .map(response => {
+      .pipe(map(response => {
         console.log("PUT existing filegroups SUCCESS (edit file order). Response: ", (response.json() as FileGroup[]));
         return (response.json() as FileGroup[]);
-      })
-      .catch(error => this.handleError("PUT existing filegroups FAIL (edit file order). Response: ", error));
+      }),
+      catchError(error => this.handleError("PUT existing filegroups FAIL (edit file order). Response: ", error)));
   }
 
   //PUT existing File. Requires the modified File and the course id
@@ -105,11 +106,11 @@ export class FileService {
     let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.put(this.url + "/edit/file/file-group/" + fileGroupId + "/course/" + courseId, body, options)
-      .map(response => {
+      .pipe(map(response => {
         console.log("PUT existing file SUCCESS. Response: ", (response.json() as FileGroup));
         return (response.json() as FileGroup);
-      })
-      .catch(error => this.handleError("PUT existing filegroup FAIL. Response: ", error));
+      }),
+      catchError(error => this.handleError("PUT existing filegroup FAIL. Response: ", error)));
   }
 
   public downloadFile(courseId: number, file: File) {

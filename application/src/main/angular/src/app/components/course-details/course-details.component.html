@@ -158,10 +158,10 @@
           </div>
 
           <div *ngIf="isCurrentPutdeleteMode(['4'])" id="tabs-attenders" class="row no-margin">
-            <md-tab-group [(selectedIndex)]="this.attenderTabSelected">
-              <md-tab>
-                <template md-tab-label><div class="md-tab-label-aux waves-effect">SIMPLE</div></template>
-                <template md-tab-content>
+            <mat-tab-group [(selectedIndex)]="this.attenderTabSelected">
+              <mat-tab>
+                <template mat-tab-label><div class="mat-tab-label-aux waves-effect">SIMPLE</div></template>
+                <template mat-tab-content>
                   <div class="row no-margin att-row-padding">
                     <div class="input-field col s12">
                       <input [(ngModel)]="inputAttenderSimple" name="inputAttenderSimple" id="input-attender-simple" type="email" class="validate" required>
@@ -169,10 +169,10 @@
                     </div>
                   </div>
                 </template>
-              </md-tab>
-              <md-tab>
-                <template md-tab-label><div class="md-tab-label-aux waves-effect">MULTIPLE</div></template>
-                <template md-tab-content>
+              </mat-tab>
+              <mat-tab>
+                <template mat-tab-label><div class="mat-tab-label-aux waves-effect">MULTIPLE</div></template>
+                <template mat-tab-content>
                   <div class="row no-margin att-row-padding">
                     <i materialize="tooltip" class="material-icons tooltipped att-info-tooltip" data-position="right" data-delay="65" data-html="true" data-tooltip="<p class='att-tooltip-text'>We always separate by <b>WHITE SPACES</b><br>and <b>NEW LINES</b>. If there's any other<br>combination of characters that should<br>be taken into account as separator,<br>include it here</p>">info</i>
                     <div class="input-field col l4 m4 s6">
@@ -185,10 +185,10 @@
                     </div>
                   </div>
                 </template>
-              </md-tab>
-              <md-tab>
-                <template md-tab-label><div class="md-tab-label-aux waves-effect">FILE UPLOAD</div></template>
-                <template md-tab-content>
+              </mat-tab>
+              <mat-tab>
+                <template mat-tab-label><div class="mat-tab-label-aux waves-effect">FILE UPLOAD</div></template>
+                <template mat-tab-content>
                   <i id="tooltip-file" materialize="tooltip" class="material-icons tooltipped att-info-tooltip" data-position="right" data-delay="65" data-html="true" data-tooltip="<p class='att-tooltip-text'>We will automatically find and add<br>to the course all the <b>EMAILS</b> in the file</p>">info</i>
                   <div class="row no-margin att-row-padding">
 
@@ -196,8 +196,8 @@
 
                   </div>
                 </template>
-              </md-tab>
-            </md-tab-group>
+              </mat-tab>
+            </mat-tab-group>
           </div>
 
           <div class="row no-margin-bottom right-align">
@@ -228,11 +228,11 @@
 
   <!--TABS-->
   <div id="tabs-course-details" class="row">
-    <md-tab-group [selectedIndex]="this.tabId">
+    <mat-tab-group [selectedIndex]="this.tabId">
 
-      <md-tab><!--Course Info Tab-->
-        <template md-tab-label><div class="md-tab-label-aux waves-effect" (click)="changeUrlTab(0)"><i id="info-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Course info">home</i></div></template>
-        <template md-tab-content>
+      <mat-tab><!--Course Info Tab-->
+        <template mat-tab-label><div class="mat-tab-label-aux waves-effect" (click)="changeUrlTab(0)"><i id="info-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Course info">home</i></div></template>
+        <template mat-tab-content>
 
             <div *ngIf="processingCourseInfo" class="loading"></div>
 
@@ -255,11 +255,11 @@
               <div *ngIf="!this.course.courseDetails.info && !this.welcomeTextEdition"><app-error-message [errorTitle]="'There is no info yet'" [errorContent]="''" [customClass]="'warning'" [closable]="false"></app-error-message></div>
             </div>
           </template>
-      </md-tab>
+      </mat-tab>
 
-      <md-tab><!--Sessions Tab-->
-        <template md-tab-label><div class="md-tab-label-aux waves-effect" (click)="changeUrlTab(1)"><i id="sessions-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Sessions">school</i></div></template>
-        <template md-tab-content>
+      <mat-tab><!--Sessions Tab-->
+        <template mat-tab-label><div class="mat-tab-label-aux waves-effect" (click)="changeUrlTab(1)"><i id="sessions-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Sessions">school</i></div></template>
+        <template mat-tab-content>
             <div class="tab-template-content">
               <div class="row no-margin">
                 <a href="#course-details-modal" *ngIf="this.authenticationService.isTeacher()" (click)="updatePostModalMode(2, 'New session', null, null, null); this.animationService.animateIfSmall()" class="right" [title]="'New session'">
@@ -290,11 +290,11 @@
             <div *ngIf="this.course.sessions.length === 0"><app-error-message [errorTitle]="'There are no sessions'" [errorContent]="''" [customClass]="'warning'" [closable]="false"></app-error-message></div>
             </div>
           </template>
-      </md-tab>
+      </mat-tab>
 
-      <md-tab><!--Forum Tab-->
-        <template md-tab-label><div class="md-tab-label-aux waves-effect" (click)="changeUrlTab(2)"><i id="forum-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Forum">forum</i></div></template>
-        <template md-tab-content>
+      <mat-tab><!--Forum Tab-->
+        <template mat-tab-label><div class="mat-tab-label-aux waves-effect" (click)="changeUrlTab(2)"><i id="forum-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Forum">forum</i></div></template>
+        <template mat-tab-content>
           <div class="tab-template-content row no-margin" [class.tab-template-content-2]="!this.course.courseDetails?.forum.activated || !this.course.courseDetails?.forum.entries.length > 0">
 
             <!--Forum view-->
@@ -372,11 +372,11 @@
             <div *ngIf="this.course.courseDetails?.forum.activated && this.course.courseDetails?.forum.entries.length === 0"><app-error-message [errorTitle]="'There are no entries yet'" [errorContent]="'Be the first one! Just click on the icon above'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
           </div>
         </template>
-      </md-tab>
+      </mat-tab>
 
-      <md-tab><!--Files Tab-->
-        <template md-tab-label><div class="md-tab-label-aux waves-effect" (click)="changeUrlTab(3)"><i id="files-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Files">description</i></div></template>
-        <template md-tab-content>
+      <mat-tab><!--Files Tab-->
+        <template mat-tab-label><div class="mat-tab-label-aux waves-effect" (click)="changeUrlTab(3)"><i id="files-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Files">description</i></div></template>
+        <template mat-tab-content>
           <div class="tab-template-content row no-margin">
             <div *ngIf="this.authenticationService.isTeacher()" class="row no-margin">
               <a href="#course-details-modal" *ngIf="!allowFilesEdition" (click)="updatePostModalMode(4, 'New file group', null, null, null); this.animationService.animateIfSmall()" class="right" [title]="'New file group'">
@@ -391,11 +391,11 @@
             <div *ngIf="this.course.courseDetails?.files.length === 0"><app-error-message [errorTitle]="'There are no files associated'" [errorContent]="'Need something? Just open an entry on the forum'" [customClass]="'warning'" [closable]="false"></app-error-message></div>
           </div>
         </template>
-      </md-tab>
+      </mat-tab>
 
-      <md-tab><!--Attenders Tab-->
-        <template md-tab-label><div class="md-tab-label-aux waves-effect" (click)="changeUrlTab(4)"><i id="attenders-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Attenders">supervisor_account</i></div></template>
-        <template md-tab-content>
+      <mat-tab><!--Attenders Tab-->
+        <template mat-tab-label><div class="mat-tab-label-aux waves-effect" (click)="changeUrlTab(4)"><i id="attenders-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Attenders">supervisor_account</i></div></template>
+        <template mat-tab-content>
           <div class="tab-template-content">
             <div *ngIf="this.authenticationService.isTeacher()" class="row no-margin">
               <a  href="#put-delete-modal" *ngIf="!this.allowAttendersEdition" (click)="updatePutDeleteModalMode(4, 'Add attenders'); this.animationService.animateIfSmall()" class="right" [title]="'Add attenders'">
@@ -436,9 +436,9 @@
             </div>
         </div>
         </template>
-      </md-tab>
+      </mat-tab>
 
-    </md-tab-group>
+    </mat-tab-group>
   </div>
   <!--TABS-->
 

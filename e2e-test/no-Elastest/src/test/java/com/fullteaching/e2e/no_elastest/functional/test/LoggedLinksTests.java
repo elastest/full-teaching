@@ -100,7 +100,7 @@ abstract public class LoggedLinksTests{
 		List<String> failed_links = new ArrayList<String>();
 		System.out.println(user+" tested "+explored.size()+" urls");
 		explored.forEach((link,result) -> {
-				System.out.println("\t"+link+" => "+result);
+				log.debug("\t"+link+" => "+result);
 				if (result.equals("KO")) {
 					failed_links.add(link);				
 				}			

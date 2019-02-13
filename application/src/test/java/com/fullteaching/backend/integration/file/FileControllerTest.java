@@ -50,7 +50,7 @@ public class FileControllerTest extends AbstractLoggedControllerUnitTest {
 		
 		
 		try {
-			MvcResult result =  mvc.perform(MockMvcRequestBuilders.fileUpload(upload_uri.replace("{courseId}",""+c.getId())+fg.getId())
+			MvcResult result =  mvc.perform(MockMvcRequestBuilders.multipart(upload_uri.replace("{courseId}",""+c.getId())+fg.getId())
 	                .file(firstFile)
 	                .session((MockHttpSession) httpSession)
 	                ).andReturn();
@@ -71,7 +71,7 @@ public class FileControllerTest extends AbstractLoggedControllerUnitTest {
 		}
 		//test secondFile
 		try {
-			MvcResult result =  mvc.perform(MockMvcRequestBuilders.fileUpload(upload_uri.replace("{courseId}",""+c.getId())+fg.getId())
+			MvcResult result =  mvc.perform(MockMvcRequestBuilders.multipart(upload_uri.replace("{courseId}",""+c.getId())+fg.getId())
 	                .file(secondFile)
 	                .session((MockHttpSession) httpSession)
 	                ).andReturn();
@@ -93,7 +93,7 @@ public class FileControllerTest extends AbstractLoggedControllerUnitTest {
 		
 		//BAD_REQUEST
 		try {
-			MvcResult result =  mvc.perform(MockMvcRequestBuilders.fileUpload(upload_uri.replace("{courseId}",""+c.getId())+"not_a_long")
+			MvcResult result =  mvc.perform(MockMvcRequestBuilders.multipart(upload_uri.replace("{courseId}",""+c.getId())+"not_a_long")
 	                .file(firstFile)
 	                .session((MockHttpSession) httpSession)
 	                ).andReturn();
@@ -112,7 +112,7 @@ public class FileControllerTest extends AbstractLoggedControllerUnitTest {
 		
 		//UNAUTHORIZED
 		try {
-			MvcResult result =  mvc.perform(MockMvcRequestBuilders.fileUpload(upload_uri.replace("{courseId}",""+c.getId())+"not_a_long")
+			MvcResult result =  mvc.perform(MockMvcRequestBuilders.multipart(upload_uri.replace("{courseId}",""+c.getId())+"not_a_long")
 	                .file(firstFile)
 	                ).andReturn();
 	
@@ -237,7 +237,7 @@ public class FileControllerTest extends AbstractLoggedControllerUnitTest {
 	
 
 		try {
-			MvcResult result =  mvc.perform(MockMvcRequestBuilders.fileUpload(uploadPicture_uri+loggedUser.getId())
+			MvcResult result =  mvc.perform(MockMvcRequestBuilders.multipart(uploadPicture_uri+loggedUser.getId())
 	                .file(firstFile)
 	                .session((MockHttpSession) httpSession)
 	                ).andReturn();
@@ -256,7 +256,7 @@ public class FileControllerTest extends AbstractLoggedControllerUnitTest {
 		
 		//BAD_REQUEST
 		try {
-			MvcResult result =  mvc.perform(MockMvcRequestBuilders.fileUpload(uploadPicture_uri+"not_a_long")
+			MvcResult result =  mvc.perform(MockMvcRequestBuilders.multipart(uploadPicture_uri+"not_a_long")
 	                .file(firstFile)
 	                .session((MockHttpSession) httpSession)
 	                ).andReturn();
@@ -275,7 +275,7 @@ public class FileControllerTest extends AbstractLoggedControllerUnitTest {
 		
 		//UNAUTHORIZED
 		try {
-			MvcResult result =  mvc.perform(MockMvcRequestBuilders.fileUpload(uploadPicture_uri+loggedUser.getId())
+			MvcResult result =  mvc.perform(MockMvcRequestBuilders.multipart(uploadPicture_uri+loggedUser.getId())
 	                .file(firstFile)
 	                ).andReturn();
 	

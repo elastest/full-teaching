@@ -7,10 +7,11 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.util.Assert;
 
 import com.fullteaching.backend.AbstractUnitTest;
 import com.fullteaching.backend.user.User;
+
+import static org.springframework.util.Assert.*;
 
 /**
  * @author gtunon
@@ -37,25 +38,25 @@ public class UserUnitaryTest extends AbstractUnitTest {
 		
 		//Empty user
 		User emptyUser = new User();
-		Assert.notNull(emptyUser, "User failed to be created");
+		notNull(emptyUser, "User failed to be created");
 		
 		//User with picture
 		User u = new User(name, password, nickName, picture,roles);
-		Assert.notNull(u, "User failed to be created");
-		Assert.isTrue(name.equals(u.getName()), "User failed to be created");
-		Assert.isTrue((new BCryptPasswordEncoder()).matches(password, u.getPasswordHash()), "User failed to be created");
-		Assert.isTrue(nickName.equals(u.getNickName()), "User failed to be created");
-		Assert.isTrue(picture.equals(u.getPicture()), "User failed to be created");
-		Assert.isTrue(roles.length == u.getRoles().size(), "User failed to be created");
+		notNull(u, "User failed to be created");
+		isTrue(name.equals(u.getName()), "User failed to be created");
+		isTrue((new BCryptPasswordEncoder()).matches(password, u.getPasswordHash()), "User failed to be created");
+		isTrue(nickName.equals(u.getNickName()), "User failed to be created");
+		isTrue(picture.equals(u.getPicture()), "User failed to be created");
+		isTrue(roles.length == u.getRoles().size(), "User failed to be created");
 		
 		//user witout picture
 		u = new User(name, password, nickName, null,roles);
-		Assert.notNull(u, "User failed to be created");
-		Assert.isTrue(name.equals(u.getName()), "User failed to be created");
-		Assert.isTrue((new BCryptPasswordEncoder()).matches(password, u.getPasswordHash()), "User failed to be created");
-		Assert.isTrue(nickName.equals(u.getNickName()), "User failed to be created");
-		Assert.notNull(u.getPicture(), "User failed to be created");
-		Assert.isTrue(roles.length == u.getRoles().size(), "User failed to be created");
+		notNull(u, "User failed to be created");
+		isTrue(name.equals(u.getName()), "User failed to be created");
+		isTrue((new BCryptPasswordEncoder()).matches(password, u.getPasswordHash()), "User failed to be created");
+		isTrue(nickName.equals(u.getNickName()), "User failed to be created");
+		notNull(u.getPicture(), "User failed to be created");
+		isTrue(roles.length == u.getRoles().size(), "User failed to be created");
 	}
 
 	/**
@@ -66,7 +67,7 @@ public class UserUnitaryTest extends AbstractUnitTest {
 	public void setAndGetUserNameTest() {
 		User u = new User();
 		u.setName(name);
-		Assert.isTrue(name.equals(u.getName()), "testSetAndGetUserName FAIL");
+		isTrue(name.equals(u.getName()), "testSetAndGetUserName FAIL");
 	}
 
 
@@ -79,7 +80,7 @@ public class UserUnitaryTest extends AbstractUnitTest {
 		User u = new User();
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		u.setPasswordHash(encoder.encode(password));
-		Assert.isTrue(encoder.matches(password, u.getPasswordHash()), "setAndGetHashPasswordTest FAIL");
+		isTrue(encoder.matches(password, u.getPasswordHash()), "setAndGetHashPasswordTest FAIL");
 	}
 	
 	/**
@@ -90,7 +91,7 @@ public class UserUnitaryTest extends AbstractUnitTest {
 	public void setAndGetUserRolesTest() {
 		User u = new User();	
 		u.setRoles(Arrays.asList(roles));
-		Assert.isTrue(roles.length == u.getRoles().size(), "SetAndGetUserRolesTest FAIL");
+		isTrue(roles.length == u.getRoles().size(), "SetAndGetUserRolesTest FAIL");
 	}
 
 	/**
@@ -101,7 +102,7 @@ public class UserUnitaryTest extends AbstractUnitTest {
 	public void setAndGetUserNickNameTest() {
 		User u = new User();
 		u.setNickName(nickName);
-		Assert.isTrue(nickName.equals(u.getNickName()), "SetAndGetUserNickNameTest FAIL");
+		isTrue(nickName.equals(u.getNickName()), "SetAndGetUserNickNameTest FAIL");
 	}
 
 	/**
@@ -112,7 +113,7 @@ public class UserUnitaryTest extends AbstractUnitTest {
 	public void setAndGetUserPictureTest() {
 		User u = new User();
 		u.setPicture(picture);
-		Assert.isTrue(picture.equals(u.getPicture()), "SetAndGetUserPictureTest FAIL");
+		isTrue(picture.equals(u.getPicture()), "SetAndGetUserPictureTest FAIL");
 	}
 
 	/**
@@ -124,7 +125,7 @@ public class UserUnitaryTest extends AbstractUnitTest {
 		User u = new User();
 		Long date = System.currentTimeMillis();
 		u.setRegistrationDate(date);
-		Assert.isTrue(date==u.getRegistrationDate());
+		isTrue(date==u.getRegistrationDate(), "Bad date");
 	}
 
 
@@ -135,10 +136,9 @@ public class UserUnitaryTest extends AbstractUnitTest {
 	public void equalUserTest() {
 		User u1 = new User(name, password, nickName, picture,roles);
 		User u2 = new User(name, password, nickName, picture,roles);
-		Assert.isTrue(u1.equals(u2), "EqualUserTest FAIL");
-		Assert.isTrue(!u1.equals("not An User"), "EqualUserTest FAIL");
-		Assert.isTrue(u1.equals(u1), "EqualUserTest FAIL");		
-		Assert.isTrue(!u1.equals(null), "EqualUserTest FAIL");
+		isTrue(u1.equals(u2), "EqualUserTest FAIL");
+		isTrue(!u1.equals("not An User"), "EqualUserTest FAIL");
+		isTrue(u1.equals(u1), "EqualUserTest FAIL");
 	}
 
 

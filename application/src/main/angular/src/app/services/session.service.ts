@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map, catchError } from "rxjs/operators";
 
 import { Session } from '../classes/session';
 import { Course } from '../classes/course';
@@ -21,11 +22,11 @@ export class SessionService {
     let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.post(this.urlSessions + "/course/" + courseId, body, options)
-      .map(response => {
+      .pipe(map(response => {
         console.log("POST new session SUCCESS. Response: ", (response.json() as Course));
         return (response.json() as Course);
-      })
-      .catch(error => this.handleError("POST new session FAIL. Response: ", error));
+      }),
+      catchError(error => this.handleError("POST new session FAIL. Response: ", error)));
   }
 
   //PUT existing session. On success returns the updated session
@@ -36,11 +37,11 @@ export class SessionService {
     let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.put(this.urlSessions + "/edit", body, options)
-      .map(response => {
+      .pipe(map(response => {
         console.log("PUT existing session SUCCESS. Response: ", (response.json() as Session));
         return (response.json() as Session);
-      })
-      .catch(error => this.handleError("PUT existing session FAIL. Response: ", error));
+      }),
+      catchError(error => this.handleError("PUT existing session FAIL. Response: ", error)));
   }
 
   //DELETE existing session. On success returns the deleted session
@@ -50,11 +51,11 @@ export class SessionService {
     let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.delete(this.urlSessions + "/delete/" + sessionId, options)
-      .map(response => {
+      .pipe(map(response => {
         console.log("DELETE session SUCCESS. Response: ", (response.json() as Session));
         return (response.json() as Session);
-      })
-      .catch(error => this.handleError("DELETE session FAIL. Response: ", error));
+      }),
+      catchError(error => this.handleError("DELETE session FAIL. Response: ", error)));
   }
 
   private handleError(message: string, error: any) {

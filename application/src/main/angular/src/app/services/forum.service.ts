@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map, catchError } from "rxjs/operators";
 
 import { Session } from '../classes/session';
 import { Entry } from '../classes/entry';
@@ -30,11 +31,11 @@ export class ForumService {
     let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.post(this.urlNewEntry + "/forum/" + courseDetailsId, body, options)
-      .map(response => {
+      .pipe(map(response => {
         console.log("POST new entry SUCCESS. Response: ", (response.json()));
         return (response.json());
-      })
-      .catch(error => this.handleError("POST new entry FAIL. Response: ", error));
+      }),
+      catchError(error => this.handleError("POST new entry FAIL. Response: ", error)));
   }
 
   //POST new Comment. Requires a Comment, the id of the Entry that owns it and the id of the CourseDetails that owns the Forum
@@ -46,11 +47,11 @@ export class ForumService {
     let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.post(this.urlNewComment + "/entry/" + entryId + "/forum/" + courseDetailsId, body, options)
-      .map(response => {
+      .pipe(map(response => {
         console.log("POST new comment SUCCESS. Response: ", (response.json()));
         return (response.json());
-      })
-      .catch(error => this.handleError("POST new comment FAIL. Response: ", error));
+      }),
+      catchError(error => this.handleError("POST new comment FAIL. Response: ", error)));
   }
 
   //PUT existing Forum. Requires a boolean value for activating/deactivating the Forum and the id of the CourseDetails that owns it
@@ -62,11 +63,11 @@ export class ForumService {
     let headers = new Headers({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.authenticationService.token });
     let options = new RequestOptions({ headers });
     return this.http.put(this.urlEditForum + "/edit/" + courseDetailsId, body, options)
-      .map(response => {
+      .pipe(map(response => {
         console.log("PUT existing forum SUCCESS. Response: ", (response.json() as boolean));
         return (response.json() as boolean);
-      })
-      .catch(error => this.handleError("PUT existing forum FAIL. Response: ", error));
+      }),
+      catchError(error => this.handleError("PUT existing forum FAIL. Response: ", error)));
   }
 
   private handleError(message: string, error: any) {

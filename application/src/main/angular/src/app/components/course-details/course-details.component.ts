@@ -1,7 +1,8 @@
-import { Component, OnInit, OnChanges, Input, EventEmitter, trigger, state, animate, transition, style } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, EventEmitter} from '@angular/core';
+import { trigger, state, animate, transition, style } from '@angular/animations';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 import { MaterializeAction } from 'angular2-materialize';

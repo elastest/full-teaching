@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.openvidu.java.client.OpenVidu;
+import io.openvidu.java.client.OpenViduHttpException;
+import io.openvidu.java.client.OpenViduJavaClientException;
 import io.openvidu.java.client.TokenOptions;
 
 import com.fullteaching.backend.user.User;
@@ -73,39 +75,48 @@ public class VideoSessionController {
 				if (teacherAuthorized != null) { // If the user is not the teacher of the course
 					return teacherAuthorized;
 				} else {
-					io.openvidu.java.client.Session s = this.openVidu.createSession();
+					try {
+						io.openvidu.java.client.Session s = this.openVidu.createSession();
 
-					sessionId = s.getSessionId();
-					token = s.generateToken(new TokenOptions.Builder()
-							.data("{\"name\": \"" + this.user.getLoggedUser().getNickName() + "\", \"isTeacher\": true}")
-							.build());
-					
-					responseJson.put(0, sessionId);
-					responseJson.put(1, token);
-					
-					this.lessonIdSession.put(id_i, s);
-					this.sessionIdUserIdToken.put(s.getSessionId(), new ConcurrentHashMap<>());
-					this.sessionIdUserIdToken.get(s.getSessionId()).put(this.user.getLoggedUser().getId(), token);
-					
-					return new ResponseEntity<>(responseJson, HttpStatus.OK);
+						sessionId = s.getSessionId();
+						token = s.generateToken(new TokenOptions.Builder()
+								.data("{\"name\": \"" + this.user.getLoggedUser().getNickName() + "\", \"isTeacher\": true}")
+								.build());
+
+						responseJson.put(0, sessionId);
+						responseJson.put(1, token);
+
+						this.lessonIdSession.put(id_i, s);
+						this.sessionIdUserIdToken.put(s.getSessionId(), new ConcurrentHashMap<>());
+						this.sessionIdUserIdToken.get(s.getSessionId()).put(this.user.getLoggedUser().getId(), token);
+
+						return new ResponseEntity<>(responseJson, HttpStatus.OK);
+					} catch (OpenViduJavaClientException | OpenViduHttpException e){
+						return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+					}
 				}
 			} else { // The video session is already created
 				ResponseEntity<Object> userAuthorized = this.checkAuthorizationUsers(session, session.getCourse().getAttenders());
 				if (userAuthorized != null) { // If the user is not an attender of the course
 					return userAuthorized;
 				} else {
-					io.openvidu.java.client.Session s = this.lessonIdSession.get(id_i);
-					sessionId = s.getSessionId();
-					token = s.generateToken(new TokenOptions.Builder()
+                    try {
+					    io.openvidu.java.client.Session s = this.lessonIdSession.get(id_i);
+					    sessionId = s.getSessionId();
+					    token = s.generateToken(new TokenOptions.Builder()
 							.data("{\"name\": \"" + this.user.getLoggedUser().getNickName() + "\", \"isTeacher\": false}")
 							.build());
 					
-					responseJson.put(0, sessionId);
-					responseJson.put(1, token);
+					    responseJson.put(0, sessionId);
+					    responseJson.put(1, token);
 					
-					this.sessionIdUserIdToken.get(s.getSessionId()).put(this.user.getLoggedUser().getId(), token);
+					    this.sessionIdUserIdToken.get(s.getSessionId()).put(this.user.getLoggedUser().getId(), token);
 					
-					return new ResponseEntity<>(responseJson, HttpStatus.OK);
+					    return new ResponseEntity<>(responseJson, HttpStatus.OK);
+
+                    } catch (OpenViduJavaClientException | OpenViduHttpException e) {
+                        return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    }
 				}
 			}
 		} else {

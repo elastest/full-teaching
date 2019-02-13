@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map, catchError } from "rxjs/operators";
 
 import { User } from '../classes/user';
 
@@ -21,11 +22,11 @@ export class UserService {
     });
     let options = new RequestOptions({ headers });
     return this.http.post(this.url + "/new", body, options)
-      .map(response => {
+      .pipe(map(response => {
         console.log("POST new user SUCCESS. Response: ", (response.json() as User));
         return (response.json() as User);
-      })
-      .catch(error => this.handleError("POST new user FAIL. Response: ", error));
+      }),
+      catchError(error => this.handleError("POST new user FAIL. Response: ", error)));
   }
 
   changePassword(oldPassword: string, newPassword: string) {
@@ -38,11 +39,11 @@ export class UserService {
     });
     let options = new RequestOptions({ headers });
     return this.http.put(this.url + "/changePassword", body, options)
-      .map(response => {
+      .pipe(map(response => {
         console.log("PUT existing user SUCCESS (change password). Response: ", (response.json() as boolean));
         return (response.json() as boolean);
-      })
-      .catch(error => this.handleError("PUT existing user FAIL (change password). Response: ", error));
+      }),
+      catchError(error => this.handleError("PUT existing user FAIL (change password). Response: ", error)));
   }
 
   // private helper methods
