@@ -1,30 +1,13 @@
 package com.fullteaching.e2e.no_elastest.functional.test.media;
 
-import static com.fullteaching.e2e.no_elastest.common.Constants.COURSELIST_COURSETITLE;
-import static com.fullteaching.e2e.no_elastest.common.Constants.COURSES_URL;
-import static com.fullteaching.e2e.no_elastest.common.Constants.COURSE_TABS;
-import static com.fullteaching.e2e.no_elastest.common.Constants.LOCALHOST;
-import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_EDITMODAL_DELETE_DIV;
-import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_EDIT_MODAL;
-import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_NEWSESSION_ICON;
-import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_NEWSESSION_MODAL;
-import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_NEWSESSION_MODAL_CONTENT;
-import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_NEWSESSION_MODAL_DATE;
-import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_NEWSESSION_MODAL_POSTBUTTON;
-import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_NEWSESSION_MODAL_TIME;
-import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_NEWSESSION_MODAL_TITLE;
-import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_SESSIONEDIT_ICON;
-import static com.fullteaching.e2e.no_elastest.common.Constants.SESSIONLIST_SESSION_ACCESS;
-import static com.fullteaching.e2e.no_elastest.common.Constants.SESSION_EXIT_ICON;
-import static com.fullteaching.e2e.no_elastest.common.Constants.SESSION_ICON;
-import static com.fullteaching.e2e.no_elastest.common.Constants.SESSION_LEFT_MENU_BUTTON;
-import static com.fullteaching.e2e.no_elastest.common.Constants.TABS_DIV_ID;
+import static com.fullteaching.e2e.no_elastest.common.Constants.*;
 import static java.lang.invoke.MethodHandles.lookup;
 import static java.util.logging.Level.ALL;
 import static org.openqa.selenium.logging.LogType.BROWSER;
 import static org.openqa.selenium.remote.CapabilityType.LOGGING_PREFS;
 import static org.openqa.selenium.remote.DesiredCapabilities.chrome;
 import static org.slf4j.LoggerFactory.getLogger;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,14 +16,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import com.fullteaching.e2e.no_elastest.common.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -49,10 +30,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 
-import com.fullteaching.e2e.no_elastest.common.CourseNavigationUtilities;
-import com.fullteaching.e2e.no_elastest.common.NavigationUtilities;
-import com.fullteaching.e2e.no_elastest.common.SessionNavigationUtilities;
-import com.fullteaching.e2e.no_elastest.common.UserUtilities;
 import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
@@ -65,8 +42,8 @@ import com.fullteaching.e2e.no_elastest.utils.Wait;
 
 import io.github.bonigarcia.seljup.DriverCapabilities;
 
-@RunWith(Parameterized.class)
-public class LoggedVideoSession {
+@Disabled
+public class LoggedVideoSession{
 
 	//1 teacher
 	protected WebDriver teacherDriver;
@@ -74,16 +51,12 @@ public class LoggedVideoSession {
 	//at least 1 student;
 	protected List<WebDriver> studentDriver;
 	
-	@Parameter(0)//format email:password:browser
-	public String teacher_data; 
+	public String teacher_data;
 		
-	@Parameter(1) //format user1:password1:browser1;user2:password2:browser2;...
 	public String users_data;
 	
-	@Parameter(2)
-	public String courseName; 
+	public String courseName;
 
-	
 	protected String teacherName;
 	protected String teacher;
 	protected String teacher_pass;
@@ -111,16 +84,16 @@ public class LoggedVideoSession {
 	        logPrefs.enable(BROWSER, ALL);
 	        capabilities.setCapability(LOGGING_PREFS, logPrefs);
 	    }
-	    
-	@Before 
+
+	@BeforeEach
 	public void setUp() throws BadUserException, ElementNotFoundException, NotLoggedException, TimeOutExeception {
-		 	
-		 	log.info("[INI setUP]");    	
-	    	
+
+		 	log.info("[INI setUP]");
+
 	    	host = SetUp.getHost();
-	     
+
 	        log.info("Test over url: "+host);
-	        
+
 	        //teacher setUp
 	        
 	        teacher = teacher_data.split(":")[0];
@@ -174,7 +147,7 @@ public class LoggedVideoSession {
 	    	log.info("[End setUP]");
 	    }
 	
-	 @After
+	 @AfterEach
 	 public void teardown() throws IOException {
 		//TODO delete tested test if it is last test.
         SetUp.tearDown(teacherDriver);
@@ -185,12 +158,12 @@ public class LoggedVideoSession {
         }           
     }
 	
-	@Parameters
     public static Collection<String[]> data() throws IOException {
         return ParameterLoader.sessionParameters();
     }
-    
-    @Test
+
+	@ParameterizedTest
+	@MethodSource("data")
     public void sessionTest() {
     	Calendar calendar = Calendar.getInstance();
     	calendar.setTimeInMillis(System.currentTimeMillis());
@@ -212,7 +185,7 @@ public class LoggedVideoSession {
     		}
     		List <String> courses = CourseNavigationUtilities.getCoursesList(teacherDriver, host);
     		
-    		Assert.assertTrue("No courses in the list",courses.size()>0);
+    		assertTrue(courses.size()>0, "No courses in the list");
     		//Teacher go to Course and create a new session to join
     	
 			WebElement course = CourseNavigationUtilities.getCourseElement(teacherDriver, courseName);
@@ -233,27 +206,27 @@ public class LoggedVideoSession {
 	    	//teacherDriver = Click.element(teacherDriver, SESSIONLIST_NEWSESSION_MODAL_DATE);
 	    	//check if session has been created
 	    	List <String> session_titles = SessionNavigationUtilities.getFullSessionList(teacherDriver);
-	    	Assert.assertTrue("Session has not been created", session_titles.contains(sessionName));    	
+	    	assertTrue(session_titles.contains(sessionName), "Session has not been created");
 	    	
 		} catch (ElementNotFoundException e) {
-			Assert.fail("Error while creating new SESSION");
+			fail("Error while creating new SESSION");
 		}
     
     	//Teacher Join Session
     	try {
     		
 	    	List <String> session_titles = SessionNavigationUtilities.getFullSessionList(teacherDriver);
-	    	Assert.assertTrue("Session has not been created", session_titles.contains(sessionName)); 
+	    	assertTrue(session_titles.contains(sessionName), "Session has not been created");
 			
 	    	//Teacher to: JOIN SESSION.
 			WebElement session = SessionNavigationUtilities.getSession(teacherDriver,sessionName );
 			teacherDriver = Click.element(teacherDriver, session.findElement(SESSIONLIST_SESSION_ACCESS));
 			
-			//Assert.assertTrue(condition);
+			//assertTrue(condition);
 	    	//Check why this is failing... maybe urls are not correct? configuration on the project?
 	    	
 		} catch (ElementNotFoundException e) {
-			Assert.fail("Error while creating new SESSION");
+			fail("Error while creating new SESSION");
 		}
     	
     	//Students Join Sessions
@@ -265,7 +238,7 @@ public class LoggedVideoSession {
         		}
         		List <String> courses = CourseNavigationUtilities.getCoursesList(student_d, host);
         		
-        		Assert.assertTrue("No courses in the list",courses.size()>0);
+        		assertTrue(courses.size()>0, "No courses in the list");
         		//Teacher go to Course and create a new session to join
         	
     			WebElement course = CourseNavigationUtilities.getCourseElement(student_d, courseName);
@@ -275,18 +248,18 @@ public class LoggedVideoSession {
     	    	student_d = CourseNavigationUtilities.go2Tab(student_d, SESSION_ICON);
     	    	
 		    	List <String> session_titles = SessionNavigationUtilities.getFullSessionList(student_d);
-		    	Assert.assertTrue("Session has not been created", session_titles.contains(sessionName)); 
+		    	assertTrue(session_titles.contains(sessionName), "Session has not been created");
 				
 		    	//Student to: JOIN SESSION.
 				WebElement session = SessionNavigationUtilities.getSession(student_d,sessionName );
 				student_d = Click.element(student_d, session.findElement(SESSIONLIST_SESSION_ACCESS));
 				
-				//Assert.assertTrue(condition);
+				//assertTrue(condition);
 		    	//Check why this is failing... maybe urls are not correct? configuration on the project?
     		}
 	    	
 		} catch (ElementNotFoundException e) {
-			Assert.fail("Error while creating new SESSION");
+			fail("Error while creating new SESSION");
 		}
     	
     	//Students Leave Sessions
@@ -300,12 +273,12 @@ public class LoggedVideoSession {
 				
 				//Wait for something
 				Wait.notTooMuch(student_d).until(ExpectedConditions.visibilityOfElementLocated(COURSE_TABS));
-				//Assert.assertTrue(condition);
+				//assertTrue(condition);
 		    	//Check why this is failing... maybe urls are not correct? configuration on the project?
     		}
 	    	
 		} catch (ElementNotFoundException e) {
-			Assert.fail("Error while leaving SESSION");
+			fail("Error while leaving SESSION");
 		}
     	//Teacher Leave Session
     	try {
@@ -317,11 +290,11 @@ public class LoggedVideoSession {
 				
 			//Wait for something
 			Wait.notTooMuch(teacherDriver).until(ExpectedConditions.visibilityOfElementLocated(COURSE_TABS));
-			//Assert.assertTrue(condition);
+			//assertTrue(condition);
 	    	//Check why this is failing... maybe urls are not correct? configuration on the project?
 	    	
 		} catch (ElementNotFoundException e) {
-			Assert.fail("Error while leaving SESSION");
+			fail("Error while leaving SESSION");
 		}
     	try {
     		//delete session by teacher
@@ -332,7 +305,7 @@ public class LoggedVideoSession {
 	    	Click.element(teacherDriver, modal.findElement(SESSIONLIST_EDITMODAL_DELETE_DIV).findElement(By.tagName("a")));
 	    	
 	    	List <String> session_titles = SessionNavigationUtilities.getFullSessionList(teacherDriver);
-	    	Assert.assertTrue("Session has not been deleted", !session_titles.contains(sessionName));  
+	    	assertTrue(!session_titles.contains(sessionName), "Session has not been deleted");
 	    	
 		} catch (ElementNotFoundException e) {
 			// TODO Auto-generated catch block

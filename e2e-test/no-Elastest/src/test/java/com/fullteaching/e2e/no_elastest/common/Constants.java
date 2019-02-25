@@ -6,7 +6,7 @@ import org.openqa.selenium.Keys;
 
 public final class Constants {
 
-	public static final String LOCALHOST = "https://localhost:5000";
+	public static final String LOCALHOST = "https://192.168.152.144:5000";
 	public static final String COURSES_URL = "__HOST__/courses";
 	   
     //Xpaths and ids

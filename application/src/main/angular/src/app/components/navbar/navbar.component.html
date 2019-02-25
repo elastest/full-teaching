@@ -4,13 +4,13 @@
       <a id="logo-container" href="/" class="brand-logo app-title-header white-text">FullTeaching</a>
 
       <!--Logout view-->
-      <ul *ngIf="!this.authenticationService.isLoggedIn()" class="right hide-on-med-and-down">
+      <ul *ngIf="!this.authenticationService.isLoggedIn()" class="right">
         <li><a href="#login-modal" (click)="updateLoginModalView(false)" id="signUpButton" class="navbar-button waves-effect white-text">Sign up</a></li>
         <li><a href="#login-modal" (click)="updateLoginModalView(true)" class="navbar-button waves-effect white-text">Log in</a></li>
       </ul>
 
       <!--Login view-->
-      <ul *ngIf="this.authenticationService.isLoggedIn()" class="right hide-on-med-and-down">
+      <ul *ngIf="this.authenticationService.isLoggedIn()" class="right" >
         <li><a id="courses-button" routerLink="/courses" class="navbar-button waves-effect white-text">Courses</a></li>
         <li><a id="settings-button" routerLink="/settings" class="navbar-button waves-effect white-text">Settings</a></li>
         <!-- Dropdown Content -->

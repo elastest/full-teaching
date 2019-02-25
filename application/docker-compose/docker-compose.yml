@@ -21,7 +21,7 @@ services:
       - openvidu.publicurl=docker
 
   full-teaching:
-    image: pablofuente/full-teaching
+    image: elastest/full-teaching
     links:
       - full-teaching-mysql
       - full-teaching-openvidu-server-kms

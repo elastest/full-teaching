@@ -1,21 +1,19 @@
 package com.fullteaching.e2e.no_elastest.common;
 
-import org.junit.Assert;
+import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
+import com.fullteaching.e2e.no_elastest.utils.Click;
+import com.fullteaching.e2e.no_elastest.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
-import com.fullteaching.e2e.no_elastest.utils.Click;
-import com.fullteaching.e2e.no_elastest.utils.DOMMannager;
-import com.fullteaching.e2e.no_elastest.utils.Wait;
-
-import static com.fullteaching.e2e.no_elastest.common.Constants.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.fullteaching.e2e.no_elastest.common.Constants.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ForumNavigationUtilities {
@@ -114,7 +112,7 @@ public class ForumNavigationUtilities {
 	
 	public static WebDriver newEntry(WebDriver wd, String newEntryTitle, String newEntryContent) throws ElementNotFoundException {
 		wd = CourseNavigationUtilities.go2Tab(wd, FORUM_ICON);
-    	Assert.assertEquals("Forum not activated",ForumNavigationUtilities.isForumEnabled(CourseNavigationUtilities.getTabContent(wd,FORUM_ICON)),true);
+    	assertEquals(ForumNavigationUtilities.isForumEnabled(CourseNavigationUtilities.getTabContent(wd,FORUM_ICON)), true, "Forum not activated");
     	
     	wd = Click.element(wd, FORUM_NEWENTRY_ICON);
     	
@@ -165,7 +163,7 @@ public class ForumNavigationUtilities {
 		WebElement save_button = edit_modal.findElement(By.id("put-modal-btn"));
 		driver = Click.element(driver, By.id("put-modal-btn"));
 		WebElement forum_tab_content = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-2")));
-		Assert.assertTrue("The forum is not dissabled", ForumNavigationUtilities.isForumEnabled(forum_tab_content));
+		assertTrue(ForumNavigationUtilities.isForumEnabled(forum_tab_content),"The forum is not dissabled");
 		return driver;
 	}
 }

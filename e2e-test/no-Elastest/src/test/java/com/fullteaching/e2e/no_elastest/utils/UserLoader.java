@@ -11,11 +11,12 @@ import java.util.Map;
 
 import org.openqa.selenium.WebDriver;
 
-import com.fullteaching.e2e.no_elastest.webDriverFactory.ChromeFactory;
-import com.fullteaching.e2e.no_elastest.webDriverFactory.FirefoxFactory;
+
 
 import io.github.bonigarcia.wdm.ChromeDriverManager;
 import io.github.bonigarcia.wdm.FirefoxDriverManager;
+
+import static io.github.bonigarcia.wdm.DriverManagerType.*;
 
 public class UserLoader {
 
@@ -69,7 +70,7 @@ public class UserLoader {
 		String field[] = cvsline.split(cvsMainFieldsSplitBy);
 		return new User(field[USERNAME], 
 						field[PASSWORD], 
-						field[ROLES].split(cvsRolesSplitBy));
+						field[ROLES]);
 	}
 
 	
@@ -100,12 +101,12 @@ public class UserLoader {
 		WebDriver driver = null;
 		switch (browser){
 			case "chrome":
-				ChromeDriverManager.getInstance().setup();
-				driver = ChromeFactory.newWebDriver();
+				ChromeDriverManager.getInstance(CHROME).setup();
+				//TODO: driver = ChromeFactory.newWebDriver();
 				break;
 			case "firefox":
-				FirefoxDriverManager.getInstance().setup();			
-				driver = FirefoxFactory.newWebDriver();
+				FirefoxDriverManager.getInstance(FIREFOX).setup();
+				//TODO: driver = FirefoxFactory.newWebDriver();
 		}
 		return driver;
 	}

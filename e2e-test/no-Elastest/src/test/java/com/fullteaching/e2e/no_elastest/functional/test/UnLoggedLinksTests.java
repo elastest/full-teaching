@@ -7,17 +7,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import com.fullteaching.e2e.no_elastest.common.NavigationUtilities;
 import com.fullteaching.e2e.no_elastest.common.SpiderNavigation;
-import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
-import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
+
 import static com.fullteaching.e2e.no_elastest.common.Constants.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 abstract public class UnLoggedLinksTests {
 
@@ -25,14 +24,15 @@ abstract public class UnLoggedLinksTests {
 	protected static int DEPTH = 3;
 	protected static String host = LOCALHOST;
 	
-	 @Before 
-	    public void setUp() throws NotLoggedException, BadUserException {
+	 @BeforeAll
+	    public void setUp() {
 			
 	    	String appHost = getProperty("fullTeachingUrl");
 	        if (appHost != null) {
 	            host = appHost;
 	        }
 	 }
+
 	@Test
 	public void spiderUnloggedTest() {
 		/*navigate from home*/
@@ -55,7 +55,7 @@ abstract public class UnLoggedLinksTests {
 		for (String failed: failed_links) {
 			msg = failed +"\n";	
 		}
-		Assert.assertTrue(msg, failed_links.isEmpty());
+		assertTrue(failed_links.isEmpty(), msg);
 	}
 	
 }

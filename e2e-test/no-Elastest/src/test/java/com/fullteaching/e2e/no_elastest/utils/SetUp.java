@@ -22,7 +22,6 @@ import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
 import com.fullteaching.e2e.no_elastest.common.exception.TimeOutExeception;
 import static com.fullteaching.e2e.no_elastest.common.Constants.*;
 
-
 public class SetUp {
 	
 	final static  Logger log = getLogger(lookup().lookupClass());
@@ -75,11 +74,14 @@ public class SetUp {
 	}
 	
 	public static String getBase64Screenshot(WebDriver driver) throws IOException {
-		 
+	    log.debug("getBase64Screenshot INI");
 	 	String screenshotBase64 = ((TakesScreenshot) driver)
                 .getScreenshotAs(BASE64);
+
+        log.debug("getBase64Screenshot END");
         return "data:image/png;base64," + screenshotBase64;
-    }
+
+   }
 	
 	public static String cleanEmptyCourse(WebDriver driver) throws ElementNotFoundException {
 		
