@@ -41,6 +41,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatStepperModule } from '@angular/material/stepper';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
 import { InterventionAskedPipe }  from './pipes/intervention-asked.pipe';
 
 import { AppComponent }           from './app.component';
@@ -119,6 +122,8 @@ MatCommonModule,
     HttpModule,
     MaterializeModule,
     MATERIAL_MODULES,
+    BrowserAnimationsModule,
+    NoopAnimationsModule,
     routing,
     CalendarModule.forRoot({
       provide: DateAdapter,

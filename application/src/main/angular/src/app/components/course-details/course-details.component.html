@@ -161,7 +161,7 @@
             <mat-tab-group [(selectedIndex)]="this.attenderTabSelected">
               <mat-tab>
                 <ng-template mat-tab-label><div class="mat-tab-label-aux waves-effect">SIMPLE</div></ng-template>
-                <ng-template mat-tab-content>
+                <ng-template matTabContent>
                   <div class="row no-margin att-row-padding">
                     <div class="input-field col s12">
                       <input [(ngModel)]="inputAttenderSimple" name="inputAttenderSimple" id="input-attender-simple" type="email" class="validate" required>
@@ -172,7 +172,7 @@
               </mat-tab>
               <mat-tab>
                 <ng-template mat-tab-label><div class="mat-tab-label-aux waves-effect">MULTIPLE</div></ng-template>
-                <ng-template mat-tab-content>
+                <ng-template matTabContent>
                   <div class="row no-margin att-row-padding">
                     <i materialize="tooltip" class="material-icons tooltipped att-info-tooltip" data-position="right" data-delay="65" data-html="true" data-tooltip="<p class='att-tooltip-text'>We always separate by <b>WHITE SPACES</b><br>and <b>NEW LINES</b>. If there's any other<br>combination of characters that should<br>be taken into account as separator,<br>include it here</p>">info</i>
                     <div class="input-field col l4 m4 s6">
@@ -188,7 +188,7 @@
               </mat-tab>
               <mat-tab>
                 <ng-template mat-tab-label><div class="mat-tab-label-aux waves-effect">FILE UPLOAD</div></ng-template>
-                <ng-template mat-tab-content>
+                <ng-template matTabContent>
                   <i id="tooltip-file" materialize="tooltip" class="material-icons tooltipped att-info-tooltip" data-position="right" data-delay="65" data-html="true" data-tooltip="<p class='att-tooltip-text'>We will automatically find and add<br>to the course all the <b>EMAILS</b> in the file</p>">info</i>
                   <div class="row no-margin att-row-padding">
 
@@ -228,15 +228,15 @@
 
   <!--TABS-->
   <div id="tabs-course-details" class="row">
-    <mat-tab-group [selectedIndex]="this.tabId">
+    <mat-tab-group [disableRipple]="true">
 
       <mat-tab><!--Course Info Tab-->
-        <ng-template mat-tab-label><div class="mat-tab-label-aux waves-effect" (click)="changeUrlTab(0)"><i id="info-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Course info">home</i></div></ng-template>
-        <ng-template mat-tab-content>
+        <ng-template mat-tab-label><div class="mat-tab-label-aux waves-effect"><i id="info-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Course info">home</i></div></ng-template>
+        <ng-template matTabContent>
 
             <div *ngIf="processingCourseInfo" class="loading"></div>
 
-            <div class="tab-<ng-template-content" [class.filtered]="processingCourseInfo">
+            <div class="tab-template-content" [class.filtered]="processingCourseInfo">
               <div class="row no-margin">
                 <a *ngIf="this.authenticationService.isTeacher() && !this.welcomeTextEdition" (click)="this.welcomeTextEdition = true" class="right" [title]="'Edit info'">
                   <i id="edit-course-info" class="material-icons add-element-icon">edit</i>
@@ -258,9 +258,9 @@
       </mat-tab>
 
       <mat-tab><!--Sessions Tab-->
-        <ng-template mat-tab-label><div class="mat-tab-label-aux waves-effect" (click)="changeUrlTab(1)"><i id="sessions-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Sessions">school</i></div></ng-template>
-        <ng-template mat-tab-content>
-            <div class="tab-<ng-template-content">
+        <ng-template mat-tab-label><div class="mat-tab-label-aux waves-effect"><i id="sessions-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Sessions">school</i></div></ng-template>
+        <ng-template matTabContent>
+            <div class="tab-template-content">
               <div class="row no-margin">
                 <a href="#course-details-modal" *ngIf="this.authenticationService.isTeacher()" (click)="updatePostModalMode(2, 'New session', null, null, null); this.animationService.animateIfSmall()" class="right" [title]="'New session'">
                   <i id="add-session-icon" class="material-icons add-element-icon">add_circle_outline</i>
@@ -293,9 +293,9 @@
       </mat-tab>
 
       <mat-tab><!--Forum Tab-->
-        <ng-template mat-tab-label><div class="mat-tab-label-aux waves-effect" (click)="changeUrlTab(2)"><i id="forum-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Forum">forum</i></div></ng-template>
-        <ng-template mat-tab-content>
-          <div class="tab-<ng-template-content row no-margin" [class.tab-<ng-template-content-2]="!this.course.courseDetails?.forum.activated || !this.course.courseDetails?.forum.entries.length > 0">
+        <ng-template mat-tab-label><div class="mat-tab-label-aux waves-effect"><i id="forum-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Forum">forum</i></div></ng-template>
+        <ng-template matTabContent>
+          <div class="tab-template-content row no-margin" [class.tab-template-content-2]="!this.course.courseDetails?.forum.activated || !this.course.courseDetails?.forum.entries.length > 0">
 
             <!--Forum view-->
             <ul class="entries-side-view row no-margin" [class.hide]="this.fadeAnim === 'commentsShown'">
@@ -375,9 +375,9 @@
       </mat-tab>
 
       <mat-tab><!--Files Tab-->
-        <ng-template mat-tab-label><div class="mat-tab-label-aux waves-effect" (click)="changeUrlTab(3)"><i id="files-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Files">description</i></div></ng-template>
-        <ng-template mat-tab-content>
-          <div class="tab-<ng-template-content row no-margin">
+        <ng-template mat-tab-label><div class="mat-tab-label-aux waves-effect"><i id="files-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Files">description</i></div></ng-template>
+        <ng-template matTabContent>
+          <div class="tab-template-content row no-margin">
             <div *ngIf="this.authenticationService.isTeacher()" class="row no-margin">
               <a href="#course-details-modal" *ngIf="!allowFilesEdition" (click)="updatePostModalMode(4, 'New file group', null, null, null); this.animationService.animateIfSmall()" class="right" [title]="'New file group'">
                 <i id="add-files-icon" class="material-icons add-element-icon">add_circle_outline</i>
@@ -394,9 +394,9 @@
       </mat-tab>
 
       <mat-tab><!--Attenders Tab-->
-        <ng-template mat-tab-label><div class="mat-tab-label-aux waves-effect" (click)="changeUrlTab(4)"><i id="attenders-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Attenders">supervisor_account</i></div></ng-template>
-        <ng-template mat-tab-content>
-          <div class="tab-<ng-template-content">
+      <ng-template mat-tab-label><div class="mat-tab-label-aux waves-effect"  (click)="changeUrlTab(4)"><i id="attenders-tab-icon" materialize="tooltip" class="material-icons tooltipped" data-position="top" data-delay="65" data-tooltip="Attenders">supervisor_account</i></div></ng-template>
+        <ng-template matTabContent>
+          <div class="tab-template-content">
             <div *ngIf="this.authenticationService.isTeacher()" class="row no-margin">
               <a  href="#put-delete-modal" *ngIf="!this.allowAttendersEdition" (click)="updatePutDeleteModalMode(4, 'Add attenders'); this.animationService.animateIfSmall()" class="right" [title]="'Add attenders'">
                 <i id="add-attenders-icon" class="material-icons add-element-icon">add_circle_outline</i>
@@ -436,6 +436,7 @@
             </div>
         </div>
         </ng-template>
+
       </mat-tab>
 
     </mat-tab-group>

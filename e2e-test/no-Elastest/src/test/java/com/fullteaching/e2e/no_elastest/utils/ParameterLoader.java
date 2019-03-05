@@ -46,7 +46,7 @@ public class ParameterLoader {
 			//records.add(user.getUserCsv().split(","));
 		}
         log.debug("[getTestStudents] END");
-		return Stream.of(arguments(records));
+        return records;
 	}
 	
 	public static  Stream<Arguments> getTestTeachers() throws IOException {
@@ -63,7 +63,7 @@ public class ParameterLoader {
 			//records.add(user.getUserCsv().split(","));
 		}
         log.debug("[getTestTeachers] END");
-		return Stream.of(arguments(records));
+        return records;
 	}
 	
 	public static  Collection<String[]> sessionParameters() throws IOException{
