@@ -1,0 +1,44 @@
+version: '2'
+
+services:
+
+  full-teaching-mysql:
+    container_name: docker-compose-full-teaching-mysql
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=pass
+      - MYSQL_DATABASE=full_teaching
+      - MYSQL_USER=ft-root
+      - MYSQL_PASSWORD=pass
+    ports:
+      - 3306:3306
+
+  full-teaching-openvidu-server-kms:
+    container_name: docker-compose-full-teaching-openvidu-server-kms
+    image: openvidu/openvidu-server-kms:1.1.0
+    ports:
+      - 8443:8443
+    environment:
+      - KMS_STUN_IP=193.147.51.12
+      - KMS_STUN_PORT=3478
+      - openvidu.publicurl=https://${hostIP}:8443/
+      
+  full-teaching:
+    container_name: docker-compose-full-teaching
+    image: elastest/demonstrator-noelastest_full-teaching
+    links:
+      - full-teaching-mysql:mysql
+      - full-teaching-openvidu-server-kms:openvidu
+    ports:
+      - 5000:5000
+    environment:
+      - WAIT_HOSTS=mysql:3306
+      - WAIT_HOSTS_TIMEOUT=120
+      - MYSQL_PORT_3306_TCP_ADDR=mysql
+      - MYSQL_PORT_3306_TCP_PORT=3306
+      - MYSQL_ENV_MYSQL_DATABASE=full_teaching
+      - MYSQL_ENV_MYSQL_USER=ft-root
+      - MYSQL_ENV_MYSQL_PASSWORD=pass
+    depends_on:
+      - full-teaching-mysql
+      - full-teaching-openvidu-server-kms

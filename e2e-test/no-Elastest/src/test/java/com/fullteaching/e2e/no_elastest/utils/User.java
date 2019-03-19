@@ -8,13 +8,13 @@ public class User implements Serializable{
 	
 	private String name;
 	private String password;
-	private String roles[];
+	private String role;
 	
 	
-	public User(String name, String password, String roles[]) {
+	public User(String name, String password, String role) {
 		this.name = name; 
 		this.password = password;
-		this.roles = roles;
+		this.role = role;
 	}
 	
 	public String getName() {
@@ -29,29 +29,14 @@ public class User implements Serializable{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String[] getRoles() {
-		return roles;
+	public String getRole() {
+		return role;
 	}
-	public void setRoles(String[] roles) {
-		this.roles = roles;
-	}
-	
+	public void setRoles(String role) {this.role = role;}
 	public String getUserCsv() {
 		return ""+name+","+password+","+getRolesCsv();
 	}
-	
-	private String getRolesCsv() {
-		String rolesStr = "";
-		for (int i=0; i<roles.length; i++) {
-			
-			rolesStr += roles[i];
-			if ( i < roles.length-1)
-				rolesStr += "|";
-			
-		}
-		
-		return rolesStr;
-	}
+	private String getRolesCsv() {return role; }
 	
 	
 }

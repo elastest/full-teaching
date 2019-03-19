@@ -39,14 +39,14 @@
         <!-- Test dependencies version -->
         <junit.jupiter.version>5.0.0</junit.jupiter.version>
         <junit.platform.version>1.0.0</junit.platform.version>
-        <selenium-jupiter.version>1.1.2</selenium-jupiter.version>
+        <selenium-jupiter.version>3.1.1</selenium-jupiter.version>
         <slf4j.version>1.7.25</slf4j.version>
 
         <!-- Plugins versions -->
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
     </properties>
-    
+
     <scm>
         <url>https://github.com/elastest/full-teaching</url>
         <connection>scm:git:https://github.com/elastest/full-teaching</connection>
@@ -68,25 +68,43 @@
 
     <dependencies>
         <!-- Test dependencies -->
-      	<dependency>
-	    	<groupId>junit</groupId>
-	    	<artifactId>junit</artifactId>
-	    	<version>4.12</version>
-	    	<scope>test</scope>
-	    </dependency>
-	    
-	    <!-- SELENIUM -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.4.0</version>
+        </dependency>
+
+
+	    <!-- SELENIUM
 	     <dependency>
 	        <groupId>org.seleniumhq.selenium</groupId>
 	        <artifactId>selenium-java</artifactId>
-	        <version>3.6.0</version>
+	        <version>3.14.0</version>
 	        <scope>test</scope>
 	    </dependency> 
-	    
+
+		<dependency>
+		    <groupId>org.seleniumhq.selenium</groupId>
+		    <artifactId>selenium-remote-driver</artifactId>
+		    <version>3.14.0</version>
+		</dependency> -->
+		
+	    <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>selenium-jupiter</artifactId>
+            <version>${selenium-jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        
         <dependency>
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
-			<version>2.0.0</version>
+			<version>3.3.0</version>
 		</dependency>
 		
         <dependency>

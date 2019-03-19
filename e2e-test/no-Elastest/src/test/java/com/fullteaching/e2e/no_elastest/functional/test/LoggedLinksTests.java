@@ -1,90 +1,49 @@
 package com.fullteaching.e2e.no_elastest.functional.test;
 
-import static java.lang.invoke.MethodHandles.lookup;
-import static org.slf4j.LoggerFactory.getLogger;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.slf4j.Logger;
-
+import com.fullteaching.e2e.no_elastest.common.BaseLoggedTest;
 import com.fullteaching.e2e.no_elastest.common.NavigationUtilities;
 import com.fullteaching.e2e.no_elastest.common.SpiderNavigation;
-import com.fullteaching.e2e.no_elastest.common.UserUtilities;
 import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
 import com.fullteaching.e2e.no_elastest.common.exception.TimeOutExeception;
 import com.fullteaching.e2e.no_elastest.utils.ParameterLoader;
-import com.fullteaching.e2e.no_elastest.utils.SetUp;
-import static com.fullteaching.e2e.no_elastest.common.Constants.*;
+import io.github.bonigarcia.seljup.DockerBrowser;
+import io.github.bonigarcia.seljup.SeleniumExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
-abstract public class LoggedLinksTests{
-	
-	protected static WebDriver driver;
-	
-	@Parameter(0)
-	public String user; 
-	
-	@Parameter(1)
-	public String password;
-	
-	@Parameter(2)
-	public String roles;
-	
-	protected String userName;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
-	protected String host=LOCALHOST;
+import static io.github.bonigarcia.seljup.BrowserType.CHROME;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@ExtendWith(SeleniumExtension.class)
+public class LoggedLinksTests extends BaseLoggedTest {
 	
-	final  Logger log = getLogger(lookup().lookupClass());
-	
-	 @Before 
-	 public void setUp() throws BadUserException, ElementNotFoundException, NotLoggedException, TimeOutExeception {
-		 	
-		 	log.info("[INI setUP]");    	
-	    	
-	    	host = SetUp.getHost();
-	     
-	        log.info("Test over url: "+host);
-	        
-	    	//check if logged with correct user
-	    	driver = SetUp.loginUser(driver, host, user, password);
-	    	
-	    	driver = UserUtilities.checkLogin(driver, user);
-	    	
-	    	userName = UserUtilities.getUserName(driver, true, host);
-	    	
-	    	log.info("[End setUP]");
-	    }
-	 
-	 @After
-	 public void teardown() throws IOException {
-        SetUp.tearDown(driver);
-    }
-	
+
 	protected static int DEPTH = 3;
-	
-	@Parameters
-    public static Collection<String[]> data() throws IOException {
-        return ParameterLoader.getTestUsers();
-    }
-	    
-    
-	@Test
-	public void spiderLoggedTest() {
-		
+
+	public static Stream<Arguments> data() throws IOException {
+		return ParameterLoader.getTestUsers();
+	}
+
+	@ParameterizedTest
+	@MethodSource("data")
+	public void spiderLoggedTest(String user, String password, String role, @DockerBrowser(type = CHROME) RemoteWebDriver rwd)  throws ElementNotFoundException, BadUserException, NotLoggedException, TimeOutExeception {
+
+		driver = rwd;
+		driver = loginAndValidate(driver,user,password);
+
 		/*navigate from home*/
 		NavigationUtilities.getUrlAndWaitFooter(driver, host);
 				
@@ -100,7 +59,7 @@ abstract public class LoggedLinksTests{
 		List<String> failed_links = new ArrayList<String>();
 		System.out.println(user+" tested "+explored.size()+" urls");
 		explored.forEach((link,result) -> {
-				System.out.println("\t"+link+" => "+result);
+				log.debug("\t"+link+" => "+result);
 				if (result.equals("KO")) {
 					failed_links.add(link);				
 				}			
@@ -110,7 +69,7 @@ abstract public class LoggedLinksTests{
 		for (String failed: failed_links) {
 			msg = failed +"\n";	
 		}
-		Assert.assertTrue(msg, failed_links.isEmpty());
+		assertTrue(failed_links.isEmpty(), msg);
 	}
 	
 }

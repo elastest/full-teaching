@@ -1,89 +1,62 @@
 package com.fullteaching.e2e.no_elastest.functional.test;
 
-import static java.lang.System.getProperty;
-import java.io.IOException;
-import java.util.Collection;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
-import org.openqa.selenium.WebDriver;
-
-import com.fullteaching.e2e.no_elastest.common.NavigationUtilities;
+import com.fullteaching.e2e.no_elastest.common.BaseLoggedTest;
 import com.fullteaching.e2e.no_elastest.common.UserUtilities;
 import com.fullteaching.e2e.no_elastest.common.exception.BadUserException;
 import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
 import com.fullteaching.e2e.no_elastest.common.exception.NotLoggedException;
 import com.fullteaching.e2e.no_elastest.common.exception.TimeOutExeception;
 import com.fullteaching.e2e.no_elastest.utils.ParameterLoader;
-import static com.fullteaching.e2e.no_elastest.common.Constants.*;
+import io.github.bonigarcia.seljup.DockerBrowser;
+import io.github.bonigarcia.seljup.SeleniumExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.io.IOException;
+import java.util.stream.Stream;
+
+import static io.github.bonigarcia.seljup.BrowserType.CHROME;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+@ExtendWith(SeleniumExtension.class)
+public class UserTest extends BaseLoggedTest {
 
 
-abstract public class UserTest {
 
-	
-	protected static WebDriver driver;
-	
-	@Parameter(0)
-	public String user; 
-	
-	@Parameter(1)
-	public String password;
-	
-	@ Parameter(2)
-	public String roles;
-
-	
-	private String host=LOCALHOST;
-	
-	
-	@Parameters
-    public static Collection<String[]> data() throws IOException {
+	public static Stream<Arguments> data() throws IOException {
         return ParameterLoader.getTestUsers();
     }
 	
-    @Before 
-    public void setUp() throws NotLoggedException, BadUserException, ElementNotFoundException {
-		
-    	String appHost = getProperty("fullTeachingUrl");
-        if (appHost != null) {
-            host = appHost;
-        }
-        
-    	try {	
-    		NavigationUtilities.getUrlAndWaitFooter(driver, UserUtilities.login_url.replace("__HOST__", host));
-    		
-			driver = UserUtilities.checkLogOut(driver);
-			
-		} catch (ElementNotFoundException enfe) {
-			driver = UserUtilities.logOut(driver,host);
-		}
-    }
-    
-    
-	@Test
-	public void loginTest() {
+
+	@ParameterizedTest
+	@MethodSource("data")
+	public void loginTest(String user, String password, String role, @DockerBrowser(type = CHROME) RemoteWebDriver rwd) throws ElementNotFoundException, BadUserException, NotLoggedException, TimeOutExeception {
+
+		driver = rwd;
+
 		try {
 			driver = UserUtilities.login(driver, user, password, host);
 		
 			driver = UserUtilities.checkLogin(driver, user);
 
-			Assert.assertTrue(true);
-			
+			assertTrue(true, "not logged");
+
 		} catch (NotLoggedException | BadUserException e) {
 				
 			e.printStackTrace();
-			Assert.fail("Not logged");
+			fail("Not logged");
 			
 		} catch (ElementNotFoundException e) {
 			
 			e.printStackTrace();
-			Assert.fail(e.getLocalizedMessage());
+			fail(e.getLocalizedMessage());
 			
 		}  catch (TimeOutExeception e) {
-			Assert.fail(e.getLocalizedMessage());
+			fail(e.getLocalizedMessage());
 		} 
 		
 		try {
@@ -92,13 +65,13 @@ abstract public class UserTest {
 			driver = UserUtilities.checkLogOut(driver);
 			
 		} catch (ElementNotFoundException enfe) {
-			Assert.fail("Still logged");
+			fail("Still logged");
 			
 		} catch (NotLoggedException e) {
-			Assert.assertTrue(true);	
+			assertTrue(true, "Not logged");
 		}
 			
-		Assert.assertTrue(true);
+		assertTrue(true);
 	}
 	
 	

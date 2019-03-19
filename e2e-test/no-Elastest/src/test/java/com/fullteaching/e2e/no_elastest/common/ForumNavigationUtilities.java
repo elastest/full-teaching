@@ -1,21 +1,19 @@
 package com.fullteaching.e2e.no_elastest.common;
 
-import org.junit.Assert;
+import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
+import com.fullteaching.e2e.no_elastest.utils.Click;
+import com.fullteaching.e2e.no_elastest.utils.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import com.fullteaching.e2e.no_elastest.common.exception.ElementNotFoundException;
-import com.fullteaching.e2e.no_elastest.utils.Click;
-import com.fullteaching.e2e.no_elastest.utils.DOMMannager;
-import com.fullteaching.e2e.no_elastest.utils.Wait;
-
-import static com.fullteaching.e2e.no_elastest.common.Constants.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.fullteaching.e2e.no_elastest.common.Constants.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ForumNavigationUtilities {
@@ -114,7 +112,7 @@ public class ForumNavigationUtilities {
 	
 	public static WebDriver newEntry(WebDriver wd, String newEntryTitle, String newEntryContent) throws ElementNotFoundException {
 		wd = CourseNavigationUtilities.go2Tab(wd, FORUM_ICON);
-    	Assert.assertEquals("Forum not activated",ForumNavigationUtilities.isForumEnabled(CourseNavigationUtilities.getTabContent(wd,FORUM_ICON)),true);
+    	assertEquals(ForumNavigationUtilities.isForumEnabled(CourseNavigationUtilities.getTabContent(wd,FORUM_ICON)), true, "Forum not activated");
     	
     	wd = Click.element(wd, FORUM_NEWENTRY_ICON);
     	
@@ -152,5 +150,20 @@ public class ForumNavigationUtilities {
 		}
 		
 		return replies;
+	}
+	
+	public static WebDriver enableForum(WebDriver driver) throws ElementNotFoundException {
+		WebElement edit_button =  Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_EDITENTRY_ICON));
+		driver = Click.element(driver,FORUM_EDITENTRY_ICON);
+		WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("put-delete-modal")));
+		//press disable
+		WebElement enable_button = edit_modal.findElement(ENABLEFORUM_BUTTON);
+		driver = Click.withNRetries(driver, ENABLEFORUM_BUTTON, 3, By.id("put-modal-btn"));
+		//enable_button.click();
+		WebElement save_button = edit_modal.findElement(By.id("put-modal-btn"));
+		driver = Click.element(driver, By.id("put-modal-btn"));
+		WebElement forum_tab_content = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-2")));
+		assertTrue(ForumNavigationUtilities.isForumEnabled(forum_tab_content),"The forum is not dissabled");
+		return driver;
 	}
 }

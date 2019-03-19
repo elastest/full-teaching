@@ -169,9 +169,10 @@ public class UserUtilities {
 			while (!wd.getCurrentUrl().equals(current_url)) {
 				wd.navigate().back();
 			}
+            log.info("[END]getLoggedUser => NOT LOGGED");
 			throw new NotLoggedException(toe.getMessage());
 		}
-		log.info("[END]getLoggedUser");
+		log.info("[END]getLoggedUser: {}", current_user);
 		return current_user;
 		
 	}
