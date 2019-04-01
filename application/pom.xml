@@ -64,7 +64,7 @@
 				<artifactId>docker-maven-plugin</artifactId>
 				<version>0.4.13</version>
 				<configuration>
-					<imageName>naevatec/${project.artifactId}</imageName>
+                <imageName>elastest/demonstrator-noelastest_full-teaching:latest</imageName>
 					<imageTags>
 						<imageTag>latest</imageTag>
 					</imageTags>
