@@ -79,7 +79,8 @@ public class BaseLoggedTest {
     @AfterEach
     void tearDown(TestInfo testInfo) throws IOException {
         String testName = testInfo.getTestMethod().get().getName();
-        log.info("##### Finish test: {}", testName);
+        log.info("##### Finish test: {} - Driver {}", testName, driver);
+
         if (driver != null) {
             log.info("url:"+driver.getCurrentUrl()+"\nScreenshot (in Base64) at the end of the test:\n{}",
                     SetUp.getBase64Screenshot(driver));

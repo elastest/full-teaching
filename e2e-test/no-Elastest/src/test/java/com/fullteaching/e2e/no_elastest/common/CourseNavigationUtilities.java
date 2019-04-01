@@ -186,7 +186,7 @@ public class CourseNavigationUtilities {
 		
 		
 		WebElement icon_element = wd.findElement(COURSE_TABS).findElement(icon);
-		WebElement tab =  DOMMannager.getParent(wd, DOMMannager.getParent(wd, icon_element));
+		WebElement tab =  DOMMannager.getParent(wd, DOMMannager.getParent(wd, DOMMannager.getParent(wd, icon_element)));
 		String id = tab.getAttribute("id");
 		wd = Click.element(wd,tab);
 		Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	

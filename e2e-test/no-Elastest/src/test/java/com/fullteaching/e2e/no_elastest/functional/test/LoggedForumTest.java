@@ -39,7 +39,7 @@ public class LoggedForumTest extends BaseLoggedTest {
 	protected static WebDriver driver;
 	
 
-	protected String courseName;
+	protected String courseName="Pseudoscientific course for treating the evil eye";
 
 	public static Stream<Arguments> data() throws IOException {
 		return ParameterLoader.getTestUsers();

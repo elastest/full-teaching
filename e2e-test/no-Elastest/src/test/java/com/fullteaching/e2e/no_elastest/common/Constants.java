@@ -6,7 +6,7 @@ import org.openqa.selenium.Keys;
 
 public final class Constants {
 
-	public static final String LOCALHOST = "https://192.168.1.89:5000";
+	public static final String LOCALHOST = "https://192.168.1.92:5000";
 	public static final String COURSES_URL = "__HOST__/courses";
 	   
     //Xpaths and ids
@@ -55,11 +55,11 @@ public final class Constants {
     public static final String ATTENDERSTAB_XPATH ="./div[1]/div[5]";
     
     /*FROM mat-tab-group*/
-    public static final String HOME_ICON_XPATH = "./div[1]/div[1]/div/i";
-    public static final String SESSION_ICON_XPATH = "./div[1]/div[2]/div/i";
-    public static final String FORUM_ICON_XPATH = "./div[1]/div[3]/div/i";
-    public static final String FILES_ICON_XPATH = "./div[1]/div[4]/div/i";
-    public static final String ATTENDERS_ICON_XPATH = "./div[1]/div[5]/div/i"; 
+    public static final String HOME_ICON_ID = "info-tab-icon";
+    public static final String SESSION_ICON_ID = "sessions-tab-icon";
+    public static final String FORUM_ICON_ID = "forum-tab-icon";
+    public static final String FILES_ICON_ID = "files-tab-icon";
+    public static final String ATTENDERS_ICON_ID = "attenders-tab-icon";
     
     public static final String SESSIONLIST_NEWSESSION_ICON_CLASS = "add-element-icon";
         
@@ -204,11 +204,11 @@ public final class Constants {
     public static final By SESSIONLIST_EDITMODAL_DELETE_DIV = By.className(SESSIONLIST_EDITMODAL_DELETE_DIV_CLASS);
     public static final By SESSIONLIST_SESSION_ACCESS = By.className(SESSIONLIST_SESSION_ACCESS_CLASS);
     //ICONS
-    public static final By FORUM_ICON = By.xpath(FORUM_ICON_XPATH);
-    public static final By HOME_ICON = By.xpath(HOME_ICON_XPATH);
-    public static final By SESSION_ICON = By.xpath(SESSION_ICON_XPATH);
-    public static final By FILES_ICON = By.xpath(FILES_ICON_XPATH);
-    public static final By ATTENDERS_ICON = By.xpath(ATTENDERS_ICON_XPATH);
+    public static final By FORUM_ICON = By.id(FORUM_ICON_ID);
+    public static final By HOME_ICON = By.id(HOME_ICON_ID);
+    public static final By SESSION_ICON = By.id(SESSION_ICON_ID);
+    public static final By FILES_ICON = By.id(FILES_ICON_ID);
+    public static final By ATTENDERS_ICON = By.id(ATTENDERS_ICON_ID);
     
     public static final By FORUM_NEWENTRY_ICON = By.id(FORUM_NEWENTRY_ICON_ID);
     public static final By FORUM_EDITENTRY_ICON = By.id(FORUM_EDITENTRY_ICON_ID);
