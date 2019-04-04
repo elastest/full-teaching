@@ -176,7 +176,7 @@ public final class Constants {
     public static final By COURSELIST = By.className(COURSELIST_CLASS);
     public static final By COURSE_TABS = By.tagName(COURSE_TABS_TAG);
     public static final By NEWCOURSE_MODAL_NAMEFIELD = By.id(NEWCOURSE_MODAL_NAMEFIELD_ID);
-    public static final By FORUMENTRYLIST_ENTRYTITLE = By.xpath(FORUMENTRYLIST_ENTRYTITLE_CLASS);
+    public static final By FORUMENTRYLIST_ENTRYTITLE = By.className(FORUMENTRYLIST_ENTRYTITLE_CLASS);
     public static final By FORUMENTRYLIST_ENTRIESUL = By.className(FORUMENTRYLIST_ENTRIESUL_CLASS);
     public static final By FORUMENTRYLIST_ENTRY_USER = By.className(FORUMENTRYLIST_ENTRY_USER_CLASS);
     public static final By FORUMCOMMENTLIST = By.id(FORUMCOMMENTLIST_ID);
