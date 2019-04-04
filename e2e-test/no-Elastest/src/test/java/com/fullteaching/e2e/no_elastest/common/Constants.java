@@ -33,7 +33,7 @@ public final class Constants {
     public static final String FILESTAB_ID ="mat-tab-label-0-3";
     public static final String ATTEDENDERSTAB_ID ="mat-tab-label-0-4";
 
-    public static final String NEWCOURSE_BUTTON_XPATH = "/html/body/app/div/main/app-dashboard/div/div[3]/div/div[1]/div/a";
+    public static final String NEWCOURSE_BUTTON_ID = "add-new-course-btn";
     public static final String NEWCOURSE_MODAL_ID = "course-modal";
     public static final String NEWCOURSE_MODAL_NAMEFIELD_ID = "inputPostCourseName";
     public static final String NEWCOURSE_MODAL_SAVE_ID="submit-post-course-btn";
@@ -92,21 +92,21 @@ public final class Constants {
     public static final String FORUMCOMMENTLIST_COMMENT_CONTENT_CLASS = "message-itself";
     public static final String FORUMCOMMENTLIST_BACK_TO_ENTRIESLIST_ICON_ID = "entries-sml-btn";
     public static final String FORUM_NEWENTRY_MODAL_ID = "course-details-modal";
-    public static final String FORUM_NEWENTRY_MODAL_TITLE_ID = "inputTitle";
-    public static final String FORUM_NEWENTRY_MODAL_CONTENT_ID = "inputComment";
+    public static final String FORUM_NEWENTRY_MODAL_TITLE_ID = "input-post-title";
+    public static final String FORUM_NEWENTRY_MODAL_CONTENT_ID = "input-post-comment";
     public static final String FORUM_NEWENTRY_MODAL_POSTBUTTON_ID = "post-modal-btn";
     public static final String FORUMCOMMENTLIST_NEWCOMMENT_ICON_CLASS = "forum-icon";
     public static final String FORUM_NEWCOMMENT_MODAL_ID = "course-details-modal";
-    public static final String FORUM_NEWCOMMENT_MODAL_TEXTFIELD_ID = "inputComment";
+    public static final String FORUM_NEWCOMMENT_MODAL_TEXTFIELD_ID = "input-post-comment";
     public static final String FORUM_NEWCOMMENT_MODAL_POSTBUTTON_ID = "post-modal-btn";
     public static final String FORUMCOMMENTLIST_COMMENT_REPLY_ICON_CLASS = "replay-icon";
     public static final String FORUMCOMMENTLIST_MODAL_NEWREPLY_ID = "course-details-modal";
-    public static final String FORUMCOMMENTLIST_MODAL_NEWREPLY_TEXTFIELD_ID = "inputComment";
+    public static final String FORUMCOMMENTLIST_MODAL_NEWREPLY_TEXTFIELD_ID = "input-post-comment";
     public static final String FORUMCOMMENTLIST_COMMENT_DIV_CLASS = "comment-div";
 
     public static final String SESSIONLIST_NEWSESSION_MODAL_ID = "course-details-modal";
-    public static final String SESSIONLIST_NEWSESSION_MODAL_TITLE_ID = "inputTitle";
-    public static final String SESSIONLIST_NEWSESSION_MODAL_CONTENT_ID = "inputComment";
+    public static final String SESSIONLIST_NEWSESSION_MODAL_TITLE_ID = "input-post-title";
+    public static final String SESSIONLIST_NEWSESSION_MODAL_CONTENT_ID = "input-post-comment";
     public static final String SESSIONLIST_NEWSESSION_MODAL_DATE_ID = "inputDate";
     public static final String SESSIONLIST_NEWSESSION_MODAL_TIME_ID = "inputTime";
     public static final String SESSIONLIST_NEWSESSION_MODAL_POSTBUTTON_ID = "post-modal-btn";
@@ -124,6 +124,7 @@ public final class Constants {
     public static final String SETTINGS_USEREMAIL_ID = "stng-user-mail";
     
     //BUTTONS
+    public static final By NEWCOURSE_BUTTON = By.id(NEWCOURSE_BUTTON_ID);
     public static final By SETTINGS_BUTTON = By.id(SETTINGS_BUTTON_ID);
     public static final By COURSES_BUTTON = By.id(COURSES_BUTTON_ID);
     public static final By LOGOUT_BUTTON = By.id(LOGOUT_BUTTON_ID);
@@ -132,7 +133,8 @@ public final class Constants {
     
     public static final By EDITCOURSE_BUTTON = By.className(EDITCOURSE_BUTTON_CLASS);
     public static final By EDITCOURSE_MODAL_SAVE = By.id(EDITCOURSE_MODAL_SAVE_ID);
-    
+
+    public static final By NEWCOURSE_MODAL_SAVE = By.id(NEWCOURSE_MODAL_SAVE_ID);
     public static final By EDITDESCRIPTION_BUTTON = By.xpath(EDITDESCRIPTION_BUTTON_XPATH);
     public static final By EDITDESCRIPTION_SAVEBUTTON = By.id(EDITDESCRIPTION_SAVEBUTTON_ID);
     
@@ -173,6 +175,7 @@ public final class Constants {
     public static final By COURSESDASHBOARD_TITLE = By.className(COURSESDASHBOARD_TITLE_CLASS);
     public static final By COURSELIST = By.className(COURSELIST_CLASS);
     public static final By COURSE_TABS = By.tagName(COURSE_TABS_TAG);
+    public static final By NEWCOURSE_MODAL_NAMEFIELD = By.id(NEWCOURSE_MODAL_NAMEFIELD_ID);
     public static final By FORUMENTRYLIST_ENTRYTITLE = By.xpath(FORUMENTRYLIST_ENTRYTITLE_XPATH);
     public static final By FORUMENTRYLIST_ENTRIESUL = By.className(FORUMENTRYLIST_ENTRIESUL_CLASS);
     public static final By FORUMENTRYLIST_ENTRY_USER = By.className(FORUMENTRYLIST_ENTRY_USER_CLASS);

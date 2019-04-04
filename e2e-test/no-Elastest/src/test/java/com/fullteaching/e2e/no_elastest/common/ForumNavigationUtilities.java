@@ -126,7 +126,7 @@ public class ForumNavigationUtilities {
     	comment.sendKeys(newEntryContent);
     	
     	//Publish
-    	Click.element(wd,FORUM_NEWENTRY_MODAL_POSTBUTTON);
+    	wd = Click.element(wd,FORUM_NEWENTRY_MODAL_POSTBUTTON);
 
     	//Wait to publish
     	Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(FORUMENTRYLIST_ENTRIESUL));

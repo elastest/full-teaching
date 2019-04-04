@@ -56,7 +56,7 @@ public class BaseLoggedTest {
     @BeforeEach
     void setup(TestInfo testInfo) {
         String testName = testInfo.getTestMethod().get().getName();
-        log.info("##### Start test: {}", testName);
+        log.info("##### Start test: {} ip: {}", testName, host );
 
         properties = new Properties();
         try {

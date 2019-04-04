@@ -34,18 +34,18 @@ public class CourseNavigationUtilities {
 		}
 
     	// press new course button and wait for modal course-modal 
-	    WebElement new_course_button = Wait.notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(By.xpath(NEWCOURSE_BUTTON_XPATH)));
+	    WebElement new_course_button = Wait.notTooMuch(wd).until(ExpectedConditions.presenceOfElementLocated(NEWCOURSE_BUTTON));
 	    Click.byJS(wd,new_course_button);
    	
 	    Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(NEWCOURSE_MODAL));
     	
     	
     	//fill information
-    	WebElement name_field = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id(NEWCOURSE_MODAL_NAMEFIELD_ID)));
+    	WebElement name_field = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(NEWCOURSE_MODAL_NAMEFIELD));
 	    String course_title = "Test Course_"+System.currentTimeMillis();
 	    name_field.sendKeys(course_title); //no duplicated courses
     	
-    	WebElement save_button = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id(NEWCOURSE_MODAL_SAVE_ID)));
+    	WebElement save_button = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(NEWCOURSE_MODAL_SAVE));
 	    Click.element(wd, By.id(NEWCOURSE_MODAL_SAVE_ID));
     	    	
     	//check if the course appears now in the list
@@ -118,7 +118,6 @@ public class CourseNavigationUtilities {
     		name_field.sendKeys(newName);
     				
     		//save
-    		WebElement save_button = edit_modal.findElement(By.id(EDITCOURSE_MODAL_SAVE_ID));
     		Click.element(wd, EDITCOURSE_MODAL_SAVE);
     		
 		}catch(NoSuchElementException csee) {
@@ -185,8 +184,7 @@ public class CourseNavigationUtilities {
 	public static WebDriver go2Tab(WebDriver wd, By icon) throws ElementNotFoundException {
 		
 		
-		WebElement icon_element = wd.findElement(COURSE_TABS).findElement(icon);
-		WebElement tab =  DOMMannager.getParent(wd, DOMMannager.getParent(wd, DOMMannager.getParent(wd, icon_element)));
+		WebElement tab = getTabElementFromIcon(wd, icon);
 		String id = tab.getAttribute("id");
 		wd = Click.element(wd,tab);
 		Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id(id.replace("label", "content"))));	
@@ -196,8 +194,8 @@ public class CourseNavigationUtilities {
 	}
 	
 	public static String getTabId(WebDriver wd, By icon) {
-		WebElement icon_element = wd.findElement(COURSE_TABS).findElement(icon);
-		WebElement tab =  DOMMannager.getParent(wd, DOMMannager.getParent(wd, icon_element));
+
+		WebElement tab = getTabElementFromIcon(wd, icon);
 		return tab.getAttribute("id");
 	}
 	
@@ -206,5 +204,9 @@ public class CourseNavigationUtilities {
 		String tab_id = getTabId(wd, icon);
 		return wd.findElement(By.id(tab_id.replace("label", "content"))); 
 	}
-	
+
+	public static WebElement getTabElementFromIcon(WebDriver wd, By icon){
+		WebElement icon_element = wd.findElement(COURSE_TABS).findElement(icon);
+		return DOMMannager.getParent(wd, DOMMannager.getParent(wd, DOMMannager.getParent(wd, icon_element)));
+	}
 }

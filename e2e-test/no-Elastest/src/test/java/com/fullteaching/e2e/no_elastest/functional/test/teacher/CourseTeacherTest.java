@@ -50,12 +50,17 @@ public class CourseTeacherTest extends BaseLoggedTest {
 	@MethodSource("data")
     public void teacherCourseMainTest(String user, String password, String role, @DockerBrowser(type = CHROME) RemoteWebDriver rwd) throws ElementNotFoundException, BadUserException, NotLoggedException, TimeOutExeception {
 
+		driver = rwd;
+
+		String courseName = properties.getProperty("forum.test.course");
+
 		driver = loginAndValidate(driver,  user, password);
     	
     	try {
     		if(!NavigationUtilities.amIHere(driver,COURSES_URL.replace("__HOST__", host)))
         		driver = NavigationUtilities.toCoursesHome(driver);
-	    	    	
+
+
 	    	WebElement course_button = Wait.notTooMuch(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath(FIRSTCOURSE_XPATH+GOTOCOURSE_XPATH)));
 	    	Click.element(driver, By.xpath(FIRSTCOURSE_XPATH+GOTOCOURSE_XPATH));
 	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(TABS_DIV_ID)));
@@ -101,7 +106,10 @@ public class CourseTeacherTest extends BaseLoggedTest {
 	@MethodSource("data")
     public void teacherNewCourseTest(String user, String password, String role, @DockerBrowser(type = CHROME) RemoteWebDriver rwd) throws ElementNotFoundException, BadUserException, NotLoggedException, TimeOutExeception {
 
-		driver = rwd;
+    	driver = rwd;
+
+		String courseName = properties.getProperty("forum.test.course");
+
 		driver = loginAndValidate(driver,  user, password);
     	
     	boolean found = false;
@@ -115,7 +123,7 @@ public class CourseTeacherTest extends BaseLoggedTest {
     	
     	try {
 	    	// press new course button and wait for modal course-modal 
-	    	WebElement new_course_button = Wait.notTooMuch(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath(NEWCOURSE_BUTTON_XPATH)));
+	    	WebElement new_course_button = Wait.notTooMuch(driver).until(ExpectedConditions.presenceOfElementLocated(NEWCOURSE_BUTTON));
 	    	
 	    	Click.byJS(driver,new_course_button);
     	
@@ -166,6 +174,10 @@ public class CourseTeacherTest extends BaseLoggedTest {
 	@ParameterizedTest
 	@MethodSource("data")
     public void teacherEditCourseValues(String user, String password, String role, @DockerBrowser(type = CHROME) RemoteWebDriver rwd) throws ElementNotFoundException, BadUserException, NotLoggedException, TimeOutExeception {
+
+		driver = rwd;
+
+		String courseName = properties.getProperty("forum.test.course");
 
 		driver = loginAndValidate(driver,  user, password);
     	
@@ -414,6 +426,9 @@ public class CourseTeacherTest extends BaseLoggedTest {
 	@ParameterizedTest
 	@MethodSource("data")
     public void teacherDeleteCourseTest(String user, String password, String role, @DockerBrowser(type = CHROME) RemoteWebDriver rwd) throws ElementNotFoundException, BadUserException, NotLoggedException, TimeOutExeception {
+
+		driver = rwd;
+
 
 		driver = loginAndValidate(driver,  user, password);
     	String courseName="";
