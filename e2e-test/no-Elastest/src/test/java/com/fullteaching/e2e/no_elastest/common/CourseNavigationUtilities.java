@@ -108,7 +108,7 @@ public class CourseNavigationUtilities {
 			
 			WebElement edit_name_button = c.findElement(EDITCOURSE_BUTTON);
     	    		
-    	    Click.element(wd,edit_name_button);
+    	    wd = Click.element(wd,edit_name_button);
     	    		
     	    //wait for edit modal
     	    WebElement edit_modal = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(EDITDELETE_MODAL));

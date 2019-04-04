@@ -81,7 +81,7 @@ public final class Constants {
     
     public static final String FORUM_NEWENTRY_ICON_ID ="add-entry-icon";
     public static final String FORUM_EDITENTRY_ICON_ID = "edit-forum-icon";
-    public static final String FORUMENTRYLIST_ENTRYTITLE_XPATH = "./div[1]/div[1]/a"; //from each li in the list of entries
+    public static final String FORUMENTRYLIST_ENTRYTITLE_CLASS = "forum-entry-title"; //from each li in the list of entries
     public static final String FORUMENTRYLIST_ENTRIESUL_CLASS = "entries-side-view";
     public static final String FORUMENTRYLIST_ENTRY_USER_CLASS = "user-name";
     public static final String FORUMCOMMENTLIST_ENTRY_TITLE_CLASS = "comment-section-title";
@@ -176,7 +176,7 @@ public final class Constants {
     public static final By COURSELIST = By.className(COURSELIST_CLASS);
     public static final By COURSE_TABS = By.tagName(COURSE_TABS_TAG);
     public static final By NEWCOURSE_MODAL_NAMEFIELD = By.id(NEWCOURSE_MODAL_NAMEFIELD_ID);
-    public static final By FORUMENTRYLIST_ENTRYTITLE = By.xpath(FORUMENTRYLIST_ENTRYTITLE_XPATH);
+    public static final By FORUMENTRYLIST_ENTRYTITLE = By.xpath(FORUMENTRYLIST_ENTRYTITLE_CLASS);
     public static final By FORUMENTRYLIST_ENTRIESUL = By.className(FORUMENTRYLIST_ENTRIESUL_CLASS);
     public static final By FORUMENTRYLIST_ENTRY_USER = By.className(FORUMENTRYLIST_ENTRY_USER_CLASS);
     public static final By FORUMCOMMENTLIST = By.id(FORUMCOMMENTLIST_ID);

@@ -85,7 +85,7 @@ public class LoggedForumTest extends BaseLoggedTest {
 	    	        	//Go into first entry
     	    			for (String entry_name : entries_list) {
     	    				WebElement entry = ForumNavigationUtilities.getEntry(driver, entry_name);
-    	    				Click.element(driver, entry.findElement(FORUMENTRYLIST_ENTRYTITLE));
+    	    				driver = Click.element(driver, entry.findElement(FORUMENTRYLIST_ENTRYTITLE));
     	    				//Load comments
     	        	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUMCOMMENTLIST));
     	        	    	List<WebElement>comments = ForumNavigationUtilities.getComments(driver);

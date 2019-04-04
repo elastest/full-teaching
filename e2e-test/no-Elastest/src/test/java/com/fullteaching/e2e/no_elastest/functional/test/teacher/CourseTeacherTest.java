@@ -459,7 +459,7 @@ public class CourseTeacherTest extends BaseLoggedTest {
     		
     		WebElement edit_name_button = course.findElement(EDITCOURSE_BUTTON);
     		
-    	    Click.element(driver,edit_name_button);
+    	    driver = Click.element(driver,edit_name_button);
     	    		
     	    //wait for edit modal
     	    WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(EDITDELETE_MODAL));;
