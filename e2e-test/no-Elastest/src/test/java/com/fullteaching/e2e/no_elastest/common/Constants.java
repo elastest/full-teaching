@@ -35,14 +35,15 @@ public final class Constants {
 
     public static final String NEWCOURSE_BUTTON_ID = "add-new-course-btn";
     public static final String NEWCOURSE_MODAL_ID = "course-modal";
-    public static final String NEWCOURSE_MODAL_NAMEFIELD_ID = "inputPostCourseName";
+    public static final String NEWCOURSE_MODAL_NAMEFIELD_ID = "input-post-course-name";
     public static final String NEWCOURSE_MODAL_SAVE_ID="submit-post-course-btn";
 
     public static final String EDITCOURSE_BUTTON_CLASS = "course-put-icon";
     public static final String EDITDELETE_MODAL_ID = "put-delete-course-modal";
-    public static final String EDITCOURSE_MODAL_NAMEFIELD_ID = "inputPutCourseName";
+    public static final String EDITCOURSE_MODAL_NAMEFIELD_ID = "input-put-course-name";
     public static final String EDITCOURSE_MODAL_SAVE_ID="submit-put-course-btn";
-    
+    public static final String EDITCOURSE_DELETE_CHECK_ID="label-delete-checkbox";
+
     public static final String COURSE_BACK_TO_DASHBOARD_CLASS = "btn-floating";
         
     public static final String COURSE_TABS_TAG = "mat-tab-group";
@@ -63,15 +64,17 @@ public final class Constants {
     
     public static final String SESSIONLIST_NEWSESSION_ICON_CLASS = "add-element-icon";
         
-    public static final String EDITDESCRIPTION_BUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[4]/mat-tab-group/div[2]/div[1]/div/div[1]/a";
+    public static final String EDITDESCRIPTION_BUTTON_ID = "edit-course-info";
     public static final String EDITDESCRIPTION_CONTENTBOX_CLASS = "ui-editor-content";
-    public static final String EDITDESCRIPTION_PREVIEWBUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[4]/mat-tab-group/div[2]/div[1]/div/div[2]/div/a[2]";
+    public static final String EDITDESCRIPTION_PREVIEWBUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[4]/mat-tab-group/div/mat-tab-body[1]/div/div/div[2]/div/a[2]";
     public static final String EDITDESCRIPTION_SAVEBUTTON_ID = "send-info-btn";
     
     public static final String USERNAME_XPATH ="/html/body/app/div/main/app-settings/div/div[3]/div[2]/ul/li[2]/div[2]";
     public static final String LOGINMENU_XPATH ="/html/body/app/div/header/navbar/div/nav/div/ul/li[2]/a";
     
-    public static final String ENABLEFORUM_BUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[2]/div/div/form/div[1]/label";
+    public static final String ENABLEFORUM_BUTTON_ID = "label-forum-checkbox";
+    public static final String ENABLEFORUM_MODAL_SAVEBUTTON_ID = "put-modal-btn";
+    public static final String ENABLEFORUM_MODAL_ID = "put-delete-modal";
     
     public static final String ENABLECOURSE_DELETION_BUTTON_XPATH = "/html/body/app/div/main/app-dashboard/div/div[2]/div/div/form/div[2]/div/div/label";
     public static final String DELETECOURSE_BUTTON_XPATH = "/html/body/app/div/main/app-dashboard/div/div[2]/div/div/form/div[2]/div/a";
@@ -120,7 +123,9 @@ public final class Constants {
     public static final String SESSION_LEFT_MENU_BUTTON_ID = "side-menu-button";
     public static final String SESSION_EXIT_ICON_ID = "exit-icon";
     
-    
+    public static final String ATTENDERS_LIST_ROWS_CLASS = "attender-row-div";
+    public static final String ATTENDERS_LIST_HIGHLIGHTEDROW_CLASS = "attender-name-p";
+
     public static final String SETTINGS_USEREMAIL_ID = "stng-user-mail";
     
     //BUTTONS
@@ -135,11 +140,12 @@ public final class Constants {
     public static final By EDITCOURSE_MODAL_SAVE = By.id(EDITCOURSE_MODAL_SAVE_ID);
 
     public static final By NEWCOURSE_MODAL_SAVE = By.id(NEWCOURSE_MODAL_SAVE_ID);
-    public static final By EDITDESCRIPTION_BUTTON = By.xpath(EDITDESCRIPTION_BUTTON_XPATH);
+    public static final By EDITDESCRIPTION_BUTTON = By.id(EDITDESCRIPTION_BUTTON_ID);
     public static final By EDITDESCRIPTION_SAVEBUTTON = By.id(EDITDESCRIPTION_SAVEBUTTON_ID);
     
-    public static final By DISABLEFORUM_BUTTON = By.xpath(ENABLEFORUM_BUTTON_XPATH);
-    public static final By ENABLEFORUM_BUTTON = By.xpath(ENABLEFORUM_BUTTON_XPATH);
+    public static final By DISABLEFORUM_BUTTON = By.id(ENABLEFORUM_BUTTON_ID);
+    public static final By ENABLEFORUM_BUTTON = By.id(ENABLEFORUM_BUTTON_ID);
+    public static final By ENABLEFORUM_MODAL = By.id(ENABLEFORUM_MODAL_ID);
     
     public static final By ENABLECOURSE_DELETION_BUTTON = By.xpath(ENABLECOURSE_DELETION_BUTTON_XPATH);
     public static final By DELETECOURSE_BUTTON = By.xpath(DELETECOURSE_BUTTON_XPATH);
@@ -147,6 +153,8 @@ public final class Constants {
     public static final By BACK_TO_DASHBOARD = By.className(COURSE_BACK_TO_DASHBOARD_CLASS);
     
     public static final By FORUM_NEWENTRY_MODAL_POSTBUTTON = By.id(FORUM_NEWENTRY_MODAL_POSTBUTTON_ID);
+    public static final By ENABLEFORUM_MODAL_SAVEBUTTON = By.id(ENABLEFORUM_MODAL_SAVEBUTTON_ID);
+
     public static final By SESSIONLIST_NEWSESSION_MODAL_POSTBUTTON = By.id(SESSIONLIST_NEWSESSION_MODAL_POSTBUTTON_ID);
     
     public static final By SESSION_LEFT_MENU_BUTTON = By.id(SESSION_LEFT_MENU_BUTTON_ID);
@@ -175,6 +183,7 @@ public final class Constants {
     public static final By COURSESDASHBOARD_TITLE = By.className(COURSESDASHBOARD_TITLE_CLASS);
     public static final By COURSELIST = By.className(COURSELIST_CLASS);
     public static final By COURSE_TABS = By.tagName(COURSE_TABS_TAG);
+    public static final By EDITCOURSE_DELETE_CHECK = By.id(EDITCOURSE_DELETE_CHECK_ID);
     public static final By NEWCOURSE_MODAL_NAMEFIELD = By.id(NEWCOURSE_MODAL_NAMEFIELD_ID);
     public static final By FORUMENTRYLIST_ENTRYTITLE = By.className(FORUMENTRYLIST_ENTRYTITLE_CLASS);
     public static final By FORUMENTRYLIST_ENTRIESUL = By.className(FORUMENTRYLIST_ENTRIESUL_CLASS);
@@ -206,6 +215,10 @@ public final class Constants {
     public static final By SESSIONLIST_SESSION_NAME = By.className(SESSIONLIST_SESSION_NAME_CLASS);
     public static final By SESSIONLIST_EDITMODAL_DELETE_DIV = By.className(SESSIONLIST_EDITMODAL_DELETE_DIV_CLASS);
     public static final By SESSIONLIST_SESSION_ACCESS = By.className(SESSIONLIST_SESSION_ACCESS_CLASS);
+
+    public static final By ATTENDERS_LIST_ROWS = By.className(ATTENDERS_LIST_ROWS_CLASS);
+    public static final By ATTENDERS_LIST_HIGHLIGHTEDROW = By.className(ATTENDERS_LIST_HIGHLIGHTEDROW_CLASS);
+
     //ICONS
     public static final By FORUM_ICON = By.id(FORUM_ICON_ID);
     public static final By HOME_ICON = By.id(HOME_ICON_ID);

@@ -5,6 +5,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -94,7 +95,21 @@ public class CourseNavigationUtilities {
     	}
     	return false;
 	}
-	
+
+	public static boolean checkIfCourseExists(WebDriver wd, String course_title, int retries){
+		for (int i = 0; i< retries; i++){
+			try {
+				TimeUnit.SECONDS.sleep(1);
+			} catch (InterruptedException e) {
+
+			}
+			if (checkIfCourseExists(wd, course_title)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static WebDriver changeCourseName(WebDriver wd, String oldName, String newName) throws ElementNotFoundException {
 		
 		log.info("[INI] changeCourseName({}=>{})",oldName,  newName);
@@ -118,7 +133,7 @@ public class CourseNavigationUtilities {
     		name_field.sendKeys(newName);
     				
     		//save
-    		Click.element(wd, EDITCOURSE_MODAL_SAVE);
+    		wd = Click.element(wd, EDITCOURSE_MODAL_SAVE);
     		
 		}catch(NoSuchElementException csee) {
     		log.info("[END] changeCourseName KO: changeCourseName - Course \"{}\" probably doesn't exists",oldName);
@@ -130,7 +145,42 @@ public class CourseNavigationUtilities {
     	return wd;
 		
 	}
-	
+
+	public static WebDriver deleteCourse(WebDriver wd, String course_name) throws ElementNotFoundException{
+		log.info("[INI] deleteCourse({}", course_name);
+
+		boolean found = false;
+		WebElement courses_list = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(COURSELIST));
+
+		try {
+			//find the course
+			WebElement c = getCourseElement(wd, course_name);
+
+			WebElement edit_name_button = c.findElement(EDITCOURSE_BUTTON);
+
+			wd = Click.element(wd, edit_name_button);
+
+			//wait for edit modal
+			WebElement edit_modal = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(EDITDELETE_MODAL));
+
+			//press delete
+			WebElement delete_check = Wait.aLittle(wd).until(ExpectedConditions.visibilityOfElementLocated(EDITCOURSE_DELETE_CHECK));
+			wd = Click.element(wd, delete_check);
+
+			//save
+			wd = Click.element(wd, EDITCOURSE_MODAL_SAVE);
+
+		}catch(NoSuchElementException csee) {
+			log.info("[END] deleteCourse KO: changeCourseName - Course \"{}\" probably doesn't exists",course_name);
+			throw new ElementNotFoundException("changeCourseName - Course "+course_name +"probably doesn't exists");
+		}
+		log.info("[END] deleteCourse OK: changeCourseName - Course \"{}\" ",course_name);
+
+		return wd;
+
+	}
+
+
 	public static List<String> getCoursesList(WebDriver wd, String host) throws ElementNotFoundException{
 		
 		ArrayList <String> courses_names = new ArrayList<String>();
@@ -205,8 +255,54 @@ public class CourseNavigationUtilities {
 		return wd.findElement(By.id(tab_id.replace("label", "content"))); 
 	}
 
+	public static WebElement wait4TabContent(WebDriver wd, By icon){
+
+		String tab_id = getTabId(wd, icon);
+		return Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(By.id(tab_id.replace("label", "content"))));
+	}
+
 	public static WebElement getTabElementFromIcon(WebDriver wd, By icon){
 		WebElement icon_element = wd.findElement(COURSE_TABS).findElement(icon);
 		return DOMMannager.getParent(wd, DOMMannager.getParent(wd, DOMMannager.getParent(wd, icon_element)));
+	}
+
+	public static boolean isUserInAttendersList(WebDriver wd, String user_name) throws ElementNotFoundException {
+
+		log.info("[INI] isUserInAttendersList");
+
+		WebElement attenders_content = getTabContent(wd, ATTENDERS_ICON);
+
+		List <WebElement> attenders_lst = wd.findElements(ATTENDERS_LIST_ROWS);
+
+		if(attenders_lst.size()<1){
+			log.info("[END] isUserInAttendersList KO: attenders list is empty");
+			throw new ElementNotFoundException("isUserInAttendersList - attenders list is empty");
+		}
+
+		for (int i = 0; i< attenders_lst.size(); i++){
+			String user_from_row = attenders_lst.get(i).getText();
+			if (user_name.trim().equalsIgnoreCase(user_from_row.trim())){
+				log.info("[END] isUserInAttendersList OK");
+				return true;
+			}
+		}
+		log.info("[END] isUserInAttendersList KO: user not found");
+		return false;
+	}
+
+	public static String getHighlightedAttender(WebDriver wd) throws ElementNotFoundException {
+
+		log.info("[INI] getHighlightedAttender");
+
+		WebElement attenders_content = getTabContent(wd, ATTENDERS_ICON);
+
+		List<WebElement> attender_highlighted = attenders_content.findElements(ATTENDERS_LIST_HIGHLIGHTEDROW);
+
+		if (attender_highlighted == null || attender_highlighted.size()<1){
+			log.info("[END] getHighlightedAttender KO: no highlighted user");
+			throw new ElementNotFoundException("getHighlightedAttender - no highlighted user");
+		}
+
+		return attender_highlighted.get(0).getText();
 	}
 }
