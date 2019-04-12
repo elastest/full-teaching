@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import com.fullteaching.e2e.no_elastest.common.*;
 import io.github.bonigarcia.seljup.DockerBrowser;
 import io.github.bonigarcia.seljup.SeleniumExtension;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -51,7 +52,7 @@ public class CourseTeacherTest extends BaseLoggedTest {
 	@MethodSource("data")
     public void teacherCourseMainTest(String user, String password, String role, @DockerBrowser(type = CHROME) RemoteWebDriver rwd) throws ElementNotFoundException, BadUserException, NotLoggedException, TimeOutExeception {
 
-		driver = rwd;
+    driver = rwd;
 
 		String courseName = properties.getProperty("forum.test.course");
 
@@ -190,7 +191,7 @@ public class CourseTeacherTest extends BaseLoggedTest {
 		driver = rwd;
 
 		String courseName = properties.getProperty("forum.test.course");
-
+      
 		driver = loginAndValidate(driver,  user, password);
     	
     	try {
@@ -214,6 +215,7 @@ public class CourseTeacherTest extends BaseLoggedTest {
     		
     		driver = CourseNavigationUtilities.changeCourseName(driver, old_name, edition_name);
     		//check if course exists
+
 	    	assertTrue(CourseNavigationUtilities.checkIfCourseExists(driver, edition_name, 3), "The course title hasn't been found in the list ¿Have been created?");
 
 	    	//return to old name	    	
@@ -350,7 +352,7 @@ public class CourseTeacherTest extends BaseLoggedTest {
     			assertNotNull(forum_tab_content.findElement(FORUM_NEWENTRY_ICON),"Add Entry not found");
     			assertNotNull(forum_tab_content.findElement(FORUM_EDITENTRY_ICON),"Add Entry not found");
     			
-    			//disable 
+    			//disable
     			driver = ForumNavigationUtilities.disableForum(driver);
 
     			//enable
@@ -368,7 +370,6 @@ public class CourseTeacherTest extends BaseLoggedTest {
     			
     			//disable 
     			driver = ForumNavigationUtilities.disableForum(driver);
-
     		}
     		
     	} catch(Exception e) {	
@@ -377,6 +378,7 @@ public class CourseTeacherTest extends BaseLoggedTest {
     	}
     	// in attenders
     	try {
+
 			driver = CourseNavigationUtilities.go2Tab(driver, ATTENDERS_ICON);
 			WebElement attenders_tab_content = CourseNavigationUtilities.getTabContent(driver, ATTENDERS_ICON);
 
@@ -403,7 +405,6 @@ public class CourseTeacherTest extends BaseLoggedTest {
     public void teacherDeleteCourseTest(String user, String password, String role, @DockerBrowser(type = CHROME) RemoteWebDriver rwd) throws ElementNotFoundException, BadUserException, NotLoggedException, TimeOutExeception {
 
 		driver = rwd;
-
 
 		driver = loginAndValidate(driver,  user, password);
     	String courseName="";

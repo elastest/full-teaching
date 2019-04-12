@@ -9,14 +9,17 @@ import io.github.bonigarcia.seljup.DriverCapabilities;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
 import org.slf4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+
 import java.util.Date;
 import java.util.Properties;
 
@@ -56,6 +59,7 @@ public class BaseLoggedTest {
     @BeforeEach
     void setup(TestInfo testInfo) {
         String testName = testInfo.getTestMethod().get().getName();
+
         log.info("##### Start test: {} ip: {}", testName, host );
 
         properties = new Properties();
@@ -71,6 +75,7 @@ public class BaseLoggedTest {
     @AfterEach
     void tearDown(TestInfo testInfo) throws IOException {
         String testName = testInfo.getTestMethod().get().getName();
+
         log.info("##### Finish test: {} - Driver {}", testName, driver);
 
         if (driver != null) {

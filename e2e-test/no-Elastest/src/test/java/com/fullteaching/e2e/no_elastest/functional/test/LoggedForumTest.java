@@ -38,7 +38,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LoggedForumTest extends BaseLoggedTest {
 	protected static WebDriver driver;
 	
-
 	protected String courseName="Pseudoscientific course for treating the evil eye";
 
 	public static Stream<Arguments> data() throws IOException {
@@ -46,7 +45,7 @@ public class LoggedForumTest extends BaseLoggedTest {
 	}
 
     @ParameterizedTest
-	@MethodSource("data")
+	  @MethodSource("data")
     public void forumLoadEntriesTest(String user, String password, String role, @DockerBrowser(type = CHROME) RemoteWebDriver rwd)  throws ElementNotFoundException, BadUserException, NotLoggedException, TimeOutExeception {
 
 		driver = rwd;

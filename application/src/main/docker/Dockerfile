@@ -1,5 +1,6 @@
 FROM ubuntu:16.04
 
+
 ## Add the init script to the image
 ADD init.sh init.sh
 RUN chmod +x /init.sh
@@ -19,6 +20,7 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 RUN apt-get install -y netcat-openbsd
 
 ADD full-teaching-1.5.0.war app.jar
+
 RUN bash -c 'touch /app.jar'
 
 EXPOSE 5000

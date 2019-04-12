@@ -7,6 +7,7 @@ import org.openqa.selenium.Keys;
 public final class Constants {
 
 	public static final String LOCALHOST = "https://192.168.1.92:5000";
+
 	public static final String COURSES_URL = "__HOST__/courses";
 	   
     //Xpaths and ids
@@ -67,6 +68,7 @@ public final class Constants {
     public static final String EDITDESCRIPTION_BUTTON_ID = "edit-course-info";
     public static final String EDITDESCRIPTION_CONTENTBOX_CLASS = "ui-editor-content";
     public static final String EDITDESCRIPTION_PREVIEWBUTTON_XPATH = "/html/body/app/div/main/app-course-details/div/div[4]/mat-tab-group/div/mat-tab-body[1]/div/div/div[2]/div/a[2]";
+
     public static final String EDITDESCRIPTION_SAVEBUTTON_ID = "send-info-btn";
     
     public static final String USERNAME_XPATH ="/html/body/app/div/main/app-settings/div/div[3]/div[2]/ul/li[2]/div[2]";
