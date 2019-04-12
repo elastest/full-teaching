@@ -126,7 +126,7 @@ public class ForumNavigationUtilities {
     	comment.sendKeys(newEntryContent);
     	
     	//Publish
-    	Click.element(wd,FORUM_NEWENTRY_MODAL_POSTBUTTON);
+    	wd = Click.element(wd,FORUM_NEWENTRY_MODAL_POSTBUTTON);
 
     	//Wait to publish
     	Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(FORUMENTRYLIST_ENTRIESUL));
@@ -152,18 +152,46 @@ public class ForumNavigationUtilities {
 		return replies;
 	}
 	
-	public static WebDriver enableForum(WebDriver driver) throws ElementNotFoundException {
-		WebElement edit_button =  Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_EDITENTRY_ICON));
-		driver = Click.element(driver,FORUM_EDITENTRY_ICON);
-		WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("put-delete-modal")));
-		//press disable
+	public static WebDriver enableForum(WebDriver wd) throws ElementNotFoundException {
+
+		//click edit
+		WebElement edit_button =  Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(FORUM_EDITENTRY_ICON));
+		wd = Click.element(wd,edit_button);
+		WebElement edit_modal = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(ENABLEFORUM_MODAL));
+
+		//press enable
 		WebElement enable_button = edit_modal.findElement(ENABLEFORUM_BUTTON);
-		driver = Click.withNRetries(driver, ENABLEFORUM_BUTTON, 3, By.id("put-modal-btn"));
-		//enable_button.click();
-		WebElement save_button = edit_modal.findElement(By.id("put-modal-btn"));
-		driver = Click.element(driver, By.id("put-modal-btn"));
-		WebElement forum_tab_content = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-2")));
-		assertTrue(ForumNavigationUtilities.isForumEnabled(forum_tab_content),"The forum is not dissabled");
-		return driver;
+		wd = Click.element(wd, enable_button);
+
+		WebElement save_button = edit_modal.findElement(ENABLEFORUM_MODAL_SAVEBUTTON);
+		wd = Click.element(wd, save_button);
+
+		WebElement forum_tab_content = CourseNavigationUtilities.wait4TabContent(wd, FORUM_ICON);
+
+		assertTrue(isForumEnabled(forum_tab_content),"The forum is not dissabled");
+
+		return wd;
 	}
+
+	public static WebDriver disableForum(WebDriver wd) throws ElementNotFoundException {
+
+		//click edit
+		WebElement edit_button =  Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(FORUM_EDITENTRY_ICON));
+		wd = Click.element(wd,edit_button);
+		WebElement edit_modal = Wait.notTooMuch(wd).until(ExpectedConditions.visibilityOfElementLocated(ENABLEFORUM_MODAL));
+
+		//press disable
+		WebElement enable_button = edit_modal.findElement(DISABLEFORUM_BUTTON);
+		wd = Click.element(wd, enable_button);
+
+		WebElement save_button = edit_modal.findElement(ENABLEFORUM_MODAL_SAVEBUTTON);
+		wd = Click.element(wd, save_button);
+
+		WebElement forum_tab_content = CourseNavigationUtilities.wait4TabContent(wd, FORUM_ICON);
+
+		assertFalse(ForumNavigationUtilities.isForumEnabled(forum_tab_content), "The forum is not dissabled");
+
+		return wd;
+	}
+
 }

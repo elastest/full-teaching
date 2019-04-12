@@ -38,15 +38,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LoggedForumTest extends BaseLoggedTest {
 	protected static WebDriver driver;
 	
-
-	protected String courseName;
+	protected String courseName="Pseudoscientific course for treating the evil eye";
 
 	public static Stream<Arguments> data() throws IOException {
 		return ParameterLoader.getTestUsers();
 	}
 
     @ParameterizedTest
-	@MethodSource("data")
+	  @MethodSource("data")
     public void forumLoadEntriesTest(String user, String password, String role, @DockerBrowser(type = CHROME) RemoteWebDriver rwd)  throws ElementNotFoundException, BadUserException, NotLoggedException, TimeOutExeception {
 
 		driver = rwd;
@@ -85,7 +84,7 @@ public class LoggedForumTest extends BaseLoggedTest {
 	    	        	//Go into first entry
     	    			for (String entry_name : entries_list) {
     	    				WebElement entry = ForumNavigationUtilities.getEntry(driver, entry_name);
-    	    				Click.element(driver, entry.findElement(FORUMENTRYLIST_ENTRYTITLE));
+    	    				driver = Click.element(driver, entry.findElement(FORUMENTRYLIST_ENTRYTITLE));
     	    				//Load comments
     	        	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUMCOMMENTLIST));
     	        	    	List<WebElement>comments = ForumNavigationUtilities.getComments(driver);

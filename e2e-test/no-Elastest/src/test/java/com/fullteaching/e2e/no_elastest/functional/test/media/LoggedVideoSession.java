@@ -299,10 +299,12 @@ public class LoggedVideoSession{
     	try {
     		//delete session by teacher
 			WebElement session = SessionNavigationUtilities.getSession(teacherDriver,sessionName);
-			Click.element(teacherDriver, session.findElement(SESSIONLIST_SESSIONEDIT_ICON));
+
+			teacherDriver = Click.element(teacherDriver, session.findElement(SESSIONLIST_SESSIONEDIT_ICON));
+
 	    	WebElement modal = Wait.notTooMuch(teacherDriver).until(ExpectedConditions.visibilityOfElementLocated(SESSIONLIST_EDIT_MODAL));
-	    	Click.element(teacherDriver, modal.findElement(SESSIONLIST_EDITMODAL_DELETE_DIV).findElement(By.tagName("label")));
-	    	Click.element(teacherDriver, modal.findElement(SESSIONLIST_EDITMODAL_DELETE_DIV).findElement(By.tagName("a")));
+	    	teacherDriver = Click.element(teacherDriver, modal.findElement(SESSIONLIST_EDITMODAL_DELETE_DIV).findElement(By.tagName("label")));
+	    	teacherDriver = Click.element(teacherDriver, modal.findElement(SESSIONLIST_EDITMODAL_DELETE_DIV).findElement(By.tagName("a")));
 	    	
 	    	List <String> session_titles = SessionNavigationUtilities.getFullSessionList(teacherDriver);
 	    	assertTrue(!session_titles.contains(sessionName), "Session has not been deleted");

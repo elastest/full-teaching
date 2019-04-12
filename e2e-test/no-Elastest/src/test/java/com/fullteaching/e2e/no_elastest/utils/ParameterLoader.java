@@ -40,10 +40,10 @@ public class ParameterLoader {
 		Collection<User> users = UserLoader.getAllUsers();
 		
 		for(User user : users) {
-			if (isStudent(user) && !isTeacher(user))
-				log.debug("getTestStudents--{}",user.getUserCsv());
-				records = Stream.concat(records, Stream.of(arguments(user.getUserCsv().split( ","))));
-			//records.add(user.getUserCsv().split(","));
+			if (isStudent(user) && !isTeacher(user)) {
+				log.debug("getTestStudents--{}", user.getUserCsv());
+				records = Stream.concat(records, Stream.of(arguments(user.getUserCsv().split(","))));
+			}
 		}
         log.debug("[getTestStudents] END");
         return records;
@@ -57,10 +57,10 @@ public class ParameterLoader {
 		Collection<User> users = UserLoader.getAllUsers();
 		
 		for(User user : users) {
-			if (!isStudent(user) && isTeacher(user))
-				log.debug("getTestTeachers--{}",user.getUserCsv());
+			if (!isStudent(user) && isTeacher(user)) {
+				log.debug("getTestTeachers--{}", user.getUserCsv());
 				records = Stream.concat(records, Stream.of(arguments(user.getUserCsv().split(","))));
-			//records.add(user.getUserCsv().split(","));
+			}
 		}
         log.debug("[getTestTeachers] END");
         return records;

@@ -4,7 +4,7 @@
 
 	<groupId>com.fullteaching</groupId>
 	<artifactId>e2e.no-elastest</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	
 	<name>${project.groupId}:${project.artifactId}</name>
@@ -43,7 +43,7 @@
         <slf4j.version>1.7.25</slf4j.version>
 
         <!-- Plugins versions -->
-        <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
     </properties>
 
@@ -130,7 +130,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version> 
                 <configuration>	
-                	<excludes>com.fullteaching.e2e.no_elastest.test.*</excludes>
+                	<excludes>com.fullteaching.e2e.no_elastest.common.*</excludes>
                 </configuration>       
             </plugin>  
         </plugins>

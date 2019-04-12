@@ -11,6 +11,8 @@ import java.util.stream.Stream;
 import com.fullteaching.e2e.no_elastest.common.*;
 import io.github.bonigarcia.seljup.DockerBrowser;
 import io.github.bonigarcia.seljup.SeleniumExtension;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -50,12 +52,17 @@ public class CourseTeacherTest extends BaseLoggedTest {
 	@MethodSource("data")
     public void teacherCourseMainTest(String user, String password, String role, @DockerBrowser(type = CHROME) RemoteWebDriver rwd) throws ElementNotFoundException, BadUserException, NotLoggedException, TimeOutExeception {
 
+    driver = rwd;
+
+		String courseName = properties.getProperty("forum.test.course");
+
 		driver = loginAndValidate(driver,  user, password);
     	
     	try {
     		if(!NavigationUtilities.amIHere(driver,COURSES_URL.replace("__HOST__", host)))
         		driver = NavigationUtilities.toCoursesHome(driver);
-	    	    	
+
+
 	    	WebElement course_button = Wait.notTooMuch(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath(FIRSTCOURSE_XPATH+GOTOCOURSE_XPATH)));
 	    	Click.element(driver, By.xpath(FIRSTCOURSE_XPATH+GOTOCOURSE_XPATH));
 	    	Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id(TABS_DIV_ID)));
@@ -99,9 +106,12 @@ public class CourseTeacherTest extends BaseLoggedTest {
     
     @ParameterizedTest
 	@MethodSource("data")
-    public void teacherNewCourseTest(String user, String password, String role, @DockerBrowser(type = CHROME) RemoteWebDriver rwd) throws ElementNotFoundException, BadUserException, NotLoggedException, TimeOutExeception {
+    public void teacherCreateAndDeleteCourseTest(String user, String password, String role, @DockerBrowser(type = CHROME) RemoteWebDriver rwd) throws ElementNotFoundException, BadUserException, NotLoggedException, TimeOutExeception {
 
-		driver = rwd;
+    	driver = rwd;
+
+		String courseName = properties.getProperty("forum.test.course");
+
 		driver = loginAndValidate(driver,  user, password);
     	
     	boolean found = false;
@@ -115,7 +125,7 @@ public class CourseTeacherTest extends BaseLoggedTest {
     	
     	try {
 	    	// press new course button and wait for modal course-modal 
-	    	WebElement new_course_button = Wait.notTooMuch(driver).until(ExpectedConditions.presenceOfElementLocated(By.xpath(NEWCOURSE_BUTTON_XPATH)));
+	    	WebElement new_course_button = Wait.notTooMuch(driver).until(ExpectedConditions.presenceOfElementLocated(NEWCOURSE_BUTTON));
 	    	
 	    	Click.byJS(driver,new_course_button);
     	
@@ -158,8 +168,19 @@ public class CourseTeacherTest extends BaseLoggedTest {
     	}catch (TimeoutException toe) {
     		fail("The courses list is not visible");
     	}
-    	
+
+    	//DELETE
+        try {
+        	CourseNavigationUtilities.deleteCourse(driver, course_title);
+        	assertFalse(CourseNavigationUtilities.checkIfCourseExists(driver, course_title), "the course still exists");
+
+		}catch(Exception e){
+        	fail("there was an error while deleting the course");
+		}
+
     	//Well done!!!
+
+
     }
 
 
@@ -167,6 +188,10 @@ public class CourseTeacherTest extends BaseLoggedTest {
 	@MethodSource("data")
     public void teacherEditCourseValues(String user, String password, String role, @DockerBrowser(type = CHROME) RemoteWebDriver rwd) throws ElementNotFoundException, BadUserException, NotLoggedException, TimeOutExeception {
 
+		driver = rwd;
+
+		String courseName = properties.getProperty("forum.test.course");
+      
 		driver = loginAndValidate(driver,  user, password);
     	
     	try {
@@ -190,11 +215,12 @@ public class CourseTeacherTest extends BaseLoggedTest {
     		
     		driver = CourseNavigationUtilities.changeCourseName(driver, old_name, edition_name);
     		//check if course exists
-	    	assertTrue(CourseNavigationUtilities.checkIfCourseExists(driver, edition_name), "The course title hasn't been found in the list ¿Have been created?");
+
+	    	assertTrue(CourseNavigationUtilities.checkIfCourseExists(driver, edition_name, 3), "The course title hasn't been found in the list ¿Have been created?");
 
 	    	//return to old name	    	
 	    	driver = CourseNavigationUtilities.changeCourseName(driver, edition_name, old_name);
-	    	assertTrue(CourseNavigationUtilities.checkIfCourseExists(driver, old_name), "The course title hasn't been reset");
+	    	assertTrue(CourseNavigationUtilities.checkIfCourseExists(driver, old_name, 3), "The course title hasn't been reset");
 
     	}catch (Exception e) {
     		fail("Failed to edit course name "+ e.getClass()+ ": "+e.getLocalizedMessage());
@@ -326,64 +352,24 @@ public class CourseTeacherTest extends BaseLoggedTest {
     			assertNotNull(forum_tab_content.findElement(FORUM_NEWENTRY_ICON),"Add Entry not found");
     			assertNotNull(forum_tab_content.findElement(FORUM_EDITENTRY_ICON),"Add Entry not found");
     			
-    			//disable 
-    			//clic edit
-    			WebElement edit_button =  Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_EDITENTRY_ICON));
-    			driver = Click.element(driver,FORUM_EDITENTRY_ICON);
-    			WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("put-delete-modal")));
-    			//press disable
-    			WebElement disable_button = edit_modal.findElement(DISABLEFORUM_BUTTON);
-    			driver = Click.withNRetries(driver, DISABLEFORUM_BUTTON, 3, By.id("put-modal-btn"));
-    			//disable_button.click();
-    			WebElement save_button = edit_modal.findElement(By.id("put-modal-btn"));
-    			driver = Click.element(driver,By.id("put-modal-btn"));
-    			assertFalse(ForumNavigationUtilities.isForumEnabled(forum_tab_content), "The forum is not dissabled");
-    			
+    			//disable
+    			driver = ForumNavigationUtilities.disableForum(driver);
+
     			//enable
     			//clic edit
-    			edit_button =  Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_EDITENTRY_ICON));
-    			driver = Click.element(driver,FORUM_EDITENTRY_ICON);
-    			edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("put-delete-modal")));
-    			//press disable
-    			WebElement enable_button = edit_modal.findElement(ENABLEFORUM_BUTTON);
-    			driver = Click.withNRetries(driver, ENABLEFORUM_BUTTON, 3, By.id("put-modal-btn"));
-    			//enable_button.click();
-    			save_button = edit_modal.findElement(By.id("put-modal-btn"));
-    			driver = Click.element(driver, By.id("put-modal-btn"));
-    			forum_tab_content = Wait.aLittle(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("md-tab-content-0-2")));
-    			assertTrue(ForumNavigationUtilities.isForumEnabled(forum_tab_content), "The forum is not disabled");
+    			driver = ForumNavigationUtilities.enableForum(driver);
     		}
     		else {
     		//else
-    			//enable 
-    			//clic edit
-    			WebElement edit_button =  Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_EDITENTRY_ICON));
-    			driver = Click.element(driver,FORUM_EDITENTRY_ICON);
-    			WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("put-delete-modal")));
-    			//press disable
-    			WebElement enable_button = edit_modal.findElement(ENABLEFORUM_BUTTON);
-    			driver = Click.withNRetries(driver, ENABLEFORUM_BUTTON, 3, By.id("put-modal-btn"));
-    			//enable_button.click();
-    			WebElement save_button = edit_modal.findElement(By.id("put-modal-btn"));
-    			driver = Click.element(driver,By.id("put-modal-btn"));
-    			assertTrue(ForumNavigationUtilities.isForumEnabled(forum_tab_content), "The forum is not enabled");
+    			//enable
+				driver = ForumNavigationUtilities.enableForum(driver);
     			
     			//check entries  ¡Only check if there is entries and all the buttons are present!
     			assertNotNull(forum_tab_content.findElement(FORUM_NEWENTRY_ICON),"Add Entry not found");
     			assertNotNull(forum_tab_content.findElement(FORUM_EDITENTRY_ICON),"Add Entry not found");
     			
     			//disable 
-    			//clic edit
-    			edit_button =  Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(FORUM_EDITENTRY_ICON));
-    			driver = Click.element(driver,FORUM_EDITENTRY_ICON);
-    			edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(By.id("put-delete-modal")));
-    			//press disable
-    			WebElement disable_button = edit_modal.findElement(DISABLEFORUM_BUTTON);
-    			driver = Click.withNRetries(driver, DISABLEFORUM_BUTTON, 3, By.id("put-modal-btn"));
-    			//disable_button.click();
-    			save_button = edit_modal.findElement(By.id("put-modal-btn"));
-    			driver = Click.element(driver,By.id("put-modal-btn"));
-    			assertFalse(ForumNavigationUtilities.isForumEnabled(forum_tab_content), "The forum is not dissabled");
+    			driver = ForumNavigationUtilities.disableForum(driver);
     		}
     		
     	} catch(Exception e) {	
@@ -392,17 +378,19 @@ public class CourseTeacherTest extends BaseLoggedTest {
     	}
     	// in attenders
     	try {
-    		driver = CourseNavigationUtilities.go2Tab(driver, ATTENDERS_ICON);
-    		WebElement attenders_tab_content = CourseNavigationUtilities.getTabContent(driver, ATTENDERS_ICON);
-    		
-    		// check logged user 
-    		//get attenders list
-    		WebElement userRow = attenders_tab_content.findElement(By.className("user-attender-row"));
-    		assertEquals("The main attender doesn't compare with loged user", userName, userRow.findElements(By.tagName("div")).get(2).getText().trim());
-    		// add attenders -in test attenders
-    		// delete attenders -in test attenders
-    	}
-    	 catch(Exception e) {	
+
+			driver = CourseNavigationUtilities.go2Tab(driver, ATTENDERS_ICON);
+			WebElement attenders_tab_content = CourseNavigationUtilities.getTabContent(driver, ATTENDERS_ICON);
+
+			//is user in attenders?
+			assertTrue(CourseNavigationUtilities.isUserInAttendersList(driver, userName), "User isn't in the attenders list");
+
+			//is user highligthed?
+			String main_user = CourseNavigationUtilities.getHighlightedAttender(driver);
+
+			assertEquals(userName, main_user, "Main user and active user doesn't match");
+
+    	} catch(Exception e) {
      		fail("Failed to tests attenders:: (File: CourseTeacherTest.java -line: "+ExceptionsHelper.getFileLineInfo(e.getStackTrace(), "CourseTeacherTest.java")+") "
      						+ e.getClass()+ ": "+e.getLocalizedMessage());
      	}
@@ -411,9 +399,12 @@ public class CourseTeacherTest extends BaseLoggedTest {
     	//Well done!
     }
 
+    @Disabled
 	@ParameterizedTest
 	@MethodSource("data")
     public void teacherDeleteCourseTest(String user, String password, String role, @DockerBrowser(type = CHROME) RemoteWebDriver rwd) throws ElementNotFoundException, BadUserException, NotLoggedException, TimeOutExeception {
+
+		driver = rwd;
 
 		driver = loginAndValidate(driver,  user, password);
     	String courseName="";
@@ -444,7 +435,7 @@ public class CourseTeacherTest extends BaseLoggedTest {
     		
     		WebElement edit_name_button = course.findElement(EDITCOURSE_BUTTON);
     		
-    	    Click.element(driver,edit_name_button);
+    	    driver = Click.element(driver,edit_name_button);
     	    		
     	    //wait for edit modal
     	    WebElement edit_modal = Wait.notTooMuch(driver).until(ExpectedConditions.visibilityOfElementLocated(EDITDELETE_MODAL));;
